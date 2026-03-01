@@ -1,0 +1,38 @@
+{
+  "name": "pseudo-kit",
+  "version": "0.1.0",
+  "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".":          "./src/client/pseudo-kit-client.js",
+    "./client":   "./src/client/pseudo-kit-client.js",
+    "./server":   "./src/server/pseudo-kit-server.js",
+    "./shared":   "./src/shared/index.js"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "scripts": {
+    "test":         "node --test src/tests/registry-shared.test.js src/tests/state-shared.test.js src/tests/pseudo-kit-server.test.js",
+    "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
+    "test:all":     "npm test && npm run test:client",
+    "test:coverage":"vitest run --coverage"
+  },
+  "devDependencies": {
+    "vitest":    "^2.0.0",
+    "happy-dom": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "keywords": [
+    "pseudo-kit",
+    "pseudo-html",
+    "web-components",
+    "vanilla",
+    "no-framework",
+    "ssr"
+  ]
+}

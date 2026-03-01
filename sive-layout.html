@@ -1,0 +1,512 @@
+<!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  SIVE LAYOUT — Pseudo-HTML Interface Descriptor      ║
+  ╚══════════════════════════════════════════════════════╝
+
+  [spec:purpose]
+    This file describes the GUI layout of the Sive application.
+    It is language-agnostic and serves as a single source of truth
+    for UI implementation across any framework or platform.
+    Consumers: AI code generators, human developers, documentation tools.
+
+  [spec:attribute-model]
+    props="*"            Structural/functional props. Declared in <template> as defaults.
+                         Instances can override any prop without special syntax.
+    data="*"             Business data fields bound to component state.
+    on="*"               Events emitted by the component. Format: eventName:payloadType
+    when-*="*"           Triggers the component reacts to. Free-text, read by LLM.
+                           when-visible, when-hidden, when-change, when-active, ...
+    behavior="*"         Free-text runtime logic that cannot be expressed as a prop or event.
+    note="*"             Annotation for LLM and documentation. Not rendered, not implemented.
+    element="*"          Declares a native/primitive element with semantic class.
+                         Format: element="name" or element="name.modifier"
+                         Not a component to create — LLM resolves implementation.
+    layer="*"            CSS @layer this component belongs to: base | layout | components | utils
+                         Can be paired with an explicit <style> block inside the component.
+    loop=""              Marks an element as repeated for each item in the parent data source.
+                         Boolean, empty value. Child of a data-bound container.
+    types-reference="*"  Space-separated TS types linked to this component.
+    component-role="*"   Purpose of the component at declaration level (template only).
+    role="*"             Purpose of the instance in its specific context (body only).
+
+  [spec:inner-content]
+    Components in <template> can declare their own inner structure.
+    Inner content = functional parts that belong to the component itself.
+    Instance content = contextual content injected at the screen level.
+    Both coexist: template declares the fixed structure, instances add their content.
+
+  [spec:type-grammar]
+    Primitives:           string, number, boolean, void
+    Optional:             type?              →  label:string?
+    Required:             type (no qualifier, default)
+    Enum:                 enum(a|b|c)        →  type:enum(text|password)
+    Array:                type[]             →  tags:string[]
+    Object:               [field:type, ...]  →  point:[label:string, date:string]
+    Array of objects:     [field:type, ...][]
+    Separator:            ;                  →  props="id:string; label:string?"
+
+  [spec:style-blocks]
+    A <style> block can be placed inside any component instance.
+    Its layer is determined by the component's layer="*" attribute.
+    When layer is omitted on a component with a <style> block, defaults to components.
+    The global <style> at the bottom of the file is the base style source of truth.
+    Theme colours are defined as CSS vars on :root in @layer base.
+    Theme switching uses :root:has(#theme-toggle:checked) — no JavaScript required.
+    Component styles use @scope to prevent style leaking between components.
+
+  [spec:conventions]
+    - <template> declares components: props, data shape, events, triggers, and inner structure.
+    - Layout elements (element="*") are native — no props declared, LLM infers attributes.
+    - Body instances reference declared components with role="" and contextual overrides.
+    - Component IDs use kebab-case. Actions use kebab-case verbs.
+    - [bracket-labels] in comments are navigation anchors only — no semantic value.
+    - when-* and behavior values are free-text strings interpreted by LLM.
+    - types-reference links to existing TS types in the codebase; LLM resolves them.
+    - loop="" on a child means: repeat this element for each item in the parent data source.
+
+  [spec:screens]
+    - [main-screen]       Writing mode. Default entry point.
+    - [onboarding-screen] First launch flow. Steps 1 → 2 → 2b/2c.
+    - [review-screen]     Full review mode. Triggered from main toolbar.
+
+  [spec:state-refs]
+    when-* expressions reference the following app state keys:
+      tab-suggestions-active  boolean
+      tab-coherence-active    boolean
+      tab-style-active        boolean
+      tab-history-active      boolean
+      diff-launched           boolean
+      step                    number | "2b" | "2c"
+      focus-mode              boolean
+      ai-running              boolean
+      suggestions-available   boolean
+
+  [spec:out-of-scope]
+    - Styling details, spacing, typography → handled by implementation.
+    - Routing logic → see types/routes/
+    - Business logic → see bmad/references/PROJECT.md
+
+  Location: bmad/references/sive-layout.html
+-->
+
+
+<!-- ═══════════════════════════════════════════════════
+     COMPONENT DECLARATIONS
+════════════════════════════════════════════════════ -->
+<template>
+
+  <!-- ── Layout elements (native, not components to create) ── -->
+
+  <row     element="row"                layer="layout" component-role="Horizontal arrangement" />
+  <column  element="column"             layer="layout" component-role="Vertical arrangement" />
+  <column  element="column.full-height" layer="layout" component-role="Vertical arrangement, full height" />
+  <grid    element="grid"               layer="layout" component-role="Grid arrangement" />
+  <cell    element="cell"               layer="layout" component-role="Grid cell, child of grid" />
+  <stack   element="stack"              layer="layout" component-role="Overlapping layers (z-axis)" />
+  <spacer  element="spacer"             layer="layout" component-role="Empty space between elements" />
+
+  <!-- ── Components ── -->
+
+  <text
+    props="label:string"
+    layer="components"
+    component-role="Display a static or bound text string"
+  />
+
+  <button
+    props="action:string; label:string; icon:string?"
+    on="click:void"
+    layer="components"
+    component-role="Trigger an action with a label"
+  />
+
+  <button-theme
+    element="button-theme"
+    layer="components"
+    note="Toggles between light and dark theme without JavaScript. Implemented as a label bound to a hidden #theme-toggle checkbox."
+    component-role="Theme toggle button"
+  />
+
+  <panel
+    props="id:string; default-width:string?; resizable:boolean?; collapsible:boolean?"
+    when-visible="condition under which the panel appears"
+    when-hidden="condition under which the panel is hidden"
+    layer="components"
+    component-role="Container for content, optionally resizable/collapsible"
+  >
+    <resize-handle when-visible="resizable is true" />
+    <spinner when-visible="loading" />
+  </panel>
+
+  <toolbar
+    props="id:string; position:enum(top|bottom)?"
+    layer="components"
+    component-role="Toolbar for navigation or actions"
+  >
+    <spacer />
+  </toolbar>
+
+  <tab-bar
+    props="id:string"
+    on="change:tabId"
+    layer="components"
+    component-role="Tab bar for switching views"
+  >
+    <tab loop="" />
+  </tab-bar>
+
+  <tab
+    props="id:string; label:string; default-active:boolean?"
+    on="select:tabId"
+    layer="components"
+    component-role="Tab for selecting a view"
+  />
+
+  <spinner
+    props="id:string; position:string?"
+    when-visible="condition under which the spinner appears"
+    when-hidden="condition under which the spinner hides"
+    layer="components"
+    component-role="Indicates processing state"
+  />
+
+  <text-zone
+    props="id:string; multiline:boolean?; spellcheck:boolean?; autosave:boolean?; type:enum(text|password)?; placeholder:string?; inline:boolean?; readonly:boolean?"
+    data="value:string"
+    on="change:string; submit:string"
+    layer="components"
+    component-role="Editable or read-only text area"
+  />
+
+  <resize-handle
+    props="id:string?; axis:enum(horizontal|vertical)"
+    layer="components"
+    component-role="Allows resizing between adjacent panels"
+  />
+
+  <diff-view
+    props="id:string"
+    data="changes:[id:string, type:enum(add|remove|replace), diff:string][]"
+    on="accept:string; reject:string"
+    types-reference="DiffChange"
+    layer="components"
+    component-role="Visual diff between two texts with per-change actions"
+  >
+    <row>
+      <button action="accept" label="Accept" />
+      <button action="reject" label="Reject" />
+    </row>
+  </diff-view>
+
+  <select
+    props="id:string; source:string?; options:string[]?"
+    data="selected:string"
+    on="change:string"
+    layer="components"
+    component-role="Dropdown for selecting options"
+  />
+
+  <overlay
+    props="id:string; position:string; draggable:boolean?; collapsible:boolean?"
+    layer="components"
+    component-role="Floating container for controls or chat"
+  />
+
+  <badge
+    props="id:string; position:string?"
+    when-visible="condition under which the badge appears"
+    layer="components"
+    component-role="Indicator badge for status or notifications"
+  />
+
+  <chat-bubble
+    props="role:string"
+    note="role drives both visual style and expected data shape. data fields vary by role, see instance declarations."
+    layer="components"
+    component-role="Bubble for alerts, signals, or report items"
+  />
+
+  <timeline
+    props="id:string; source:string"
+    data="points:[label:string, message:string, date:string][]"
+    on="select:pointId"
+    layer="components"
+    component-role="Timeline for version history or events"
+  />
+
+  <chart
+    props="type:enum(line|bar|pie); series:string[]"
+    layer="components"
+    component-role="Chart for visualizing data"
+  />
+
+</template>
+
+
+<!-- ═══════════════════════════════════════════════════
+     [main-screen] MAIN SCREEN — Writing Mode
+     Default entry point of the application.
+════════════════════════════════════════════════════ -->
+
+<!-- theme-toggle checkbox: referenced by button-theme, no JS required -->
+<input type="checkbox" id="theme-toggle" hidden />
+
+<column id="app-root" element="column.full-height" role="Main application container">
+
+  <!-- [main-toolbar] -->
+  <toolbar id="main-toolbar" position="top" role="Fixed top toolbar">
+    <text
+      label="active_project / current_chapter"
+      role="Active project and chapter display"
+    />
+    <button action="focus-mode"  label="Focus"          role="Toggle focus mode"
+      behavior="Hides ai-panel. suggestions-ready-badge becomes visible." />
+    <button action="review-mode" label="Review"         role="Switch to review mode" />
+    <button action="harden"      label="💾 New version" role="Trigger versioning"
+      behavior="Creates a new harden point in the timeline." />
+    <button-theme />
+    <button action="settings"    label="⚙"              role="Open settings" />
+  </toolbar>
+
+  <!-- [main-body] -->
+  <row id="main-body" role="Main body: editor + AI panel">
+
+    <!-- [editor-panel] -->
+    <panel id="editor-panel" default-width="55%" resizable role="Editor panel">
+      <text-zone
+        id="main-editor"
+        multiline spellcheck autosave
+        role="Main editor for the current chapter"
+        behavior="Edits .md narrative. On change, triggers ai-spinner in ai-panel."
+      />
+    </panel>
+
+    <resize-handle id="split-handle" axis="horizontal" role="Panel resize handle" />
+
+    <!-- [ai-panel] -->
+    <panel id="ai-panel" default-width="45%" resizable collapsible
+      role="AI and tools panel"
+      when-hidden="focus-mode is active"
+    >
+
+      <!-- [ai-tabs] -->
+      <tab-bar id="ai-tabs" role="Tab bar for right panel">
+        <tab id="tab-suggestions" label="Suggestions" default-active role="Suggestions tab" />
+        <tab id="tab-coherence"   label="Coherence"               role="Coherence tab" />
+        <tab id="tab-style"       label="Style"                   role="Style tab" />
+        <tab id="tab-history"     label="History"                 role="History tab" />
+      </tab-bar>
+
+      <spinner
+        id="ai-spinner"
+        role="AI processing indicator"
+        when-visible="ai-running"
+        when-hidden="ai is done processing"
+      />
+
+      <!-- [tab-content-suggestions] -->
+      <panel id="tab-content-suggestions" role="Suggestions tab content"
+        when-visible="tab-suggestions-active"
+      >
+        <diff-view
+          id="suggestions-diff"
+          data="changes:[id:string, type:enum(add|remove|replace), diff:string][]"
+          role="AI proposals as an interactive diff"
+          behavior="Each change is an independent proposal. Click for details. Accept/reject per item."
+        />
+        <row id="suggestion-actions" role="Bulk suggestion actions">
+          <button action="accept-all" label="Accept all" role="Accept all suggestions" />
+        </row>
+      </panel>
+
+      <!-- [tab-content-coherence] -->
+      <panel id="tab-content-coherence" role="Coherence tab content"
+        when-visible="tab-coherence-active"
+      >
+        <column id="coherence-alerts" role="List of coherence alerts">
+          <chat-bubble
+            role="coherence-alert"
+            data="entity:string; discrepancy_type:string; confidence:number; note:string"
+            note="confidence drives colour: low=grey, medium=orange, high=red. One bubble per alert."
+            loop=""
+          />
+        </column>
+      </panel>
+
+      <!-- [tab-content-style] -->
+      <panel id="tab-content-style" role="Style tab content"
+        when-visible="tab-style-active"
+      >
+        <button action="analyse-passage" label="Analyse this passage" role="Trigger passage analysis" />
+        <column id="style-results" role="Style analysis results">
+          <chat-bubble
+            role="style-signal"
+            data="location:string; signal:string; suggestion:string"
+            note="One bubble per style signal detected in the passage."
+            loop=""
+          />
+        </column>
+      </panel>
+
+      <!-- [tab-content-history] -->
+      <panel id="tab-content-history" role="History tab content"
+        when-visible="tab-history-active"
+      >
+        <timeline
+          id="harden-timeline"
+          source="harden-list"
+          role="Harden version timeline"
+          behavior="Click on a point to preview that version. Each point = one harden."
+        />
+        <row id="diff-controls" role="Version diff controls">
+          <text label="Compare:" />
+          <select id="version-a" source="harden-list" role="Diff — version A selector" />
+          <text label="↔" />
+          <select id="version-b" source="harden-list" role="Diff — version B selector" />
+          <button action="launch-diff" label="View differences" role="Launch version diff"
+            behavior="Sets diff-launched=true, renders version-diff below." />
+        </row>
+        <diff-view
+          id="version-diff"
+          role="Version diff view"
+          when-visible="diff-launched"
+        />
+      </panel>
+
+    </panel>
+  </row>
+
+  <!-- [chat-bar] -->
+  <overlay id="chat-bar" position="bottom-center" draggable collapsible role="Floating chat bar">
+    <row>
+      <button action="toggle-voice" icon="mic"   label="Voice" role="Toggle voice input (LiveKit)" />
+      <text-zone
+        id="chat-input"
+        inline
+        placeholder="Ask or command…"
+        role="Text or voice command input"
+      />
+      <button action="upload-image" icon="image" label="Image" role="Upload an image" />
+      <button action="send"         icon="send"  label="Send"  role="Send chat input" />
+    </row>
+  </overlay>
+
+  <!-- [suggestions-ready-badge] -->
+  <badge
+    id="suggestions-ready-badge"
+    role="Suggestions ready indicator"
+    when-visible="focus-mode is on and new suggestions are available"
+    behavior="Click opens ai-panel and deactivates focus-mode."
+  />
+
+</column>
+
+
+<!-- ═══════════════════════════════════════════════════
+     BASE STYLES
+════════════════════════════════════════════════════ -->
+<style>
+  @layer base, layout, components, utils;
+
+  @layer base {
+    :root {
+      --color-bg:            #0f0f0f;
+      --color-text:          #e5e5e5;
+      --color-primary:       #3b82f6;
+      --color-secondary:     #94a3b8;
+      --color-accent:        #fbbf24;
+      --color-complementary: #34d399;
+
+      background: var(--color-bg);
+      color:      var(--color-text);
+    }
+
+    :root:has(#theme-toggle:checked) {
+      --color-bg:            #ffffff;
+      --color-text:          #1a1a1a;
+      --color-primary:       #2563eb;
+      --color-secondary:     #64748b;
+      --color-accent:        #f59e0b;
+      --color-complementary: #10b981;
+    }
+
+    .primary        { background: var(--color-primary); }
+    .primary-text   { color:      var(--color-primary); }
+    .secondary      { background: var(--color-secondary); }
+    .accent         { background: var(--color-accent); }
+    .complementary  { background: var(--color-complementary); }
+  }
+
+  @layer layout {
+    .row, row                 { display: flex; flex-direction: row; }
+    .column, column           { display: flex; flex-direction: column; }
+    .column.full-height,
+    column.full-height        { height: 100%; }
+    .grid, grid               { display: grid; }
+    .cell, cell               { }
+    .stack, stack             { display: grid; grid-template-areas: "stack"; }
+    .stack > *, stack > *     { grid-area: stack; }
+    .spacer, spacer           { flex: 1; }
+    pk-slot                   { display: contents; } /* slot wrapper — invisible to layout */
+  }
+
+  @layer components {
+
+    @scope (.toolbar) {
+      :scope {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+
+    @scope (.panel) {
+      :scope {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+    }
+
+    @scope (.tab-bar) {
+      :scope {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+
+    @scope (.overlay) {
+      :scope {
+        position: fixed;
+        z-index: 100;
+      }
+    }
+
+    @scope (.chat-bubble) {
+      :scope {
+        border-radius: 8px;
+        padding: 8px 12px;
+        background: var(--color-secondary);
+      }
+    }
+
+    @scope (.badge) {
+      :scope {
+        border-radius: 50%;
+        background: var(--color-accent);
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    @scope (.button-theme) {
+      :scope { cursor: pointer; }
+    }
+
+  }
+
+  @layer utils {
+    /* populated by implementation */
+  }
+</style>

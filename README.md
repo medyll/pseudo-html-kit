@@ -1,0 +1,858 @@
+# pseudo-kit
+
+> Vanilla HTML component system. No build step. No framework. No dependencies.
+
+pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface descriptor that bridges UI specification and working code. Write your UI as annotated HTML, render it in the browser as-is, generate real components for any framework, or serve it via SSR from Node.js.
+
+---
+
+## Table of contents
+
+- [What is pseudo-HTML?](#what-is-pseudo-html)
+- [What is pseudo-kit?](#what-is-pseudo-kit)
+- [How it works](#how-it-works)
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Component files](#component-files)
+  - [Anatomy](#anatomy)
+  - [Script modes](#script-modes)
+  - [Self-registration](#self-registration)
+- [Slots](#slots)
+  - [Default slot](#default-slot)
+  - [Named slots](#named-slots)
+  - [Slot data forwarding](#slot-data-forwarding)
+  - [pk-slot wrapper](#pk-slot-wrapper)
+- [Loop rendering](#loop-rendering)
+- [Reactive state](#reactive-state)
+- [Events](#events)
+- [Theme system](#theme-system)
+- [CSS architecture](#css-architecture)
+  - [@layer](#layer)
+  - [@scope](#scope)
+  - [CSSStyleSheet — no DOM injection](#cssstylesheet--no-dom-injection)
+- [Layout elements](#layout-elements)
+- [File naming conventions](#file-naming-conventions)
+- [Server-side rendering (SSR)](#server-side-rendering-ssr)
+  - [Rendering a component](#rendering-a-component)
+  - [State hydration](#state-hydration)
+  - [CSS generation](#css-generation)
+  - [Layout validation](#layout-validation)
+- [Client API](#client-api)
+- [Server API](#server-api)
+- [Shared API](#shared-api)
+- [Project structure](#project-structure)
+- [Tests](#tests)
+- [Browser support](#browser-support)
+- [Framework references](#framework-references)
+- [License](#license)
+
+---
+
+## What is pseudo-HTML?
+
+Pseudo-HTML is a language-agnostic interface descriptor. It describes a UI — its components, their props, data, events, and behaviour — without styling or business logic.
+
+It is **not** valid HTML. It borrows HTML syntax for readability, but its semantics are its own. It is consumed by:
+- AI code generators (LLM reads the file and generates real components)
+- Human developers (as a single source of truth for the UI)
+- pseudo-kit (renders it directly in the browser as a functional wireframe)
+
+A pseudo-HTML file has this structure:
+
+```html
+<!-- [spec] header: attribute model, type grammar, state refs -->
+
+<template>
+  <!-- component declarations -->
+  <chat-bubble
+    props="role:string"
+    data="entity:string; confidence:number"
+    on="select:string"
+    layer="components"
+    component-role="Alert bubble with confidence level"
+  />
+</template>
+
+<!-- screen implementations -->
+<column id="app-root">
+  <chat-bubble role="coherence-alert" loop="" />
+</column>
+
+<!-- base styles -->
+<style>
+  @layer base, layout, components, utils;
+  /* ... */
+</style>
+```
+
+See `docs/SPEC.md` for the full attribute model and type grammar.
+
+---
+
+## What is pseudo-kit?
+
+pseudo-kit is the runtime layer that makes pseudo-HTML functional:
+
+- **Browser**: observes the DOM, loads `.html` component files, stamps templates, manages CSS without DOM injection, handles slots, loops, state, and events.
+- **Server (Node.js)**: renders components to HTML strings, generates CSS, serializes state for hydration, validates layout files.
+- **Shared**: a registry and state model that works in both environments.
+
+---
+
+## How it works
+
+1. Custom tags (`<panel>`, `<chat-bubble>`, `<toolbar>`…) are unknown to the browser — it renders them as inline elements by default.
+2. A `MutationObserver` watches the DOM for registered component names.
+3. When a component appears, pseudo-kit fetches its `.html` file, parses the `<template>`, `<style>`, and `<script>` blocks, stamps the template into the element, and injects CSS into the document's adopted stylesheet — **no `<style>` tags added to the DOM**.
+4. `when-*` conditions are expressed as CSS `:has()` + `data-*` attributes on `:root` — minimal JS, maximum CSS.
+5. On the server, components render to HTML strings with `<pk-slot>` wrappers. The client detects these and skips re-stamping.
+
+---
+
+## Installation
+
+```bash
+npm install pseudo-kit
+```
+
+Requires Node.js 22+ for the server runtime.
+
+---
+
+## Quick start
+
+### index.html
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="styles/base.css" />
+</head>
+<body>
+
+<input type="checkbox" id="theme-toggle" hidden />
+
+<column id="app-root">
+  <toolbar id="main-toolbar">
+    <text label="My App" />
+    <button-theme />
+  </toolbar>
+
+  <column id="alerts">
+    <chat-bubble role="alert" loop=""></chat-bubble>
+  </column>
+</column>
+
+<script type="module">
+  import PseudoKit from 'pseudo-kit';
+
+  PseudoKit
+    .register({ name: 'toolbar',      src: 'components/toolbar.html' })
+    .register({ name: 'chat-bubble',  src: 'components/chat-bubble.html' })
+    .register({ name: 'button-theme', src: 'components/button-theme.html' })
+    .init();
+
+  PseudoKit.renderLoop('alerts', [
+    { entity: 'Aria', confidence: '0.9' },
+    { entity: 'Bram', confidence: '0.5' },
+  ]);
+</script>
+
+</body>
+</html>
+```
+
+---
+
+## Component files
+
+### Anatomy
+
+Each component is a single `.html` file with three optional sections:
+
+```html
+<!-- components/chat-bubble.html -->
+
+<template>
+  <!-- The component's internal markup structure -->
+  <!-- <slot /> marks where instance-level content is injected -->
+  <div class="bubble-body">
+    <slot data-entity="" data-confidence="" />
+  </div>
+</template>
+
+<style>
+  @layer components {
+    @scope (chat-bubble) {
+      :scope {
+        display: block;
+        border-radius: 8px;
+        padding: 8px 12px;
+        background: var(--color-secondary);
+      }
+
+      :scope[role="coherence-alert"][data-confidence="high"] {
+        background: var(--color-accent);
+      }
+    }
+  }
+</style>
+
+<script>
+  // Inline script — runs in component context
+  // Available: el, state, emit, renderLoop, register
+  el.addEventListener('click', () => emit(el, 'select', { id: el.dataset.id }));
+</script>
+```
+
+### Script modes
+
+Two script modes are supported:
+
+| Mode | Syntax | Use for |
+|---|---|---|
+| **Inline** | `<script>` | Simple logic, event listeners, `el` available directly |
+| **Module** | `<script type="module" src="./component.js">` | ES module imports, self-registration |
+
+**Inline script** is evaluated via `new Function()` with `el`, `state`, `emit`, `renderLoop`, and `register` in scope.
+
+**Module script** is loaded via dynamic `import()`. The module runs in standard ESM scope and is expected to self-register.
+
+### Self-registration
+
+A component can register itself without any bootstrap configuration:
+
+```html
+<!-- components/chat-bubble.html -->
+<template>...</template>
+<style>...</style>
+<script type="module" src="./chat-bubble.js"></script>
+```
+
+```js
+// components/chat-bubble.js
+import PseudoKit from 'pseudo-kit';
+
+// Name is derived from the filename: chat-bubble.js → 'chat-bubble'
+PseudoKit.register(import.meta);
+
+// Component logic runs after registration
+document.querySelectorAll('chat-bubble').forEach(el => {
+  el.addEventListener('click', () => PseudoKit.emit(el, 'select', { id: el.dataset.id }));
+});
+```
+
+Manual registration still works and takes priority:
+
+```js
+PseudoKit
+  .register({ name: 'chat-bubble', src: 'components/chat-bubble.html' })
+  .init();
+```
+
+---
+
+## Slots
+
+### Default slot
+
+```html
+<!-- template -->
+<div class="panel-body">
+  <slot />
+</div>
+
+<!-- instance -->
+<panel>
+  <text-zone id="editor" />   <!-- injected into <slot /> -->
+</panel>
+```
+
+### Named slots
+
+Children with a `slot="name"` attribute are routed to the matching `<slot name="name">`. All other children go to the default slot.
+
+```html
+<!-- template -->
+<div class="toolbar-body">
+  <slot name="start" />
+  <spacer />
+  <slot name="end" />
+</div>
+
+<!-- instance -->
+<toolbar>
+  <text slot="start" label="My App" />     <!-- → slot name="start" -->
+  <button slot="end" action="settings" />  <!-- → slot name="end" -->
+  <badge />                                <!-- → default slot (if any) -->
+</toolbar>
+```
+
+### Slot data forwarding
+
+A `<slot>` can declare `data-*` attributes. These are automatically copied to every injected child element — unless the child already defines that attribute.
+
+```html
+<!-- template declares what data the slot provides -->
+<slot data-entity="" data-confidence="" data-note="" />
+```
+
+```html
+<!-- instance — children receive the data-* from the slot -->
+<chat-bubble>
+  <span>Aria appears twice</span>
+  <!-- becomes: <span data-entity="" data-confidence="" data-note="">... -->
+</chat-bubble>
+
+<!-- override: parent-provided value wins -->
+<chat-bubble>
+  <span data-entity="Aria" data-confidence="0.9">Aria appears twice</span>
+  <!-- data-entity and data-confidence preserved, data-note added from slot -->
+</chat-bubble>
+```
+
+Rule: **slot declares, parent overrides, component never forces**.
+
+### pk-slot wrapper
+
+Every resolved slot is wrapped in a `<pk-slot>` element with `display: contents`. This element is invisible to layout but carries slot metadata in the DOM for debugging and CSS targeting.
+
+```html
+<pk-slot
+  style="display: contents"
+  data-slot-component="chat-bubble"
+  data-slot-name="default"
+  data-slot-props='{"data-entity":"","data-confidence":""}'
+>
+  <span data-entity="Aria">...</span>
+</pk-slot>
+```
+
+Useful for targeting in CSS or DevTools:
+
+```css
+/* Target all slots in a chat-bubble */
+pk-slot[data-slot-component="chat-bubble"] { }
+```
+
+---
+
+## Loop rendering
+
+`loop=""` on a child element marks it as a repeated template. It is replaced by cloned instances once data is provided.
+
+```html
+<column id="coherence-alerts">
+  <chat-bubble role="coherence-alert" loop=""></chat-bubble>
+</column>
+```
+
+```js
+PseudoKit.renderLoop('coherence-alerts', [
+  { entity: 'Aria',  discrepancy_type: 'location', confidence: '0.9', note: 'Ch. 3' },
+  { entity: 'Bram',  discrepancy_type: 'timeline',  confidence: '0.5', note: 'Ch. 7' },
+]);
+```
+
+Each item's fields are bound as `data-*` attributes on the clone. Newly created elements are resolved as pseudo-kit components automatically.
+
+---
+
+## Reactive state
+
+pseudo-kit provides a reactive state proxy backed by `data-*` attributes on `:root`. Writing a value updates the DOM attribute; CSS `:has()` reacts immediately.
+
+```js
+// Write
+PseudoKit.state.focusMode = true;
+// → document.documentElement.setAttribute('data-focus-mode', '')
+
+PseudoKit.state.focusMode = false;
+// → document.documentElement.removeAttribute('data-focus-mode')
+
+PseudoKit.state.step = '2b';
+// → document.documentElement.setAttribute('data-step', '2b')
+
+// Read
+console.log(PseudoKit.state.focusMode); // true / false
+```
+
+camelCase keys are converted to kebab-case attributes:
+- `focusMode` → `data-focus-mode`
+- `tabSuggestionsActive` → `data-tab-suggestions-active`
+- `aiRunning` → `data-ai-running`
+
+CSS consumes the state:
+
+```css
+/* Hide AI panel when focus mode is active */
+:root[data-focus-mode] panel#ai-panel {
+  display: none;
+}
+
+/* Show suggestions tab content */
+panel#tab-content-suggestions {
+  display: none;
+}
+:root[data-tab-suggestions-active] panel#tab-content-suggestions {
+  display: flex;
+}
+```
+
+State is hydrated from SSR automatically — see [State hydration](#state-hydration).
+
+---
+
+## Events
+
+Components dispatch `CustomEvent` instances that bubble up the DOM. This matches the `on="eventName:payloadType"` declarations in pseudo-HTML.
+
+```js
+// In a component script — dispatch
+emit(el, 'accept', { id: changeId });
+
+// Anywhere in the app — listen
+document.addEventListener('accept', (e) => {
+  console.log('accepted:', e.detail.id);
+});
+
+// Or on the component itself
+diffView.addEventListener('accept', (e) => { ... });
+```
+
+```js
+// Via PseudoKit public API
+PseudoKit.emit(el, 'reject', { id: changeId });
+```
+
+Events are `bubbles: true, composed: true` by default.
+
+---
+
+## Theme system
+
+Theme switching requires zero JavaScript. A hidden checkbox drives the theme via CSS `:has()`:
+
+```html
+<!-- App root — place before everything -->
+<input type="checkbox" id="theme-toggle" hidden />
+
+<!-- button-theme component is a <label> bound to the checkbox -->
+<button-theme />
+<!-- renders as: <label for="theme-toggle">Toggle theme</label> -->
+```
+
+```css
+/* Dark theme — default */
+:root {
+  --color-bg:            #0f0f0f;
+  --color-text:          #e5e5e5;
+  --color-primary:       #3b82f6;
+  --color-secondary:     #94a3b8;
+  --color-accent:        #fbbf24;
+  --color-complementary: #34d399;
+}
+
+/* Light theme — toggled by checkbox */
+:root:has(#theme-toggle:checked) {
+  --color-bg:            #ffffff;
+  --color-text:          #1a1a1a;
+  --color-primary:       #2563eb;
+  --color-secondary:     #64748b;
+  --color-accent:        #f59e0b;
+  --color-complementary: #10b981;
+}
+```
+
+---
+
+## CSS architecture
+
+### @layer
+
+All styles are organized into four cascade layers:
+
+```css
+@layer base, layout, components, utils;
+```
+
+| Layer | Content |
+|---|---|
+| `base` | CSS vars, theme tokens, resets |
+| `layout` | Layout primitives: `row`, `column`, `grid`, `stack`… |
+| `components` | Component styles via `@scope` |
+| `utils` | Utility classes, populated by the implementation |
+
+### @scope
+
+Each component's styles are scoped using `@scope` to prevent leaking:
+
+```css
+@layer components {
+  @scope (chat-bubble) {
+    :scope {
+      display: block;
+      border-radius: 8px;
+    }
+    :scope[role="coherence-alert"] {
+      border-left: 3px solid var(--color-accent);
+    }
+  }
+}
+```
+
+### CSSStyleSheet — no DOM injection
+
+Component styles are inserted into the document via a single `CSSStyleSheet` adopted on `document.adoptedStyleSheets`. No `<style>` tags are ever added to the DOM. Rules are inserted or replaced in-place using `insertRule` / `deleteRule` — each component's `@scope` block occupies a stable index.
+
+---
+
+## Layout elements
+
+Layout elements are **native HTML primitives** dressed with CSS. They are not components — no `.html` file needed. They are declared in the pseudo-HTML `<template>` with `element="*"` and no props.
+
+```css
+.row, row                  { display: flex; flex-direction: row; }
+.column, column            { display: flex; flex-direction: column; }
+column.full-height         { height: 100%; }
+.grid, grid                { display: grid; }
+.stack, stack              { display: grid; grid-template-areas: "stack"; }
+.stack > *, stack > *      { grid-area: stack; }
+.spacer, spacer            { flex: 1; }
+pk-slot                    { display: contents; }
+```
+
+Dual selectors (`.row, row`) allow the pseudo-HTML file to render directly in the browser as a wireframe.
+
+---
+
+## File naming conventions
+
+Pseudo-kit uses a **hierarchical prefix** as a visual namespace. The file name reads left to right from most general to most specific.
+
+```
+components/          ← reusable components
+  panel.html
+  toolbar.html
+  chat-bubble.html
+  diff-view.html
+  tab-bar.html
+  tab.html
+  overlay.html
+  badge.html
+  spinner.html
+  text-zone.html
+  timeline.html
+  chart.html
+  button-theme.html
+  resize-handle.html
+
+layouts/             ← screens and major layout containers
+  screen-main.html
+  screen-onboarding.html
+  screen-review.html
+  panel-editor.html
+  panel-ai.html
+  panel-tab-suggestions.html
+  section-coherence-alerts.html
+  card-harden-point.html
+```
+
+| Prefix | Scope |
+|---|---|
+| `screen-*` | Full screen, app root level |
+| `panel-*` | Major container within a screen |
+| `section-*` | Semantic zone within a panel |
+| `card-*` | Autonomous content unit |
+
+---
+
+## Server-side rendering (SSR)
+
+```js
+import PseudoKitServer from 'pseudo-kit/server';
+```
+
+### Rendering a component
+
+```js
+PseudoKitServer.register({ name: 'chat-bubble', src: './components/chat-bubble.html' });
+
+const html = await PseudoKitServer.renderComponent(
+  'chat-bubble',                                  // component name
+  { role: 'coherence-alert' },                    // props → HTML attributes
+  '<span data-entity="Aria">Aria appears twice</span>', // children → injected into slot
+  './components'                                  // base path for resolving files
+);
+```
+
+Output:
+
+```html
+<chat-bubble role="coherence-alert">
+  <div class="bubble-body">
+    <pk-slot style="display:contents"
+             data-slot-component="chat-bubble"
+             data-slot-name="default"
+             data-slot-props='{"data-entity":"","data-confidence":""}'>
+      <span data-entity="Aria" data-confidence="">Aria appears twice</span>
+    </pk-slot>
+  </div>
+</chat-bubble>
+```
+
+The client detects the `<pk-slot>` and skips re-stamping. Scripts are evaluated client-side after hydration.
+
+### State hydration
+
+```js
+// Server: serialize state into the HTML response
+const stateTag = PseudoKitServer.serializeState({
+  tabCoherenceActive: true,
+  tabSuggestionsActive: false,
+});
+
+// Inject before </body>:
+// <script id="pk-state" type="application/json">{"focusMode":false,"tabCoherenceActive":true,...}</script>
+```
+
+The client reads the tag automatically on init and applies the state to `:root` before rendering:
+
+```js
+// Client automatically calls deserializeFromTag_shared() on init
+// No manual setup needed
+PseudoKit.init();
+```
+
+### CSS generation
+
+Generates a single CSS string from all registered component style blocks:
+
+```js
+PseudoKitServer.register({ name: 'chat-bubble', src: './components/chat-bubble.html' });
+PseudoKitServer.register({ name: 'panel',       src: './components/panel.html' });
+
+const css = await PseudoKitServer.generateCSS('./components');
+await writeFile('dist/components.css', css, 'utf-8');
+```
+
+### Layout validation
+
+Validates a pseudo-HTML layout file against the registered component registry:
+
+```js
+const result = await PseudoKitServer.validate('./sive-layout.html');
+
+if (!result.valid) {
+  result.errors.forEach(e => console.error('ERROR:', e));
+}
+result.warnings.forEach(w => console.warn('WARN:', w));
+```
+
+Checks:
+- Every custom tag used in the layout is registered or a known layout element
+- `loop=""` elements have a data-bound parent (warning only)
+
+---
+
+## Client API
+
+### `PseudoKit.register(input)`
+
+Registers a component. Returns `PseudoKit` for chaining.
+
+```js
+// Manual
+PseudoKit.register({ name: 'panel', src: 'components/panel.html' });
+
+// Auto — from inside the component file
+PseudoKit.register(import.meta); // name derived from filename
+```
+
+### `PseudoKit.init([root])`
+
+Starts the runtime. Begins DOM observation and resolves existing components.
+
+```js
+PseudoKit.init();                                  // observe document.body
+PseudoKit.init(document.getElementById('app-root')); // observe from a specific root
+```
+
+Returns the `MutationObserver` instance.
+
+### `PseudoKit.renderLoop(containerId, data)`
+
+Renders a `loop=""` template with a data array.
+
+```js
+PseudoKit.renderLoop('alerts', [
+  { entity: 'Aria', confidence: '0.9' },
+]);
+```
+
+### `PseudoKit.emit(el, eventName, [detail])`
+
+Dispatches a `CustomEvent` from an element.
+
+```js
+PseudoKit.emit(el, 'accept', { id: '42' });
+```
+
+### `PseudoKit.state`
+
+Reactive state proxy. See [Reactive state](#reactive-state).
+
+---
+
+## Server API
+
+### `PseudoKitServer.register(input)`
+
+Same as client. Returns `PseudoKitServer` for chaining.
+
+### `PseudoKitServer.resolvePath(src, [base])`
+
+Resolves a `file://` URL or relative path to an absolute filesystem path.
+
+```js
+PseudoKitServer.resolvePath('file:///project/components/panel.html');
+// → '/project/components/panel.html'
+
+PseudoKitServer.resolvePath('components/panel.html', '/project');
+// → '/project/components/panel.html'
+```
+
+### `PseudoKitServer.renderComponent(name, props, children, [base])`
+
+Renders a component to an HTML string. See [Rendering a component](#rendering-a-component).
+
+### `PseudoKitServer.serializeState([state])`
+
+Returns a `<script id="pk-state" type="application/json">` tag. See [State hydration](#state-hydration).
+
+### `PseudoKitServer.generateCSS([base])`
+
+Generates concatenated CSS from all registered components. See [CSS generation](#css-generation).
+
+### `PseudoKitServer.validate(layoutPath)`
+
+Validates a pseudo-HTML layout file. See [Layout validation](#layout-validation).
+
+---
+
+## Shared API
+
+```js
+import { register_shared, lookup_shared, all_shared, isRegistered_shared, reset_shared } from 'pseudo-kit/shared';
+import { serialize_shared, serializeToTag_shared, deserialize_shared, deserializeFromTag_shared, merge_shared, defaultState_shared } from 'pseudo-kit/shared';
+```
+
+### Registry
+
+| Function | Description |
+|---|---|
+| `register_shared(input)` | Register a component (manual or `import.meta`) |
+| `lookup_shared(name)` | Get a component definition by name |
+| `all_shared()` | Get all registered definitions |
+| `isRegistered_shared(name)` | Check if a component is registered |
+| `reset_shared()` | Clear the registry (tests only) |
+
+### State
+
+| Function | Description |
+|---|---|
+| `serialize_shared(state)` | Serialize state to JSON string |
+| `serializeToTag_shared(state)` | Serialize state to `<script>` tag HTML |
+| `deserialize_shared(json)` | Parse JSON to AppState |
+| `deserializeFromTag_shared()` | Read state from `<script id="pk-state">` in DOM |
+| `merge_shared(current, patch)` | Merge a partial patch into a state object |
+| `defaultState_shared()` | Return a fresh copy of the default state |
+
+---
+
+## Project structure
+
+```
+pseudo-kit/
+  src/
+    shared/
+      registry-shared.js      ← component registry (client + server)
+      state-shared.js          ← state model + serialization
+      index.js                 ← shared exports
+    client/
+      pseudo-kit-client.js     ← browser runtime
+    server/
+      pseudo-kit-server.js     ← Node.js runtime
+  tests/
+    registry-shared.test.js              ← node:test
+    state-shared.test.js                 ← node:test
+    pseudo-kit-server.test.js            ← node:test
+    pseudo-kit-client.client.test.js     ← vitest + happy-dom
+  docs/
+    SPEC.md                     ← pseudo-HTML full specification
+    PSEUDO-KIT.md               ← component system reference
+    REACT.md                    ← pseudo-HTML → React mapping
+    SVELTE.md                   ← pseudo-HTML → Svelte 5 mapping
+    pseudo-svelte-5-reference.md ← Svelte 5 non-regression log
+  vitest.config.js
+  package.json
+  README.md
+  .gitignore
+```
+
+---
+
+## Tests
+
+```bash
+# Node.js tests — shared + server (no dependencies)
+npm test
+
+# Client tests — requires vitest + happy-dom
+npm install --save-dev vitest happy-dom
+npm run test:client
+
+# All tests
+npm run test:all
+
+# Coverage (client)
+npm run test:coverage
+```
+
+Test coverage targets: **100%** lines, functions, branches, statements on all modules.
+
+| File | Runner | Tests |
+|---|---|---|
+| `registry-shared.js` | `node:test` | 28 |
+| `state-shared.js` | `node:test` | 35 |
+| `pseudo-kit-server.js` | `node:test` | 37 |
+| `pseudo-kit-client.js` | Vitest + happy-dom | ~50 |
+
+---
+
+## Browser support
+
+| Browser | Minimum version | Key features required |
+|---|---|---|
+| Chrome | 105+ | `@scope`, `CSSStyleSheet`, `:has()` |
+| Firefox | 115+ | `@scope`, `CSSStyleSheet`, `:has()` |
+| Safari | 16.4+ | `@scope`, `CSSStyleSheet`, `:has()` |
+
+---
+
+## Framework references
+
+The `docs/` directory contains mapping references for generating real code from pseudo-HTML:
+
+- `docs/SPEC.md` — Full pseudo-HTML attribute model, type grammar, conventions
+- `docs/PSEUDO-KIT.md` — pseudo-kit component system reference
+- `docs/REACT.md` — pseudo-HTML → React mapping
+- `docs/SVELTE.md` — pseudo-HTML → Svelte 5 mapping
+- `docs/pseudo-svelte-5-reference.md` — Svelte 5 non-regression guide (LLMs regress often)
+
+---
+
+## License
+
+MIT
