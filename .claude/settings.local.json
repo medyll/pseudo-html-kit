@@ -5,7 +5,8 @@
       "Bash(python3:*)",
       "Bash(mv:*)",
       "Bash(node:*)",
-      "Bash(pnpm run:*)"
+      "Bash(pnpm run:*)",
+      "Skill(keybindings-help)"
     ]
   }
 }
