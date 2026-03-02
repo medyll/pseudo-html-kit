@@ -82,27 +82,27 @@ pseudo_assets:
     - id: PKA-002
       title: "50+ components (atoms S1 + molecules S2 + organisms S3)"
       sprint: "sprint-01/02/03"
-      status: in_progress
+      status: done
     - id: PKA-003
       title: "20+ frame skeletons (empty)"
       sprint: sprint-04
-      status: pending
+      status: done
     - id: PKA-004
       title: "pseudo-canvas-viewer"
       sprint: sprint-05
-      status: pending
+      status: done
     - id: PKA-005
       title: "Netflix demo app"
       sprint: sprint-06
-      status: pending
+      status: done
     - id: PKA-006
       title: "Amazon demo app"
       sprint: sprint-06
-      status: pending
+      status: done
     - id: PKA-007
       title: "Facebook demo app"
       sprint: sprint-07
-      status: pending
+      status: done
 
 qa:
   test_plan: pending
@@ -112,7 +112,7 @@ qa:
 
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"
-  - naming: "plain name.html — no pk- prefix"
+  - naming: "component files use -pk suffix to match their tag name (e.g. button-pk.html → <button-pk>)"
   - auto_register: false
   - css_strategy: "@scope on every style block"
   - breakpoints: "320 / 768 / 1024 / 1440px (mobile-first)"
@@ -123,4 +123,4 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-recommendation: "/dev-story S2 — Sprint 2: 16 molecules (breadcrumb, card, card-media, dropdown, form-field, list-item, menu-item, modal, notification, pagination, price-tag, product-tile, search-bar, tab-bar, tooltip, user-info)"
+recommendation: "Post-audit (2026-03-02): all 20 fixes applied, 100 tests green. Next → /test-plan to cover BUG-02 (_findInstances) and NOM-06 (renamed assets), then npm publish v0.1.0"
