@@ -13,7 +13,10 @@
     "./shared":      "./src/shared/index.js"
   },
   "files": [
-    "src/",
+    "src/client/",
+    "src/server/",
+    "src/shared/",
+    "src/pseudo-html/",
     "README.md"
   ],
   "scripts": {
