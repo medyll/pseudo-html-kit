@@ -11,8 +11,9 @@
 | **pseudo-kit** | ✅ Published v0.2.0 | [npm](https://www.npmjs.com/package/pseudo-kit) |
 | **pseudo-canvas** | ✅ v0.2.0 | Part of monorepo |
 | **pseudo-stack-assets** | ✅ v0.2.0 | Part of monorepo |
+| **README** | ✅ Consumer-focused | Enhanced with Installation, Development, Release sections |
 
-**Published:** 2026-03-02 22:44 UTC | **Commit:** `cf21bb1` | **Tag:** `v0.2.0`
+**Published:** 2026-03-02 22:44 UTC | **Commits:** `cf21bb1`, `0f6e5f5`, `f3e1bda` | **Tag:** `v0.2.0`
 
 ---
 
@@ -116,17 +117,17 @@ pseudo-kit-assets/ (new npm package)
 
 ## 👉 **Next Step — Maintenance & Support**
 
-✅ **v0.2.0 Release Complete.**
+✅ **v0.2.0 Release Complete + Documentation Delivered.**
 
 - [📦 pseudo-kit on npm](https://www.npmjs.com/package/pseudo-kit)
-- 📚 Documentation live
+- 📚 Consumer-focused README (Installation, Development, Testing, Release)
 - 🧪 259 tests passing, 0 failures
-- 🎉 All deliverables shipped
+- 🎉 All deliverables shipped (46 components, 20 frames, 3 demos)
 
 **Optional next steps:**
-- `/readme` — generate or update installation/usage guide
+- `/sprint-planning` — plan v0.3.0 features (post-launch feedback)
 - `/test-plan` — expand test coverage for edge cases
-- `/sprint-planning` — plan v0.3.0 roadmap (post-launch feedback)
+- `/brainstorm` — ideas for next release (new components, patterns, frameworks)
 
 ---
 
