@@ -17,7 +17,7 @@
  *
  * No framework. No build step. Browser only (no Node APIs).
  * Requires: shared/registry-shared.js, shared/state-shared.js
- * Targets: Chrome 105+, Firefox 115+, Safari 16.4+
+ * Targets: Chrome 118+, Firefox 128+, Safari 17.4+
  *
  * @module pseudo-kit-client
  * @version 0.1.0
@@ -30,13 +30,13 @@ import {
   lookup_shared,
   all_shared,
   isRegistered_shared,
-} from './shared/registry-shared.js';
+} from '../shared/registry-shared.js';
 
 import {
   deserializeFromTag_shared,
   merge_shared,
   defaultState_shared,
-} from './shared/state-shared.js';
+} from '../shared/state-shared.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CSS — STYLESHEET MANAGEMENT (no DOM injection)
@@ -287,30 +287,6 @@ async function _loadComponent(def) {
   def.loaded = true;
 }
 
-/**
- * Stamps a component's <template> into the target element.
- *
- * If the template contains a <slot />, it is replaced by the element's original children
- * (instance-level content from the layout file).
- *
- * If the <slot> declares data-* attributes, those are forwarded to each injected child
- * element — unless the child already has its own value for that attribute.
- * This allows a component to declare what data it makes available to slotted content,
- * while the parent retains the ability to override.
- *
- * @param {Element}                                                    el
- * @param {import('./shared/registry-shared.js').ComponentDefinition}  def
- *
- * @example
- * // component template:
- * // <slot data-entity="" data-confidence="" />
- *
- * // instance:
- * // <chat-bubble><span>Aria</span></chat-bubble>
- *
- * // result: <span data-entity="" data-confidence="">Aria</span>
- * // parent can override: <chat-bubble><span data-entity="Aria">...</span></chat-bubble>
- */
 /**
  * Creates a slot wrapper element with display:contents.
  * The wrapper is invisible to layout but carries slot metadata in the DOM

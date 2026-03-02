@@ -578,16 +578,16 @@ Before validating, run the normalizer to auto-fix simple issues:
 
 ```bash
 # Writes pseudo-canvas-demo.normalized.html alongside the original
-npm run normalize pseudo-canvas-demo.html
+npm run normalize -- src/pseudo-canvas/pseudo-canvas-demo.html
 
 # Overwrites the original in place
-npm run normalize:write pseudo-canvas-demo.html
+npm run normalize:write -- src/pseudo-canvas/pseudo-canvas-demo.html
 
 # Node API
 import { normalizeCanvas } from 'pseudo-kit/normalizer';
 
-const result = await normalizeCanvas('./pseudo-canvas-demo.html');
-// or: await normalizeCanvas('./pseudo-canvas-demo.html', { inPlace: true });
+const result = await normalizeCanvas('./src/pseudo-canvas/pseudo-canvas-demo.html');
+// or: await normalizeCanvas('./src/pseudo-canvas/pseudo-canvas-demo.html', { inPlace: true });
 
 console.log(result.changes);
 // → ['Renamed 2× `fields` → `data`', 'Added `component-role=""` to `<button>`', ...]
@@ -619,15 +619,15 @@ Normalize first to fix mechanical errors, then validate to confirm the canvas is
 
 ```bash
 # Text output (Markdown manifest — pass to LLM)
-npm run validate pseudo-canvas-demo.html
+npm run validate -- src/pseudo-canvas/pseudo-canvas-demo.html
 
 # JSON output (structured manifest — for programmatic use)
-npm run validate:json pseudo-canvas-demo.html
+npm run validate:json -- src/pseudo-canvas/pseudo-canvas-demo.html
 
 # Node API
 import { validateCanvas } from 'pseudo-kit/validator';
 
-const result = await validateCanvas('./pseudo-canvas-demo.html');
+const result = await validateCanvas('./src/pseudo-canvas/pseudo-canvas-demo.html');
 
 if (!result.valid) {
   result.errors.forEach(e => console.error('ERROR:', e));
@@ -951,7 +951,7 @@ await writeFile('dist/components.css', css, 'utf-8');
 Validates a pseudo-HTML layout file against the registered component registry:
 
 ```js
-const result = await PseudoKitServer.validate('./pseudo-canvas-demo.html');
+const result = await PseudoKitServer.validate('./src/pseudo-canvas/pseudo-canvas-demo.html');
 
 if (!result.valid) {
   result.errors.forEach(e => console.error('ERROR:', e));
@@ -1156,9 +1156,9 @@ Test coverage targets: **100%** lines, functions, branches, statements on all mo
 
 | Browser | Minimum version | Key features required |
 |---|---|---|
-| Chrome | 105+ | `@scope`, `CSSStyleSheet`, `:has()` |
-| Firefox | 115+ | `@scope`, `CSSStyleSheet`, `:has()` |
-| Safari | 16.4+ | `@scope`, `CSSStyleSheet`, `:has()` |
+| Chrome | 118+ | `@scope`, `CSSStyleSheet`, `:has()` |
+| Firefox | 128+ | `@scope`, `CSSStyleSheet`, `:has()` |
+| Safari | 17.4+ | `@scope`, `CSSStyleSheet`, `:has()` |
 
 ---
 

@@ -136,7 +136,7 @@ pseudo-canvas-viewer.html
 
 - **Status:** Accepted
 - **Context:** The client needs to distinguish SSR-rendered elements from client-rendered ones to avoid double-stamping.
-- **Decision:** `pseudo-kit-server.renderComponent()` adds `data-pk-hydrated` on the component root element. `pseudo-kit-client` checks for this attribute and skips re-stamping; it only adopts the `@scope` stylesheet.
+- **Decision:** The server emits a `<pk-slot>` child element inside each SSR-rendered component. The client detects the presence of a direct `<pk-slot>` child and sets `data-pk-hydrated` on the component root, then skips re-stamping and only adopts the `@scope` stylesheet.
 - **Consequences:** Clean separation of SSR and CSR paths. Requires `pseudo-html-kit` v0.2.0 to implement (tracked as PKA-001 dependency).
 
 ---
@@ -234,7 +234,8 @@ component.html <style> block
 ## Cross-Cutting Concerns
 
 ### Security
-- No `eval()` — component `<script>` blocks are executed as ESM modules in strict scope
+- `<script type="module">` blocks in components run as ESM modules in strict scope
+- Inline (non-module) `<script>` blocks are executed via `new Function()`, which carries the same CSP implications as `eval()` — both are blocked by `script-src 'unsafe-eval'` CSP directives
 - No `innerHTML` on user-provided data — slot content injected via DOM APIs only
 - Viewer: `FileReader` + `DOMParser` only — no server-side execution, no file system write
 

@@ -81,7 +81,7 @@ const ATTR_RENAMES = new Map([
  * Returns [content, startIndex, endIndex] so we can replace it in the original.
  * @param {string} html
  * @param {string} tag
- * @returns {{ content: string, start: number, end: number } | null}
+ * @returns {{ content: string, start: number, end: number, fullStart: number, fullEnd: number } | null}
  */
 function _findBlock(html, tag) {
   const openRe = new RegExp(`<${tag}(?:\\s[^>]*)?>`, 'i');

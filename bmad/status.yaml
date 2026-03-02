@@ -72,33 +72,37 @@ phases:
         status: done
         points: 22
     status: done
-        title: "pseudo-kit-assets package scaffold"
-        sprint: sprint-01
-        status: done
-      - id: PKA-002
-        title: "50+ components (atoms S1 + molecules S2 + organisms S3)"
-        sprint: "sprint-01/02/03"
-        status: in_progress
-      - id: PKA-003
-        title: "20+ frame skeletons (empty)"
-        sprint: sprint-04
-        status: pending
-      - id: PKA-004
-        title: "pseudo-canvas-viewer"
-        sprint: sprint-05
-        status: pending
-      - id: PKA-005
-        title: "Netflix demo app"
-        sprint: sprint-06
-        status: pending
-      - id: PKA-006
-        title: "Amazon demo app"
-        sprint: sprint-06
-        status: pending
-      - id: PKA-007
-        title: "Facebook demo app"
-        sprint: sprint-07
-        status: pending
+
+pseudo_assets:
+  deliverables:
+    - id: PKA-001
+      title: "pseudo-kit-assets package scaffold"
+      sprint: sprint-01
+      status: done
+    - id: PKA-002
+      title: "50+ components (atoms S1 + molecules S2 + organisms S3)"
+      sprint: "sprint-01/02/03"
+      status: in_progress
+    - id: PKA-003
+      title: "20+ frame skeletons (empty)"
+      sprint: sprint-04
+      status: pending
+    - id: PKA-004
+      title: "pseudo-canvas-viewer"
+      sprint: sprint-05
+      status: pending
+    - id: PKA-005
+      title: "Netflix demo app"
+      sprint: sprint-06
+      status: pending
+    - id: PKA-006
+      title: "Amazon demo app"
+      sprint: sprint-06
+      status: pending
+    - id: PKA-007
+      title: "Facebook demo app"
+      sprint: sprint-07
+      status: pending
 
 qa:
   test_plan: pending

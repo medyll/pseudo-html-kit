@@ -31,11 +31,11 @@ import { readFile } from 'node:fs/promises';
 /** Tags that are layout elements — not components to generate. */
 const LAYOUT_ELEMENTS = new Set([
   'row', 'column', 'grid', 'cell', 'stack', 'spacer',
-  'frame', 'input', 'style', 'script', 'template',
-  'component-registry', 'pk-slot',
+  'frame', 'style', 'script', 'template',
+  'component-registry', 'pk-slot', 'button-theme',
   // HTML native
-  'div', 'span', 'p', 'a', 'ul', 'li', 'ol', 'button', 'input',
-  'form', 'label', 'select', 'option', 'textarea', 'nav', 'main',
+  'div', 'span', 'p', 'a', 'ul', 'li', 'ol',
+  'input', 'form', 'label', 'select', 'option', 'textarea', 'nav', 'main',
   'header', 'footer', 'section', 'article', 'aside', 'h1', 'h2',
   'h3', 'h4', 'h5', 'h6', 'img', 'table', 'tr', 'td', 'th',
 ]);
@@ -123,11 +123,16 @@ function _parseAttrs(tagStr) {
   const attrs = {};
   // Match name="value", name='value', name=value, or bare name
   const re = /([a-z][a-z0-9-]*)(?:="([^"]*?)"|='([^']*?)'|=([^\s/>]+))?(?=[\s/>])/gi;
+  // Extract tag name from the opening < to avoid matching it as an attribute
+  const tagNameMatch = /^<([a-z][a-z0-9-]*)/i.exec(tagStr.trim());
+  const tagName = tagNameMatch ? tagNameMatch[1].toLowerCase() : null;
+  let first = true;
   let m;
   while ((m = re.exec(tagStr)) !== null) {
     const key = m[1].toLowerCase();
-    // Skip the tag name itself (first match)
-    if (key === tagStr.trim().replace(/^</, '').split(/[\s/>]/)[0].toLowerCase()) continue;
+    // Skip the first token only if it matches the tag name
+    if (first && key === tagName) { first = false; continue; }
+    first = false;
     attrs[key] = m[2] ?? m[3] ?? m[4] ?? true;
   }
   return attrs;
@@ -281,12 +286,11 @@ function _parseRegistry(registryHtml) {
 
 /**
  * Finds all instances of a component in the frames section of the canvas.
- * @param {string} framesHtml - HTML of all <frame> blocks combined
+ * @param {string} framesHtml - HTML of all <frame> blocks combined (component-registry removed)
  * @param {string} name       - Component tag name
- * @param {string} fullHtml   - Full canvas HTML (for frame detection)
  * @returns {ComponentInstance[]}
  */
-function _findInstances(framesHtml, name, fullHtml) {
+function _findInstances(framesHtml, name) {
   const instances = [];
   const re = new RegExp(`<${name}(\\s[^>]*)?\\/?>`, 'gi');
   let m;
@@ -294,9 +298,9 @@ function _findInstances(framesHtml, name, fullHtml) {
   while ((m = re.exec(framesHtml)) !== null) {
     const attrStr = m[0];
     const attrs   = _parseAttrs(attrStr);
-    // Find position in full HTML to determine frame
-    const posInFull = fullHtml.indexOf(m[0]);
-    const frameId   = _getFrameId(fullHtml, posInFull);
+    // Use m.index (exact position in framesHtml) to correctly identify the containing frame
+    // for each occurrence, avoiding false matches from fullHtml.indexOf()
+    const frameId = _getFrameId(framesHtml, m.index);
 
     instances.push({
       name,
@@ -497,7 +501,7 @@ export async function validateCanvas(canvasPath) {
   const manifest = [];
 
   for (const decl of declarations) {
-    const instances = _findInstances(framesHtml, decl.name, html);
+    const instances = _findInstances(framesHtml, decl.name);
 
     // Check: missing role on instances
     for (const inst of instances) {
