@@ -577,17 +577,17 @@ LLM generation pass
 Before validating, run the normalizer to auto-fix simple issues:
 
 ```bash
-# Writes pseudo-canvas-demo.normalized.html alongside the original
-npm run normalize -- src/pseudo-canvas/pseudo-canvas-demo.html
+# Writes pseudo-canvas-reference.normalized.html alongside the original
+npm run normalize -- src/shared/pseudo-canvas-reference.html
 
 # Overwrites the original in place
-npm run normalize:write -- src/pseudo-canvas/pseudo-canvas-demo.html
+npm run normalize:write -- src/shared/pseudo-canvas-reference.html
 
 # Node API
 import { normalizeCanvas } from 'pseudo-kit/normalizer';
 
-const result = await normalizeCanvas('./src/pseudo-canvas/pseudo-canvas-demo.html');
-// or: await normalizeCanvas('./src/pseudo-canvas/pseudo-canvas-demo.html', { inPlace: true });
+const result = await normalizeCanvas('./src/shared/pseudo-canvas-reference.html');
+// or: await normalizeCanvas('./src/shared/pseudo-canvas-reference.html', { inPlace: true });
 
 console.log(result.changes);
 // → ['Renamed 2× `fields` → `data`', 'Added `component-role=""` to `<button>`', ...]
@@ -619,15 +619,15 @@ Normalize first to fix mechanical errors, then validate to confirm the canvas is
 
 ```bash
 # Text output (Markdown manifest — pass to LLM)
-npm run validate -- src/pseudo-canvas/pseudo-canvas-demo.html
+npm run validate -- src/shared/pseudo-canvas-reference.html
 
 # JSON output (structured manifest — for programmatic use)
-npm run validate:json -- src/pseudo-canvas/pseudo-canvas-demo.html
+npm run validate:json -- src/shared/pseudo-canvas-reference.html
 
 # Node API
 import { validateCanvas } from 'pseudo-kit/validator';
 
-const result = await validateCanvas('./src/pseudo-canvas/pseudo-canvas-demo.html');
+const result = await validateCanvas('./src/shared/pseudo-canvas-reference.html');
 
 if (!result.valid) {
   result.errors.forEach(e => console.error('ERROR:', e));
@@ -712,7 +712,7 @@ The system has three distinct file types. Never mix their roles.
 **Canvas structure:**
 
 ```
-pseudo-canvas-demo.html
+pseudo-canvas-reference.html (src/shared/)
   ├── [spec:*] header comments     ← rules, conventions, state refs
   ├── <component-registry>         ← declares every component and layout element
   │     <chat-bubble props="..." data="..." on="..." />
@@ -720,6 +720,8 @@ pseudo-canvas-demo.html
   │     …
   └── <frame id="main-screen">    ← one frame per screen
   └── <frame id="review-screen">
+
+Note: A synced copy is maintained at src/pseudo-canvas/demos/pseudo-canvas-demo.html
 ```
 
 **Component file structure:**
@@ -951,7 +953,7 @@ await writeFile('dist/components.css', css, 'utf-8');
 Validates a pseudo-HTML layout file against the registered component registry:
 
 ```js
-const result = await PseudoKitServer.validate('./src/pseudo-canvas/pseudo-canvas-demo.html');
+const result = await PseudoKitServer.validate('./src/shared/pseudo-canvas-reference.html');
 
 if (!result.valid) {
   result.errors.forEach(e => console.error('ERROR:', e));
@@ -1097,13 +1099,18 @@ pseudo-kit/
       canvas-normalize.js          ← canvas auto-corrector
     pseudo-html/
       SPEC.md                      ← pseudo-HTML full specification
+    shared/
+      pseudo-canvas-reference.html   ← canonical source (the "Bible")
     pseudo-canvas/
-      pseudo-canvas-demo.html      ← demo canvas
+      viewer/                        ← Figma-style component viewer
+      demos/
+        pseudo-canvas-demo.html      ← synced copy of reference
+        amazon/                      ← demo apps
+        facebook/
+        netflix/
     pseudo-assets/
-      components/                  ← atoms, molecules, organisms
-      frames/                      ← page skeleton templates
-      demos/                       ← amazon, facebook, netflix demos
-      viewer/                      ← Figma-style component viewer
+      components/                    ← atoms, molecules, organisms
+      frames/                        ← page skeleton templates
     pseudo-skills/
       SKILL.md                     ← LLM skill entry point
       PSEUDO-KIT.md                ← component system reference

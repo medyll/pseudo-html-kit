@@ -1,5 +1,5 @@
-current_phase: "Phase 4 – Implementation"
-progress: 100
+current_phase: "Phase 3 – Solutioning (Restructure)"
+progress: 15
 
 phases:
   - id: phase-1
@@ -127,4 +127,4 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-recommendation: "QA in progress. Root cause found for failing script tests. Next → apply template strip fix in _loadComponent (plan.md has exact code), then canvas-normalize.test.js. Publishing handled by CI — never run npm publish manually."
+recommendation: "Restructuring PRD + Architecture docs created. Ready to implement Phase 2: Create pseudo-canvas package and move files. Run `/next` to execute implementation sprints."

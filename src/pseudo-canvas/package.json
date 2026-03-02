@@ -1,0 +1,35 @@
+{
+  "name": "pseudo-canvas",
+  "version": "0.1.0",
+  "description": "Figma-like viewer and demo apps for pseudo-HTML canvases.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./viewer": "./viewer/pseudo-canvas-viewer.html",
+    "./demos/*": "./demos/*"
+  },
+  "files": [
+    "viewer/",
+    "demos/",
+    "index.js",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "pseudo-kit": ">=0.1.0"
+  },
+  "devDependencies": {
+    "pseudo-kit": "workspace:*",
+    "pseudo-stack-assets": "workspace:*"
+  },
+  "keywords": [
+    "pseudo-kit",
+    "pseudo-canvas",
+    "pseudo-html",
+    "viewer",
+    "no-framework"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

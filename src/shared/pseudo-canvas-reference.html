@@ -1,0 +1,173 @@
+<!--
+  pseudo-canvas-reference.html
+  
+  CANONICAL SOURCE for pseudo-HTML canvas-based app generation.
+  
+  ⚠️  THIS IS THE "BIBLE" — modifications must be intentional and documented.
+  
+  Use:
+    • Validators read from this file to check registry completeness
+    • LLM code generators use this as the baseline for app generation
+    • Synced to: src/pseudo-canvas/demos/pseudo-canvas-demo.html
+  
+  Structure:
+    - [spec:*] blocks → specification
+    - <component-registry> → all pseudo-components used
+    - <component-tree> → layout structure
+-->
+
+<!--
+  SPECIFICATION BLOCK
+  This section defines the canvas and generation rules.
+-->
+<spec>
+  <meta name="description" content="Canonical pseudo-HTML canvas for pseudo-kit app generation" />
+  <meta name="version" content="1.0.0" />
+  <meta name="created" content="2026-03-02" />
+  
+  <attribute-model>
+    props: Structural configuration (parent-set, immutable)
+    data: Runtime state (read/write)
+    on: CustomEvents emitted (event:type format)
+    element: Layout primitive (CSS-only, no component file)
+    layer: CSS @layer target (base|layout|components|utils)
+    component-role: Purpose description (for LLM context)
+    types-reference: Space-separated TS types
+    when-visible/when-hidden: Trigger conditions
+    behavior: Runtime logic (free-text)
+    role: Purpose of this instance
+    loop: Boolean, marks child as repeated template
+    note: LLM/dev annotation (never implemented)
+  </attribute-model>
+  
+  <type-grammar>
+    field:type              required
+    field:type?             optional
+    type[]                  array
+    enum(a|b|c)            enum
+    [field:type, ...]       object
+    [field:type, ...][]     array of objects
+  </type-grammar>
+</spec>
+
+<!--
+  COMPONENT REGISTRY
+  All pseudo-HTML components used in this canvas.
+  Layout primitives (element="*") are CSS-only, no component files.
+-->
+<component-registry>
+  <!-- Layout primitives (CSS-only) -->
+  <component name="row" element="row" layer="layout" component-role="Flexbox row layout" note="display: flex; flex-direction: row" />
+  <component name="column" element="column" layer="layout" component-role="Flexbox column layout" note="display: flex; flex-direction: column" />
+  
+  <!-- App container -->
+  <component name="app-shell" 
+    props="theme:enum(light|dark)?; lang:string?"
+    data="focusMode:boolean?"
+    on="themeChange:string; languageChange:string"
+    component-role="Root app container, manages theme and language"
+    types-reference="AppConfig"
+  />
+  
+  <!-- Navigation -->
+  <component name="navbar" 
+    props="position:enum(top|side)?; fixed:boolean?"
+    data="activeTab:string?"
+    on="navigationChange:string"
+    component-role="Main navigation bar"
+  />
+  
+  <!-- Content panels -->
+  <component name="panel" 
+    props="title:string; collapsible:boolean?"
+    data="collapsed:boolean?"
+    on="collapse:boolean"
+    component-role="Generic collapsible panel container"
+  />
+  
+  <!-- Cards -->
+  <component name="card" 
+    props="title:string?; subtitle:string?"
+    component-role="Generic card with header and content"
+  />
+  
+  <!-- Buttons -->
+  <component name="button" 
+    props="variant:enum(primary|secondary|danger)?; disabled:boolean?"
+    data="loading:boolean?"
+    on="click:void"
+    component-role="Interactive button"
+  />
+</component-registry>
+
+<!--
+  COMPONENT TREE
+  The actual layout and structure of the pseudo-HTML canvas.
+-->
+<app-shell theme="light" data="focusMode:false" role="root">
+  
+  <row element="row" role="main-layout">
+    <!-- Sidebar navigation -->
+    <navbar 
+      role="primary-nav"
+      props="position:side; fixed:true"
+      data="activeTab:home"
+    >
+      <button role="nav-home" variant="primary" on="click">Home</button>
+      <button role="nav-canvas" on="click">Canvas Editor</button>
+      <button role="nav-components" on="click">Components</button>
+      <button role="nav-settings" on="click">Settings</button>
+    </navbar>
+    
+    <!-- Main content area -->
+    <column element="column" role="content-area">
+      
+      <!-- Header -->
+      <panel 
+        role="header"
+        props="title:Pseudo-Canvas; collapsible:false"
+      >
+        <row element="row">
+          <h1>Welcome to pseudo-canvas</h1>
+          <button role="theme-toggle" on="themeChange">Toggle Theme</button>
+        </row>
+      </panel>
+      
+      <!-- Main content -->
+      <panel 
+        role="main-content"
+        props="title:Canvas Demo; collapsible:true"
+        data="collapsed:false"
+      >
+        <card 
+          role="intro-card"
+          props="title:Getting Started; subtitle:Build pseudo-HTML apps"
+        >
+          <p>This is the canonical reference canvas for pseudo-kit code generation.</p>
+          <p>All LLM-generated apps trace back to this baseline structure.</p>
+        </card>
+        
+        <card 
+          role="demo-card"
+          props="title:Component Demo; subtitle:Interactive elements"
+        >
+          <button role="action-button" variant="primary" on="click">Primary Action</button>
+          <button role="secondary-button" variant="secondary" on="click">Secondary Action</button>
+        </card>
+      </panel>
+      
+      <!-- Footer -->
+      <panel 
+        role="footer"
+        props="title:Footer; collapsible:false"
+      >
+        <row element="row">
+          <p>© 2026 pseudo-kit. This is the canonical reference.</p>
+          <a href="#" role="reference-link">About pseudo-canvas-reference.html</a>
+        </row>
+      </panel>
+      
+    </column>
+  </row>
+  
+</app-shell>
