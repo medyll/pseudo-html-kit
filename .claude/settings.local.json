@@ -6,7 +6,8 @@
       "Bash(mv:*)",
       "Bash(node:*)",
       "Bash(pnpm run:*)",
-      "Skill(keybindings-help)"
+      "Skill(keybindings-help)",
+      "Bash(npm publish:*)"
     ]
   }
 }
