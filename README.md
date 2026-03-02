@@ -146,7 +146,40 @@ See [Asset Library](#asset-library--pre-built-components) below.
 
 ## Quick start
 
-### index.html
+### Viewer Setup
+
+The **pseudo-canvas-viewer** is a Figma-style component preview tool. It requires HTTP to load components (not `file://`):
+
+```bash
+npm run serve:canvas
+# → Opens http://localhost:3000/viewer/pseudo-canvas-viewer.html
+```
+
+### Creating a Component
+
+An HTML file with `<template>`, `<style>`, and `<script>` sections:
+
+```html
+<!-- components/chat-bubble.html -->
+<template>
+  <div class="bubble-body">
+    <pk-slot/>
+  </div>
+</template>
+
+<style>
+  @scope {
+    :scope { display: flex; padding: 1rem; border-radius: 8px; }
+  }
+</style>
+
+<script type="module">
+  import PseudoKit from 'pseudo-kit';
+  PseudoKit.register(import.meta);
+</script>
+```
+
+Then use it in your layout:
 
 ```html
 <!DOCTYPE html>

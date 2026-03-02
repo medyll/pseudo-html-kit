@@ -27,7 +27,8 @@
     "test":         "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js",
     "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
     "test:all":     "pnpm test && pnpm run test:client",
-    "test:coverage":"vitest run --coverage"
+    "test:coverage":"vitest run --coverage",
+    "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000 -o /viewer/pseudo-canvas-viewer.html"
   },
   "devDependencies": {
     "vitest":    "^2.0.0",
