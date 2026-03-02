@@ -805,7 +805,7 @@ const ui     = new ViewerUI(loader);
 
 /** Derive the index.js URL relative to this viewer file */
 function indexUrl() {
-  return new URL('../../index.js', import.meta.url).href;
+  return new URL('../index.js', import.meta.url).href;
 }
 
 /** Load all assets from index.js */
