@@ -1,6 +1,6 @@
 {
   "name": "pseudo-canvas",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Figma-like viewer and demo apps for pseudo-HTML canvases.",
   "type": "module",
   "license": "MIT",
