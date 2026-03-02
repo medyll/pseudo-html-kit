@@ -118,11 +118,29 @@ pseudo-kit is the runtime layer that makes pseudo-HTML functional:
 
 ## Installation
 
+### Core Library
+
 ```bash
 npm install pseudo-kit
+# or
+pnpm add pseudo-kit
 ```
 
-Requires Node.js 22+ for the server runtime.
+**Requirements:**
+- Node.js 22+ (server runtime)
+- Browser: Chrome 118+, Firefox 128+, Safari 17.4+ (for `@scope`, `CSSStyleSheet`, `:has()`)
+
+### With Pre-built Asset Library (optional)
+
+For 46 pre-built components (atoms, molecules, organisms), 20 frame skeletons, and demo apps:
+
+```bash
+npm install pseudo-stack-assets
+# or
+pnpm add pseudo-stack-assets
+```
+
+See [Asset Library](#asset-library--pre-built-components) below.
 
 ---
 
@@ -1131,24 +1149,83 @@ pseudo-kit/
 
 ---
 
-## Tests
+## Development
+
+### Setup
 
 ```bash
-# Node.js tests — shared + server (no dependencies)
+# Install dependencies
+npm install
+
+# or with pnpm (workspace support)
+pnpm install
+```
+
+No build step required anywhere in the project — everything runs as vanilla ESM.
+
+### Project Commands
+
+```bash
+# Run all tests (node:test + vitest)
+npm run test:all
+
+# Run tests in watch mode (useful during development)
+npm run test:watch
+
+# Generate documentation
+npm run generate:manifest  # produce manifest text from pseudo-canvas
+
+# Validate and normalize layouts
+npm run validate -- path/to/layout.html
+npm run normalize:write -- path/to/layout.html
+```
+
+### Key Files
+
+- **Entry points**: `src/client/pseudo-kit-client.js`, `src/server/pseudo-kit-server.js`, `src/shared/index.js`
+- **Tests**: `tests/*.test.js` (node:test), `tests/*.client.test.js` (vitest)
+- **Spec**: `src/pseudo-html/SPEC.md` (full attribute model and type grammar)
+- **Skills**: `src/pseudo-skills/` (LLM code generation references)
+
+---
+
+## Tests
+
+### Running Tests
+
+```bash
+# Node.js tests — shared + server (no external dependencies)
 npm test
 
 # Client tests — requires vitest + happy-dom
-npm install --save-dev vitest happy-dom
 npm run test:client
 
-# All tests
+# All tests (Node + vitest)
 npm run test:all
 
-# Coverage (client)
+# Coverage report (client only — enforces 100%)
 npm run test:coverage
 ```
 
-Test coverage targets: **100%** lines, functions, branches, statements on all modules.
+### Validation & Normalization
+
+Validate pseudo-HTML canvas files against the spec:
+
+```bash
+# Check spec conformity + registry completeness
+npm run validate -- path/to/canvas.html
+
+# JSON output for programmatic consumption
+npm run validate:json -- path/to/canvas.html
+
+# Auto-fix obsolete attributes and missing component-role/role
+npm run normalize -- path/to/canvas.html        # writes canvas.normalized.html
+npm run normalize:write -- path/to/canvas.html  # in-place
+```
+
+### Test Coverage
+
+Target: **100%** lines, functions, branches, statements on all modules.
 
 | File | Runner | Tests |
 |---|---|---|
@@ -1156,6 +1233,9 @@ Test coverage targets: **100%** lines, functions, branches, statements on all mo
 | `state-shared.js` | `node:test` | 33 |
 | `pseudo-kit-server.js` | `node:test` | 37 |
 | `pseudo-kit-client.js` | Vitest + happy-dom | ~50 |
+| **Total** | — | **259** |
+
+**v0.2.0 Status:** All tests passing (0 failures).
 
 ---
 
@@ -1169,6 +1249,47 @@ Test coverage targets: **100%** lines, functions, branches, statements on all mo
 
 ---
 
+## Asset Library — Pre-built Components
+
+The **pseudo-stack-assets** npm package includes 46 production-ready components, 20 page frame templates, and 3 complete demo apps (Netflix, Amazon, Facebook) — all built with pseudo-kit, zero external dependencies.
+
+### Installation
+
+```bash
+npm install pseudo-stack-assets
+```
+
+### Usage
+
+```js
+import { components, componentNames, frames, componentsMeta } from 'pseudo-stack-assets';
+
+// Register one component
+PseudoKit.register({ name: componentNames.card, src: components.card }); // → 'card-pk'
+
+// Or register all at once
+Object.entries(components).forEach(([key, src]) =>
+  PseudoKit.register({ name: componentNames[key], src })
+);
+PseudoKit.init();
+```
+
+### Component Catalog
+
+| Type | Count | Examples |
+|---|---|---|
+| **Atoms** | 17 | `button-pk`, `text-pk`, `icon-pk`, `divider-pk`, `badge-pk` |
+| **Molecules** | 16 | `card-pk`, `alert-pk`, `tooltip-pk`, `tabs-pk`, `navbar-pk` |
+| **Organisms** | 13 | `modal-pk`, `dropdown-pk`, `carousel-pk`, `accordion-pk` |
+| **Frames** | 20 | Page skeleton templates (empty slots for content) |
+| **Demo Apps** | 3 | Netflix, Amazon, Facebook reference implementations |
+
+### Tokens & Theming
+
+Each demo app includes a `tokens.css` stylesheet with color/spacing variables for quick customization. Frame your components with your own token values.
+
+---
+
 ## Framework references
 
 The `src/pseudo-skills/` directory contains mapping references for generating real code from pseudo-HTML:
@@ -1178,6 +1299,37 @@ The `src/pseudo-skills/` directory contains mapping references for generating re
 - `src/pseudo-skills/REACT.md` — pseudo-HTML → React mapping
 - `src/pseudo-skills/SVELTE.md` — pseudo-HTML → Svelte 5 mapping
 - `src/pseudo-skills/pseudo-svelte-5-reference.md` — Svelte 5 non-regression guide (LLMs regress often)
+
+---
+
+## Release & Versioning
+
+### Version Policy
+
+pseudo-kit follows **Semantic Versioning (SemVer)**.
+
+- **Major** (breaking): Changes to component registration, slot API, state serialization, or browser support
+- **Minor** (feature): New components, CSS layers, or validation features
+- **Patch** (fix): Bug fixes, test improvements, documentation updates
+
+### Current Version
+
+**v0.2.0** — Production release (March 2026)
+
+- 259 tests passing (0 failures)
+- 46 pre-built components (pseudo-stack-assets)
+- Full SSR support with hydration
+- CSS `@scope` isolation on all components
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+### Publishing
+
+Publishing is handled exclusively by CI/CD. Do **not** run `npm publish` manually.
+
+- Releases are tagged in git (e.g., `v0.2.0`)
+- Packages are published to npm registry automatically
+- GitHub Actions validates tests, coverage, and builds before publishing
 
 ---
 
