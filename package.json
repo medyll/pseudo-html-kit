@@ -1,5 +1,5 @@
 {
-  "name": "pseudo-kit",
+  "name": "pseudo-stack",
   "version": "0.2.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
@@ -28,7 +28,7 @@
     "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
     "test:all":     "pnpm test && pnpm run test:client",
     "test:coverage":"vitest run --coverage",
-    "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000 -o /viewer/pseudo-canvas-viewer.html"
+    "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000"
   },
   "devDependencies": {
     "vitest":    "^2.0.0",

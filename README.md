@@ -152,7 +152,8 @@ The **pseudo-canvas-viewer** is a Figma-style component preview tool. It require
 
 ```bash
 npm run serve:canvas
-# → Opens http://localhost:3000/viewer/pseudo-canvas-viewer.html
+# → Serves on http://localhost:3000
+# → Open: http://localhost:3000/viewer/pseudo-canvas-viewer.html
 ```
 
 ### Creating a Component
