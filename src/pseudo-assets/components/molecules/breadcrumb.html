@@ -1,8 +1,10 @@
 <!--
   @component breadcrumb-pk
-  @props items:[{label:string,href:string?}][]
-  @slots default
   @layer molecules
+
+  @prop {Array<{label: string, href: string}>} items - Ordered list of breadcrumb steps; last item is the current page
+
+  @slot default - Slotted `<li>` elements as an alternative to the `items` prop
 -->
 <template>
   <nav class="breadcrumb" aria-label="Breadcrumb">

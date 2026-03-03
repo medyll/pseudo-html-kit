@@ -1,8 +1,16 @@
 <!--
   @component button-pk
-  @props label:string?; variant:enum(primary|secondary|ghost|danger)?; size:enum(sm|md|lg)?; disabled:boolean?; type:enum(button|submit|reset)?
-  @slots default, icon-left, icon-right
   @layer atoms
+
+  @prop {string} [label] - Button text; can also be provided via default slot
+  @prop {'primary'|'secondary'|'ghost'|'danger'} [variant='secondary'] - Visual style variant
+  @prop {'sm'|'md'|'lg'} [size='md'] - Button size preset
+  @prop {boolean} [disabled] - Disables the button and prevents interaction
+  @prop {'button'|'submit'|'reset'} [type='button'] - Native button type attribute
+
+  @slot default - Button label text or mixed content
+  @slot icon-left - Icon placed to the left of the label
+  @slot icon-right - Icon placed to the right of the label
 -->
 <template>
   <button class="button" type="button">

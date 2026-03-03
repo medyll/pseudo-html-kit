@@ -394,7 +394,7 @@ function _generateManifestText(manifest, errors, warnings) {
  * Validates a pseudo-canvas file and produces a component manifest.
  *
  * Checks:
- *  1. Conformité spec — props/data/on fields follow the type grammar
+ *  1. Conformity spec — props/data/on fields follow the type grammar
  *  2. Registry completeness — every tag used in frames is declared in <component-registry>
  *  3. Inter-frame consistency — same component used with contradictory props across frames
  *

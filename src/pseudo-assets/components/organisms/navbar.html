@@ -1,8 +1,15 @@
 <!--
   @component navbar-pk
-  @props sticky:boolean?; transparent:boolean?; elevated:boolean?
-  @slots logo, links, actions, mobile-menu
   @layer organisms
+
+  @prop {boolean} [sticky] - Pins the navbar to the top of the viewport while scrolling
+  @prop {boolean} [transparent] - Removes the background colour (for hero overlay navbars)
+  @prop {boolean} [elevated] - Adds a bottom shadow to separate the navbar from content
+
+  @slot logo - Brand logo or wordmark on the left side
+  @slot links - Primary navigation links in the centre
+  @slot actions - Right-side action buttons (search, cart, user menu)
+  @slot mobile-menu - Full mobile navigation panel revealed by the hamburger button
 -->
 <template>
   <header class="navbar">

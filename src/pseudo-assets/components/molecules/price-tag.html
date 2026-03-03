@@ -1,8 +1,14 @@
 <!--
   @component price-tag-pk
-  @props price:number; currency:string?; original:number?; discount:boolean?; size:enum(sm|md|lg)?
-  @slots default
   @layer molecules
+
+  @prop {number} price - Current (possibly discounted) price value
+  @prop {string} [currency='$'] - Currency symbol displayed before the price
+  @prop {number} [original] - Original price shown struck-through when a discount applies
+  @prop {boolean} [discount] - Highlights the price with a discount/sale colour treatment
+  @prop {'sm'|'md'|'lg'} [size='md'] - Font size preset for the price display
+
+  @slot original - Custom struck-through original price content
 -->
 <template>
   <div class="price-tag">

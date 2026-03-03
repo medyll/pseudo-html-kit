@@ -1,8 +1,12 @@
 <!--
   @component skeleton-pk
-  @props width:string?; height:string?; variant:enum(text|circle|rect)?; lines:number?; animated:boolean?
-  @slots (none)
   @layer atoms
+
+  @prop {string} [width] - Explicit CSS width override (e.g. "120px", "60%")
+  @prop {string} [height] - Explicit CSS height override (e.g. "1rem", "40px")
+  @prop {'text'|'circle'|'rect'} [variant='rect'] - Shape preset: text (narrow bar), circle, or rectangle
+  @prop {number} [lines=1] - Number of stacked text-variant skeleton lines to render
+  @prop {boolean} [animated=true] - Enable the shimmer/pulse loading animation
 -->
 <template>
   <span class="skeleton" aria-hidden="true" aria-busy="true"></span>

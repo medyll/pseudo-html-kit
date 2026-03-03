@@ -1,8 +1,15 @@
 <!--
   @component sidebar-pk
-  @props open:boolean?; position:enum(left|right)?; width:string?; overlay:boolean?
-  @slots header, default, footer
   @layer organisms
+
+  @prop {boolean} [open] - Controls whether the sidebar panel is visible (relevant in overlay mode)
+  @prop {'left'|'right'} [position='left'] - Side of the viewport where the sidebar is anchored
+  @prop {string} [width='260px'] - CSS width value of the sidebar panel
+  @prop {boolean} [overlay] - Renders the sidebar as a modal drawer with a backdrop overlay
+
+  @slot header - Top area of the sidebar (logo, close button, etc.)
+  @slot default - Main navigation or content area
+  @slot footer - Bottom area of the sidebar (user info, settings link)
 -->
 <template>
   <aside class="sidebar">

@@ -1,8 +1,15 @@
 <!--
   @component modal-pk
-  @props title:string?; open:boolean?; size:enum(sm|md|lg|fullscreen)?; closeable:boolean?
-  @slots default, header, footer
   @layer molecules
+
+  @prop {string} [title] - Modal title shown in the header when no `header` slot is provided
+  @prop {boolean} [open] - Controls whether the modal is visible
+  @prop {'sm'|'md'|'lg'|'fullscreen'} [size='md'] - Width preset of the modal container
+  @prop {boolean} [closeable=true] - Shows the × close button in the header
+
+  @slot header - Custom header content; replaces the default title bar
+  @slot default - Main modal body content
+  @slot footer - Footer area for action buttons
 -->
 <template>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -116,3 +123,18 @@
     .modal__footer:empty { display: none; }
   }
 </style>
+
+<script>
+// Forward aria-labelledby / aria-label from host to the inner role="dialog" element.
+const dialog = el.querySelector('.modal');
+if (dialog) {
+  if (el.hasAttribute('aria-labelledby')) {
+    dialog.setAttribute('aria-labelledby', el.getAttribute('aria-labelledby'));
+    el.removeAttribute('aria-labelledby');
+  }
+  if (el.hasAttribute('aria-label')) {
+    dialog.setAttribute('aria-label', el.getAttribute('aria-label'));
+    el.removeAttribute('aria-label');
+  }
+}
+</script>

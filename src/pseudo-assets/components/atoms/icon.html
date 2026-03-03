@@ -1,8 +1,13 @@
 <!--
   @component icon-pk
-  @props name:string?; size:enum(xs|sm|md|lg|xl)?; label:string?
-  @slots default (SVG content)
   @layer atoms
+
+  @prop {string} [name] - Icon identifier (reserved for icon-font / sprite usage)
+  @prop {'xs'|'sm'|'md'|'lg'|'xl'} [size='md'] - Icon box size preset
+  @prop {string} [label] - Accessible label; also accepted as `aria-label`. When set the icon is
+    exposed to assistive technology (aria-hidden removed from inner span).
+
+  @slot default - SVG or img element to render as the icon
 -->
 <template>
   <span class="icon" role="img" aria-hidden="true">
@@ -37,3 +42,16 @@
     }
   }
 </style>
+
+<script>
+// Forward aria-label from host to the inner role="img" span; expose to AT when labelled.
+const icon = el.querySelector('.icon');
+if (icon) {
+  const lbl = el.getAttribute('aria-label') || el.getAttribute('label');
+  if (lbl) {
+    icon.setAttribute('aria-label', lbl);
+    icon.removeAttribute('aria-hidden');
+    el.removeAttribute('aria-label');
+  }
+}
+</script>

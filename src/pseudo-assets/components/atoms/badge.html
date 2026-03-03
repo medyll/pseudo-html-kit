@@ -1,8 +1,11 @@
 <!--
   @component badge-pk
-  @props label:string; variant:enum(default|primary|success|warning|danger)?; dot:boolean?; size:enum(sm|md)?
-  @slots (none)
   @layer atoms
+
+  @prop {string} label - Badge text content (slotted or via default slot)
+  @prop {'default'|'primary'|'success'|'warning'|'danger'} [variant='default'] - Colour variant
+  @prop {boolean} [dot] - Show a coloured dot indicator before the label
+  @prop {'sm'|'md'} [size='md'] - Badge size preset
 -->
 <template>
   <span class="badge" role="status">

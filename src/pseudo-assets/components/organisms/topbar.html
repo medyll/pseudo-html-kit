@@ -1,8 +1,14 @@
 <!--
   @component topbar-pk
-  @props elevated:boolean?; transparent:boolean?; sticky:boolean?
-  @slots leading, title, actions
   @layer organisms
+
+  @prop {boolean} [elevated] - Adds a bottom shadow to the topbar
+  @prop {boolean} [transparent] - Removes the background colour for overlay usage
+  @prop {boolean} [sticky] - Pins the topbar to the top of the viewport
+
+  @slot leading - Left-side content (back button, hamburger menu, logo)
+  @slot title - Centre title or search bar
+  @slot actions - Right-side icon buttons (notifications, avatar, settings)
 -->
 <template>
   <div class="topbar">

@@ -1,8 +1,13 @@
 <!--
   @component footer-pk
-  @props variant:enum(simple|full)?
-  @slots brand, links, social, legal
   @layer organisms
+
+  @prop {'simple'|'full'} [variant='full'] - Layout variant: `simple` is a single-row bar; `full` has multi-column links
+
+  @slot brand - Logo and tagline area on the left / top
+  @slot links - Navigation link columns (use `<ul>` groups)
+  @slot social - Social media icon links
+  @slot legal - Copyright text and legal links at the very bottom
 -->
 <template>
   <footer class="footer">

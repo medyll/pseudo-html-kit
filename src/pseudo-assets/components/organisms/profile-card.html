@@ -1,8 +1,15 @@
 <!--
   @component profile-card-pk
-  @props name:string?; bio:string?; variant:enum(compact|full)?
-  @slots avatar, stats, actions, cover
   @layer organisms
+
+  @prop {string} [name] - User's display name
+  @prop {string} [bio] - Short bio or tagline text
+  @prop {'compact'|'full'} [variant='full'] - `compact` shows only avatar + name; `full` adds bio, stats, and cover
+
+  @slot cover - Cover/banner image displayed at the top of the card
+  @slot avatar - Profile picture element (use `<avatar-pk>`)
+  @slot stats - Follower/following/post count stats row
+  @slot actions - Follow, message, and other CTA buttons
 -->
 <template>
   <article class="profile-card">

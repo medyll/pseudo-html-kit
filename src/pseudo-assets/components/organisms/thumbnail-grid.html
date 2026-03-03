@@ -1,8 +1,12 @@
 <!--
   @component thumbnail-grid-pk
-  @props columns:number?; gap:enum(sm|md|lg)?; masonry:boolean?
-  @slots default
   @layer organisms
+
+  @prop {number} [columns=3] - Number of columns in the CSS grid
+  @prop {'sm'|'md'|'lg'} [gap='md'] - Gap size between grid cells
+  @prop {boolean} [masonry] - Enables CSS masonry-style layout (column-count fallback)
+
+  @slot default - Thumbnail items to display in the grid (use `<card-media-pk>` or `<img>` elements)
 -->
 <template>
   <div class="thumbnail-grid">

@@ -1,8 +1,10 @@
 <!--
   @component spinner-pk
-  @props size:enum(sm|md|lg)?; label:string?; variant:enum(default|primary|white)?
-  @slots (none)
   @layer atoms
+
+  @prop {'sm'|'md'|'lg'} [size='md'] - Spinner diameter size preset
+  @prop {string} [label='Loading'] - Screen-reader text placed in a `.sr-only` span; also accepted as `aria-label`
+  @prop {'default'|'primary'|'white'} [variant='default'] - Arc colour variant
 -->
 <template>
   <span class="spinner" role="status" aria-live="polite">
@@ -60,3 +62,13 @@
     }
   }
 </style>
+
+<script>
+// Forward label to the .sr-only span so role="status" carries an accessible name.
+const srOnly = el.querySelector('.sr-only');
+if (srOnly) {
+  const lbl = el.getAttribute('aria-label') || el.getAttribute('label') || 'Loading';
+  srOnly.textContent = lbl;
+  if (el.hasAttribute('aria-label')) el.removeAttribute('aria-label');
+}
+</script>

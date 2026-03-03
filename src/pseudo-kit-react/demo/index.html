@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pseudo-kit-react — demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; padding: 2rem; background: #f8fafc; color: #1a202c; }
+    h1 { margin-bottom: 1.5rem; font-size: 1.5rem; }
+    .demo-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center; }
+    .section { margin-bottom: 2rem; }
+    h2 { font-size: 1rem; font-weight: 600; margin-bottom: .75rem; color: #4a5568; }
+  </style>
+
+  <!--
+    Load pseudo-kit-client.js (adjust path if serving from a different root).
+    PseudoKit is exposed on globalThis so the React hooks can access it.
+  -->
+  <script type="module">
+    import PseudoKit from '../../client/pseudo-kit-client.js';
+    globalThis.PseudoKit = PseudoKit;
+  </script>
+</head>
+<body>
+  <h1>pseudo-kit-react demo</h1>
+  <p style="margin-bottom:1.5rem;color:#64748b">
+    This page demonstrates using <code>useComponent</code> and <code>usePseudoKit</code>
+    from <strong>pseudo-kit-react</strong> inside a plain React 18 app loaded via CDN.
+    No build step required.
+  </p>
+
+  <div id="root"></div>
+
+  <!--
+    React + ReactDOM + Babel (CDN) — for demo purposes only.
+    In a real project, use a bundler and import from node_modules.
+  -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Inline implementation of useComponent (mirrors src/index.js)
+    // In a real project: import { useComponent, usePseudoKit } from 'pseudo-kit-react';
+    function _nameFromUrl(url) {
+      return url.split('/').pop().replace(/\.html$/, '');
+    }
+
+    function useComponent(url) {
+      const [ready, setReady] = useState(false);
+      useEffect(() => {
+        if (!url || !globalThis.PseudoKit) return;
+        const name = _nameFromUrl(url);
+        globalThis.PseudoKit.register({ name, src: url });
+        globalThis.PseudoKit.init().then(() => setReady(true));
+      }, [url]);
+      return { ready };
+    }
+
+    function usePseudoKit(urls) {
+      const [ready, setReady] = useState(false);
+      useEffect(() => {
+        if (!urls?.length || !globalThis.PseudoKit) return;
+        urls.forEach(url => {
+          globalThis.PseudoKit.register({ name: _nameFromUrl(url), src: url });
+        });
+        globalThis.PseudoKit.init().then(() => setReady(true));
+      }, [urls.join(',')]);
+      return { ready };
+    }
+
+    // ---- Demo components ----
+
+    function ButtonDemo() {
+      const { ready } = useComponent('../../pseudo-assets/components/atoms/button-pk.html');
+      if (!ready) return <p style={{color:'#94a3b8'}}>Loading button-pk…</p>;
+      return (
+        <div className="demo-row">
+          <button-pk variant="primary">Primary</button-pk>
+          <button-pk variant="secondary">Secondary</button-pk>
+          <button-pk variant="ghost">Ghost</button-pk>
+          <button-pk variant="danger">Danger</button-pk>
+          <button-pk disabled>Disabled</button-pk>
+        </div>
+      );
+    }
+
+    function BadgeAvatarDemo() {
+      const { ready } = usePseudoKit([
+        '../../pseudo-assets/components/atoms/badge.html',
+        '../../pseudo-assets/components/atoms/avatar.html',
+        '../../pseudo-assets/components/atoms/chip.html',
+      ]);
+      if (!ready) return <p style={{color:'#94a3b8'}}>Loading atoms…</p>;
+      return (
+        <div className="demo-row">
+          <avatar-pk initials="JD" size="md"></avatar-pk>
+          <badge-pk variant="success">Online</badge-pk>
+          <badge-pk variant="warning">Pending</badge-pk>
+          <chip-pk>React ⚛</chip-pk>
+          <chip-pk removable>pseudo-kit</chip-pk>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div>
+          <div className="section">
+            <h2>useComponent — button-pk</h2>
+            <ButtonDemo />
+          </div>
+          <div className="section">
+            <h2>usePseudoKit — badge, avatar, chip</h2>
+            <BadgeAvatarDemo />
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

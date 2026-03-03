@@ -1,8 +1,14 @@
 <!--
   @component search-bar-pk
-  @props placeholder:string?; value:string?; loading:boolean?; size:enum(sm|md|lg)?
-  @slots prefix, suffix
   @layer molecules
+
+  @prop {string} [placeholder='Search…'] - Placeholder text for the search input
+  @prop {string} [value] - Pre-filled search input value
+  @prop {boolean} [loading] - Shows a loading spinner inside the field
+  @prop {'sm'|'md'|'lg'} [size='md'] - Height and font-size preset of the search field
+
+  @slot prefix - Icon or element placed at the start of the input (default: magnifier icon)
+  @slot suffix - Icon or element placed at the end of the input (clear button, filter, etc.)
 -->
 <template>
   <div class="search-bar" role="search">

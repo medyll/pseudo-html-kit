@@ -276,12 +276,12 @@ describe('list-item-pk', () => {
     obs.disconnect();
   });
 
-  it('stamps li.list-item with leading, content and trailing sections', async () => {
+  it('stamps .list-item with leading, content and trailing sections', async () => {
     const obs = registerAndInit('list-item-pk', SRC, HTML);
     document.body.innerHTML = '<list-item-pk primary="Item"></list-item-pk>';
     PseudoKit.init(document.body);
     await flush();
-    expect(document.querySelector('li.list-item')).toBeTruthy();
+    expect(document.querySelector('.list-item')).toBeTruthy();
     expect(document.querySelector('.list-item__leading')).toBeTruthy();
     expect(document.querySelector('.list-item__content')).toBeTruthy();
     expect(document.querySelector('.list-item__trailing')).toBeTruthy();

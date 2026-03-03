@@ -7,13 +7,13 @@
   <style>
     /* Design tokens — ensures components get real colours for contrast testing */
     :root {
-      --color-primary: #3b82f6;
+      --color-primary: #1d4ed8;
       --color-primary-contrast: #ffffff;
       --color-primary-hover: #2563eb;
       --color-surface-1: #f7fafc;
       --color-surface-2: #e2e8f0;
       --color-text: #1a202c;
-      --color-text-muted: #718096;
+      --color-text-muted: #4a5568;
       --color-border: #cbd5e0;
       --color-danger: #ef4444;
       --color-danger-hover: #dc2626;
@@ -61,7 +61,7 @@
     h2 { margin: 2rem 0 1rem; font-size: 1.25rem; border-bottom: 1px solid #e2e8f0; padding-bottom: .5rem; }
     .component-grid { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
     .component-sample { border: 1px solid #e2e8f0; border-radius: .375rem; padding: .75rem; min-width: 180px; }
-    .component-label { font-size: .6875rem; color: #718096; margin-bottom: .5rem; font-family: monospace; }
+    .component-label { font-size: .6875rem; color: #4a5568; margin-bottom: .5rem; font-family: monospace; }
 
     #status { position: fixed; top: 1rem; right: 1rem; background: #3b82f6; color: #fff;
       padding: .5rem 1rem; border-radius: .375rem; font-size: .875rem; }
@@ -84,7 +84,7 @@
 
     <div class="component-sample">
       <div class="component-label">badge-pk</div>
-      <badge-pk variant="success" aria-label="Status: Active">Active</badge-pk>
+      <badge-pk variant="success">Active</badge-pk>
     </div>
 
     <div class="component-sample">
@@ -94,7 +94,7 @@
 
     <div class="component-sample">
       <div class="component-label">chip-pk</div>
-      <chip-pk label="React" aria-label="React chip"></chip-pk>
+      <chip-pk label="React"></chip-pk>
     </div>
 
     <div class="component-sample">
@@ -144,7 +144,7 @@
 
     <div class="component-sample">
       <div class="component-label">skeleton-pk</div>
-      <skeleton-pk variant="text" aria-label="Loading text placeholder"></skeleton-pk>
+      <skeleton-pk variant="text"></skeleton-pk>
     </div>
 
     <div class="component-sample">
@@ -154,7 +154,7 @@
 
     <div class="component-sample">
       <div class="component-label">tag-pk</div>
-      <tag-pk variant="primary" aria-label="Tag: Design">Design</tag-pk>
+      <tag-pk variant="primary">Design</tag-pk>
     </div>
 
     <div class="component-sample">
@@ -219,7 +219,7 @@
 
     <div class="component-sample">
       <div class="component-label">list-item-pk</div>
-      <ul style="list-style:none;padding:0;min-width:180px">
+      <ul role="list" style="list-style:none;padding:0;min-width:180px">
         <list-item-pk primary="Alice Johnson">
           <avatar-pk slot="leading" size="sm"><img src="https://placehold.co/32x32" alt="Alice Johnson avatar"/></avatar-pk>
         </list-item-pk>
@@ -312,7 +312,7 @@
       <div class="component-label">cart-summary-pk</div>
       <cart-summary-pk style="max-width:240px">
         <span slot="title">Order Summary</span>
-        <li slot="items" style="list-style:none;padding:.25rem 0">Widget × 2 — $59.98</li>
+        <span slot="items" style="display:block;padding:.25rem 0">Widget × 2 — $59.98</span>
       </cart-summary-pk>
     </div>
 
@@ -339,7 +339,7 @@
         <avatar-pk slot="avatar" size="sm"><img src="https://placehold.co/32x32" alt="Author avatar"/></avatar-pk>
         <span slot="header">
           <span style="font-weight:600">Jane Doe</span>
-          <time datetime="2026-03-03" style="font-size:.75rem;color:#718096">Just now</time>
+          <time datetime="2026-03-03" style="font-size:.75rem;color:#4a5568">Just now</time>
         </span>
         <p>This is a sample feed post with some content.</p>
       </feed-post-pk>

@@ -1,8 +1,13 @@
 <!--
   @component comment-thread-pk
-  @props count:number?; loading:boolean?
-  @slots default, composer, header
   @layer organisms
+
+  @prop {number} [count] - Total comment count displayed in the section header
+  @prop {boolean} [loading] - Shows a skeleton/spinner state while comments are loading
+
+  @slot header - Custom thread header (title, sort controls, etc.)
+  @slot default - Comment items (use `<feed-post-pk>` or custom comment cards)
+  @slot composer - Reply/new comment input area placed at the bottom of the thread
 -->
 <template>
   <section class="comment-thread">

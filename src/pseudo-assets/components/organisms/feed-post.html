@@ -1,8 +1,17 @@
 <!--
   @component feed-post-pk
-  @props author:string?; time:string?; liked:boolean?; bookmarked:boolean?
-  @slots avatar, media, body, actions, header
   @layer organisms
+
+  @prop {string} [author] - Author's display name shown in the post header
+  @prop {string} [time] - Relative or formatted timestamp string
+  @prop {boolean} [liked] - Whether the current user has liked this post
+  @prop {boolean} [bookmarked] - Whether the current user has bookmarked this post
+
+  @slot avatar - Author avatar element (use `<avatar-pk>`)
+  @slot header - Custom post header replacing the default author/time row
+  @slot media - Post media content (image, video embed, link card)
+  @slot body - Main post text content
+  @slot actions - Reaction/action buttons (like, comment, share)
 -->
 <template>
   <article class="feed-post">

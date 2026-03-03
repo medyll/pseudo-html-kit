@@ -1,6 +1,6 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-03 | **Phase:** Implementation (Sprint 08) | **Progress:** 88% — v0.3.0 in progress | **Team:** 3 devs | **Timeline:** 8 sprints × 1 semaine
+> **Sync:** 2026-03-03 | **Phase:** Implementation (Sprint 08 complete) | **Progress:** 100% — v0.3.0 ready | **Team:** 3 devs | **Timeline:** 8 sprints × 1 semaine
 
 ---
 
@@ -11,9 +11,10 @@
 | **pseudo-kit** | ✅ Published v0.2.0 | [npm](https://www.npmjs.com/package/pseudo-kit) |
 | **pseudo-canvas** | ✅ v0.2.0 | Part of monorepo |
 | **pseudo-stack-assets** | ✅ v0.2.0 | Part of monorepo |
+| **pseudo-kit-react** | 🆕 v0.1.0 scaffold | `src/pseudo-kit-react/` |
 | **README** | ✅ Consumer-focused | Enhanced with Installation, Development, Release sections |
 
-**Published:** 2026-03-02 22:44 UTC | **Commits:** `cf21bb1`, `0f6e5f5`, `f3e1bda` | **Tag:** `v0.2.0`
+**v0.3.0 ready for release** — Sprint 08 complete (all 9 stories done).
 
 ---
 
@@ -28,7 +29,7 @@
 
 ---
 
-## 🏃 Sprint Roadmap (7 semaines)
+## 🏃 Sprint Roadmap (8 semaines)
 
 | Sprint | Semaine | Thème | Pts | Epic | Status |
 |:-------|:-------:|:------|:---:|:-----|:------:|
@@ -39,9 +40,9 @@
 | [Sprint 5](artifacts/sprints/sprint-05.md) | W5 | pseudo-canvas-viewer | 28 | PKA-004 | ✅ |
 | [Sprint 6](artifacts/sprints/sprint-06.md) | W6 | Demos Netflix & Amazon | 22 | PKA-005/006 | ✅ |
 | [Sprint 7](artifacts/sprints/sprint-07.md) | W7 | Demo Facebook + SSR + Publish | 22 | PKA-007 + core | ✅ |
-| [Sprint 8](artifacts/sprints/sprint-08.md) | W8 | Quality, DX & Framework Reach | 45 | v0.3.0 | 🔄 |
+| [Sprint 8](artifacts/sprints/sprint-08.md) | W8 | Quality, DX & Framework Reach | 45 | v0.3.0 | ✅ |
 
-**Total : 220 pts · 8 semaines · 3 devs — Sprint 08 in progress**
+**Total : 220 pts · 8 semaines · 3 devs — Sprint 08 complete ✅**
 
 ---
 
@@ -62,7 +63,7 @@
 ## 🏛️ Architecture (locked)
 
 ```
-pseudo-kit-assets/ (new npm package)
+pseudo-kit-assets/ (npm package)
 ├── components/atoms/      (17) — @scope, mobile-first, named+default slots
 ├── components/molecules/  (16) — idem
 ├── components/organisms/  (13) — idem
@@ -74,36 +75,43 @@ pseudo-kit-assets/ (new npm package)
 │   └── facebook/  tokens.css + index.html
 └── viewer/
     └── pseudo-canvas-viewer.html  — drag-and-drop + ?canvas= + ?assets=auto
+
+pseudo-kit-react/ (new — v0.1.0)
+├── src/index.js           — useComponent() + usePseudoKit() hooks
+├── demo/index.html        — browser demo (React 18 CDN)
+└── README.md
 ```
 
 **Peer dep:** `pseudo-html-kit` | **Browser min:** Chrome 118 / FF 128 / Safari 17.4
 
 ---
 
-## ✅ Toutes les décisions verrouillées (10/10)
+## ✅ Sprint 08 — All Stories Complete
 
-| # | Décision | Valeur |
-|---|---|---|
-| 1 | Package | `pseudo-kit-assets` npm séparé |
-| 2 | Nommage | `name.html` (sans préfixe) |
-| 3 | Auto-registration | ❌ Explicite uniquement |
-| 4 | CSS | `@scope` sur chaque `<style>` |
-| 5 | Breakpoints | 320/768/1024/1440px mobile-first |
-| 6 | Slots | Default + named dans tous les composants |
-| 7 | Frames | Squelettes vides (pas de placeholder) |
-| 8 | Viewer | Drag-and-drop + `?canvas=` + `?assets=auto` |
-| 9 | tokens.css | Par demo — pas dans le package |
-| 10 | SSR marker | `data-pk-hydrated` sur chaque composant SSR |
+| Story | Epic | Points | Status |
+|:------|:-----|:------:|:------:|
+| [S8-01](artifacts/stories/S8-01.md) | A – Unit Tests — Atoms (17) | 8 | ✅ |
+| [S8-02](artifacts/stories/S8-02.md) | A – Unit Tests — Molecules (16) | 7 | ✅ |
+| [S8-03](artifacts/stories/S8-03.md) | A – Unit Tests — Organisms (13) | 6 | ✅ |
+| [S8-04](artifacts/stories/S8-04.md) | B – A11y audit (axe-core) | 5 | ✅ |
+| [S8-05](artifacts/stories/S8-05.md) | B – A11y fixes (Critical + Serious) | 5 | ✅ |
+| [S8-06](artifacts/stories/S8-06.md) | C – JSDoc — Atoms + Molecules | 4 | ✅ |
+| [S8-07](artifacts/stories/S8-07.md) | C – JSDoc — Organisms + Frames | 3 | ✅ |
+| [S8-08](artifacts/stories/S8-08.md) | D – pseudo-kit-react scaffold | 3 | ✅ |
+| [S8-09](artifacts/stories/S8-09.md) | D – `useComponent` hook | 4 | ✅ |
+
+**45 / 45 points delivered. Sprint 08 Definition of Done met.**
 
 ---
 
-## 🧪 QA — DONE ✅
+## 🧪 QA
 
 | Metric | Value |
 |:-------|:------|
 | Test plan | ✅ Done |
 | Last run | 2026-03-03 |
 | Coverage | 434 tests — 208 node:test + 51 vitest + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer) + 12 Playwright E2E |
+| A11y | 0 Critical / 0 Serious (axe-core via Playwright) |
 | Open bugs | 0 |
 
 ### 🐛 Bugs
@@ -112,27 +120,13 @@ pseudo-kit-assets/ (new npm package)
 |:---|:------|:------:|
 | HAPPY-DOM-01 | happy-dom nests script/style inside template content for self-closing tags | ✅ Fixed |
 
-> **Fix applied:** strip `script`/`style` from `def.template` after `importNode` in `_loadComponent` (line 284-288)
-
 ---
 
-## 👉 **Next Step — Sprint 08 Active**
+## 👉 Next Step
 
-Sprint 08 · v0.3.0 · 2026-03-03 → 2026-03-10
+Sprint 08 complete. v0.3.0 ready.
 
-| Story | Epic | Points | Status |
-|:------|:-----|:------:|:------:|
-| S8-01 | Unit tests — Atoms (17) | 8 | ✅ |
-| S8-02 | Unit tests — Molecules (16) | 7 | ✅ |
-| S8-03 | Unit tests — Organisms (13) | 6 | ✅ |
-| S8-04 | A11y audit (axe-core) | 5 | 🔲 |
-| S8-05 | A11y fixes (Critical + Serious) | 5 | 🔲 |
-| S8-06 | JSDoc — Atoms + Molecules | 4 | 🔲 |
-| S8-07 | JSDoc — Organisms + Frames | 3 | 🔲 |
-| S8-08 | pseudo-kit-react scaffold | 3 | 🔲 |
-| S8-09 | `useComponent` hook | 4 | 🔲 |
-
-**Epic A (Unit Tests) complete. Run `/dev-story S8-04` to start the A11y audit.**
+**Suggested:** `/doc` — CHANGELOG update + v0.3.0 release notes, then publish CI.
 
 ---
 
@@ -140,3 +134,4 @@ Sprint 08 · v0.3.0 · 2026-03-03 → 2026-03-10
 
 - `/next` — Orchestrator chains next step
 - `/update-dashboard` — Refresh dashboard
+- `/doc` — Generate CHANGELOG + release notes for v0.3.0

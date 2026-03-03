@@ -1,8 +1,17 @@
 <!--
   @component product-detail-pk
-  @props title:string?; price:number?; sku:string?
-  @slots media, info, actions, reviews, tabs, breadcrumb
   @layer organisms
+
+  @prop {string} [title] - Product name shown in the info column
+  @prop {number} [price] - Current price value
+  @prop {string} [sku] - Stock-keeping unit identifier displayed below the title
+
+  @slot breadcrumb - Breadcrumb navigation above the product layout
+  @slot media - Product image gallery or carousel
+  @slot info - Product metadata (title, rating, description, etc.)
+  @slot actions - Add-to-cart, wishlist, and quantity controls
+  @slot tabs - Product details / specs / reviews tab panel
+  @slot reviews - Customer review section below the main layout
 -->
 <template>
   <div class="product-detail">

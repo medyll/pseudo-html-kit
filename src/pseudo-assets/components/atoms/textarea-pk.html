@@ -1,8 +1,15 @@
 <!--
   @component textarea-pk
-  @props name:string; id:string?; placeholder:string?; rows:number?; disabled:boolean?; required:boolean?; error:string?; resize:enum(none|vertical|horizontal|both)?
-  @slots (none)
   @layer atoms
+
+  @prop {string} name - Form field name (forwarded to inner `<textarea>`)
+  @prop {string} [id] - Field id; forwarded to inner `<textarea>` and removed from host
+  @prop {string} [placeholder] - Placeholder text shown when field is empty
+  @prop {number} [rows=4] - Visible number of text rows
+  @prop {boolean} [disabled] - Disables the field
+  @prop {boolean} [required] - Marks the field as required for form validation
+  @prop {string} [error] - Error message; activates error visual state when set
+  @prop {'none'|'vertical'|'horizontal'|'both'} [resize='vertical'] - CSS resize behaviour
 -->
 <template>
   <div class="textarea">
@@ -73,3 +80,17 @@
     :scope[error] .textarea__error { display: block; }
   }
 </style>
+
+<script>
+// Forward host attributes to the inner <textarea> for proper labelling and semantics.
+const field = el.querySelector('.textarea__field');
+if (field) {
+  const fwd = ['name', 'placeholder', 'rows', 'autocomplete'];
+  fwd.forEach(attr => { if (el.hasAttribute(attr)) field.setAttribute(attr, el.getAttribute(attr)); });
+  if (el.hasAttribute('id'))          { field.setAttribute('id', el.getAttribute('id')); el.removeAttribute('id'); }
+  if (el.hasAttribute('aria-label'))  { field.setAttribute('aria-label', el.getAttribute('aria-label')); el.removeAttribute('aria-label'); }
+  if (el.hasAttribute('aria-labelledby')) { field.setAttribute('aria-labelledby', el.getAttribute('aria-labelledby')); el.removeAttribute('aria-labelledby'); }
+  if (el.hasAttribute('disabled'))    field.setAttribute('disabled', '');
+  if (el.hasAttribute('required'))    field.setAttribute('required', '');
+}
+</script>

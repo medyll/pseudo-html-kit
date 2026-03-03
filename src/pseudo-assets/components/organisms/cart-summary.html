@@ -1,8 +1,14 @@
 <!--
   @component cart-summary-pk
-  @props count:number?; total:number?; currency:string?
-  @slots items, actions, promo
   @layer organisms
+
+  @prop {number} [count] - Total number of items in the cart shown in the header
+  @prop {number} [total] - Subtotal price value
+  @prop {string} [currency='$'] - Currency symbol displayed with the total
+
+  @slot items - List of cart line items (use `<list-item-pk>` or custom rows)
+  @slot promo - Promo code input area
+  @slot actions - Checkout/continue shopping buttons
 -->
 <template>
   <aside class="cart-summary">

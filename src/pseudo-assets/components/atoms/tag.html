@@ -1,8 +1,13 @@
 <!--
   @component tag-pk
-  @props label:string; variant:enum(default|primary|success|warning|danger|info)?; size:enum(sm|md)?; outline:boolean?
-  @slots icon
   @layer atoms
+
+  @prop {string} label - Tag text content (slotted or via default slot)
+  @prop {'default'|'primary'|'success'|'warning'|'danger'|'info'} [variant='default'] - Colour variant
+  @prop {'sm'|'md'} [size='md'] - Tag size preset
+  @prop {boolean} [outline] - Use outline (border-only) visual style
+
+  @slot icon - Optional icon placed before the tag label
 -->
 <template>
   <span class="tag">

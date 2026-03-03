@@ -1,8 +1,14 @@
 <!--
   @component dropdown-pk
-  @props label:string; open:boolean?; align:enum(left|right)?; disabled:boolean?
-  @slots trigger, items
   @layer molecules
+
+  @prop {string} label - Default trigger button label when no `trigger` slot is provided
+  @prop {boolean} [open] - Controls the open/closed state of the dropdown menu
+  @prop {'left'|'right'} [align='left'] - Menu alignment relative to the trigger
+  @prop {boolean} [disabled] - Disables the trigger button and prevents opening
+
+  @slot trigger - Custom trigger element (replaces the default button)
+  @slot items - Menu items; use `<menu-item-pk>` or `<li>` elements
 -->
 <template>
   <div class="dropdown">

@@ -1,8 +1,13 @@
 <!--
   @component avatar-pk
-  @props src:string?; alt:string?; initials:string?; size:enum(xs|sm|md|lg|xl)?
-  @slots default
   @layer atoms
+
+  @prop {string} [src] - Image URL; omit to show initials or default placeholder
+  @prop {string} [alt=''] - Alt text for the avatar image
+  @prop {string} [initials] - Fallback text shown when no image is provided
+  @prop {'xs'|'sm'|'md'|'lg'|'xl'} [size='md'] - Avatar diameter size preset
+
+  @slot default - Slotted `<img>` element for the avatar image
 -->
 <template>
   <span class="avatar" aria-label="avatar">

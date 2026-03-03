@@ -1,5 +1,5 @@
-current_phase: "Phase 4 – Implementation (Sprint 08 in progress)"
-progress: 88
+current_phase: "Phase 4 – Implementation (Sprint 08 complete)"
+progress: 100
 
 phases:
   - id: phase-1
@@ -74,7 +74,7 @@ phases:
       - id: sprint-08
         file: artifacts/sprints/sprint-08.md
         theme: "Quality, DX & Framework Reach"
-        status: in_progress
+        status: done
         points: 45
     status: in_progress
 
@@ -135,5 +135,5 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.2.0 published · v0.3.0 in progress (Sprint 08)"
-recommendation: "S8-01/02/03 done (155 component tests). Epic A complete. Next: /dev-story S8-04 — A11y audit (axe-core via Playwright)."
+release_status: "✅ v0.2.0 published · v0.3.0 ready (Sprint 08 complete)"
+recommendation: "Sprint 08 done. All 9 stories complete. v0.3.0 CHANGELOG + publish prep → run /dev-story or /doc for release notes."

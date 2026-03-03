@@ -14,15 +14,15 @@ Harden the library with per-component unit tests and accessibility fixes, improv
 
 | ID | Epic | Title | Points | Priority | Assignee |
 |---|---|---|---|---|---|
-| S8-01 | A – Unit Tests | Vitest unit tests — Atoms (17 components) | 8 | Must | — |
-| S8-02 | A – Unit Tests | Vitest unit tests — Molecules (16 components) | 7 | Must | — |
-| S8-03 | A – Unit Tests | Vitest unit tests — Organisms (13 components) | 6 | Must | — |
-| S8-04 | B – A11y | Automated a11y audit (axe-core via Playwright) on all 46 components | 5 | Must | — |
-| S8-05 | B – A11y | Fix Critical + Serious a11y violations surfaced by S8-04 | 5 | Must | — |
-| S8-06 | C – JSDoc | JSDoc `@prop` / `@slot` / `@event` annotations — Atoms + Molecules | 4 | Should | — |
-| S8-07 | C – JSDoc | JSDoc `@prop` / `@slot` / `@event` annotations — Organisms + Frames | 3 | Should | — |
-| S8-08 | D – React | `pseudo-kit-react` package scaffold (peerDep: react ≥ 18) | 3 | Should | — |
-| S8-09 | D – React | `useComponent(url)` hook — loads + registers a pseudo-html-kit component | 4 | Should | — |
+| S8-01 | A – Unit Tests | Vitest unit tests — Atoms (17 components) | 8 | Must | ✅ |
+| S8-02 | A – Unit Tests | Vitest unit tests — Molecules (16 components) | 7 | Must | ✅ |
+| S8-03 | A – Unit Tests | Vitest unit tests — Organisms (13 components) | 6 | Must | ✅ |
+| S8-04 | B – A11y | Automated a11y audit (axe-core via Playwright) on all 46 components | 5 | Must | ✅ |
+| S8-05 | B – A11y | Fix Critical + Serious a11y violations surfaced by S8-04 | 5 | Must | ✅ |
+| S8-06 | C – JSDoc | JSDoc `@prop` / `@slot` / `@event` annotations — Atoms + Molecules | 4 | Should | ✅ |
+| S8-07 | C – JSDoc | JSDoc `@prop` / `@slot` / `@event` annotations — Organisms + Frames | 3 | Should | ✅ |
+| S8-08 | D – React | `pseudo-kit-react` package scaffold (peerDep: react ≥ 18) | 3 | Should | ✅ |
+| S8-09 | D – React | `useComponent(url)` hook — loads + registers a pseudo-html-kit component | 4 | Should | ✅ |
 
 **Total: 45 points**
 

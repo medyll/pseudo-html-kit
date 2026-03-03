@@ -1,0 +1,33 @@
+{
+  "name": "pseudo-kit-react",
+  "version": "0.1.0",
+  "description": "React adapter for pseudo-html-kit — load and use pseudo-html components inside React 18+ apps.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "keywords": [
+    "pseudo-kit",
+    "pseudo-html",
+    "react",
+    "web-components",
+    "vanilla",
+    "adapter"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

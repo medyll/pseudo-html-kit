@@ -1,8 +1,15 @@
 <!--
   @component image-pk
-  @props src:string; alt:string; ratio:enum(square|16x9|4x3|3x2|auto)?; loading:enum(lazy|eager)?; fit:enum(cover|contain|fill)?; rounded:boolean?
-  @slots fallback
   @layer atoms
+
+  @prop {string} src - Image source URL
+  @prop {string} alt - Alt text for the image (required for accessibility)
+  @prop {'square'|'16x9'|'4x3'|'3x2'|'auto'} [ratio='auto'] - Aspect-ratio constraint applied via padding-top trick
+  @prop {'lazy'|'eager'} [loading='lazy'] - Native loading attribute forwarded to the inner `<img>`
+  @prop {'cover'|'contain'|'fill'} [fit='cover'] - CSS object-fit for the image
+  @prop {boolean} [rounded] - Apply full border-radius to create a rounded rectangle
+
+  @slot fallback - Content shown when the image fails to load
 -->
 <template>
   <figure class="image">

@@ -1,8 +1,13 @@
 <!--
   @component chip-pk
-  @props label:string; removable:boolean?; selected:boolean?; variant:enum(default|primary)?
-  @slots icon
   @layer atoms
+
+  @prop {string} label - Chip label text (forwarded to inner span)
+  @prop {boolean} [removable] - Show a remove/close button inside the chip
+  @prop {boolean} [selected] - Apply selected (filled primary) visual state
+  @prop {'default'|'primary'} [variant='default'] - Colour variant
+
+  @slot icon - Optional icon placed before the label
 -->
 <template>
   <span class="chip">

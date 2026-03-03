@@ -1,8 +1,14 @@
 <!--
   @component notification-pk
-  @props message:string?; variant:enum(info|success|warning|danger)?; dismissible:boolean?; icon:boolean?
-  @slots default, action
   @layer molecules
+
+  @prop {string} [message] - Notification text when no default slot is provided
+  @prop {'info'|'success'|'warning'|'danger'} [variant='info'] - Colour/icon preset for the notification type
+  @prop {boolean} [dismissible] - Shows a × button to dismiss the notification
+  @prop {boolean} [icon] - Displays the variant icon on the left side
+
+  @slot default - Custom notification body content (overrides `message` prop)
+  @slot action - Inline action link or button placed after the message text
 -->
 <template>
   <div class="notification" role="alert">

@@ -2,3 +2,4 @@ packages:
   - '.'
   - 'src/pseudo-canvas'
   - 'src/pseudo-assets'
+  - 'src/pseudo-kit-react'

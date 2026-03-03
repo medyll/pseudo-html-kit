@@ -1,8 +1,14 @@
 <!--
   @component content-row-pk
-  @props title:string?; href:string?; seeAll:boolean?; cols:enum(2|3|4|5|6)?
-  @slots default, header
   @layer organisms
+
+  @prop {string} [title] - Section heading shown above the content row
+  @prop {string} [href] - Link target for the "See all" button
+  @prop {boolean} [seeAll] - Shows a "See all →" link in the section header
+  @prop {'2'|'3'|'4'|'5'|'6'} [cols='4'] - Number of columns in the horizontal grid
+
+  @slot header - Custom section header replacing the default title/see-all row
+  @slot default - Card or tile items to display in the row
 -->
 <template>
   <section class="content-row">

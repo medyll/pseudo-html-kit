@@ -1,8 +1,17 @@
 <!--
   @component hero-banner-pk
-  @props title:string?; subtitle:string?; align:enum(left|center|right)?; overlay:boolean?; fullHeight:boolean?
-  @slots media, headline, cta, badge
   @layer organisms
+
+  @prop {string} [title] - Hero heading text when no `headline` slot is provided
+  @prop {string} [subtitle] - Supporting text below the heading
+  @prop {'left'|'center'|'right'} [align='center'] - Horizontal alignment of the hero content
+  @prop {boolean} [overlay] - Adds a dark gradient overlay on top of the background media
+  @prop {boolean} [fullHeight] - Makes the banner fill the full viewport height
+
+  @slot media - Background image or video element
+  @slot badge - Small label or eyebrow text above the heading
+  @slot headline - Custom heading content (overrides `title`/`subtitle` props)
+  @slot cta - Call-to-action buttons placed below the heading
 -->
 <template>
   <section class="hero-banner">

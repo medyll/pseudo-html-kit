@@ -1,8 +1,13 @@
 <!--
   @component story-ring-pk
-  @props label:string?; seen:boolean?; add:boolean?
-  @slots default, add-icon
   @layer organisms
+
+  @prop {string} [label] - Name label displayed below the story ring avatar
+  @prop {boolean} [seen] - Shows the ring in a muted/seen colour state
+  @prop {boolean} [add] - Renders a "+" add-story variant with a blue indicator
+
+  @slot default - Avatar image or custom thumbnail inside the ring
+  @slot add-icon - Icon for the add-story button (defaults to `+`)
 -->
 <template>
   <div class="story-ring">

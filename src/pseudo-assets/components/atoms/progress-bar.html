@@ -1,8 +1,13 @@
 <!--
   @component progress-bar-pk
-  @props value:number; max:number?; label:string?; variant:enum(default|primary|success|warning|danger)?; size:enum(sm|md|lg)?; animated:boolean?
-  @slots (none)
   @layer atoms
+
+  @prop {number} value - Current progress value
+  @prop {number} [max=100] - Maximum progress value
+  @prop {string} [label] - Visible label displayed above the bar; also used as accessible name
+  @prop {'default'|'primary'|'success'|'warning'|'danger'} [variant='default'] - Fill colour variant
+  @prop {'sm'|'md'|'lg'} [size='md'] - Track height size preset
+  @prop {boolean} [animated] - Add a shimmer animation to the fill
 -->
 <template>
   <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -80,3 +85,29 @@
     }
   }
 </style>
+
+<script>
+// Forward value, max, and label attributes to the inner progressbar for accessibility.
+const bar = el.querySelector('.progress-bar');
+if (bar) {
+  const lbl = el.getAttribute('aria-label') || el.getAttribute('label');
+  if (lbl) { bar.setAttribute('aria-label', lbl); el.removeAttribute('aria-label'); }
+
+  const val = el.getAttribute('value');
+  const max = el.getAttribute('max') || '100';
+  if (val !== null) {
+    bar.setAttribute('aria-valuenow', val);
+    bar.setAttribute('aria-valuemax', max);
+    const pct = Math.min(100, Math.max(0, (parseFloat(val) / parseFloat(max)) * 100));
+    const fill = bar.querySelector('.progress-bar__fill');
+    if (fill) fill.style.width = pct + '%';
+    const valueEl = bar.querySelector('.progress-bar__value');
+    if (valueEl) valueEl.textContent = Math.round(pct) + '%';
+  }
+
+  if (el.hasAttribute('label')) {
+    const labelEl = bar.querySelector('.progress-bar__label');
+    if (labelEl) labelEl.textContent = el.getAttribute('label');
+  }
+}
+</script>

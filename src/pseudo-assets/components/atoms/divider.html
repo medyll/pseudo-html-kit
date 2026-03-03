@@ -1,8 +1,11 @@
 <!--
   @component divider-pk
-  @props orientation:enum(horizontal|vertical)?; label:string?
-  @slots default
   @layer atoms
+
+  @prop {'horizontal'|'vertical'} [orientation='horizontal'] - Divider direction
+  @prop {string} [label] - Optional centred label text displayed over the divider line
+
+  @slot default - Label content; overrides the `label` prop when slotted
 -->
 <template>
   <div class="divider" role="separator" aria-orientation="horizontal">

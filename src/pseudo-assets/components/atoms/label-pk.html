@@ -1,8 +1,12 @@
 <!--
   @component label-pk
-  @props for:string?; required:boolean?; text:string?
-  @slots default
   @layer atoms
+
+  @prop {string} [for] - id of the associated form control (forwarded as `for` on the inner `<label>`)
+  @prop {boolean} [required] - Show the required asterisk indicator
+  @prop {string} [text] - Label text; can also be provided via default slot
+
+  @slot default - Label text content; overrides the `text` prop when slotted
 -->
 <template>
   <label class="label">

@@ -1,8 +1,13 @@
 <!--
   @component tab-bar-pk
-  @props active:string?; variant:enum(line|pill|boxed)?
-  @slots default
   @layer molecules
+
+  @prop {string} [active] - Name of the currently active tab (matches the slot name)
+  @prop {'line'|'pill'|'boxed'} [variant='line'] - Visual style variant for the tab strip
+
+  @slot tab-1 - Label for the first tab button
+  @slot tab-2 - Label for the second tab button
+  @slot tab-3 - Label for the third tab button
 -->
 <template>
   <div class="tab-bar" role="tablist">

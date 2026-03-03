@@ -1,11 +1,19 @@
 <!--
   @component list-item-pk
-  @props primary:string; secondary:string?; href:string?; active:boolean?; disabled:boolean?; divider:boolean?
-  @slots leading, trailing
   @layer molecules
+
+  @prop {string} primary - Primary text line of the list item
+  @prop {string} [secondary] - Secondary/supporting text line below the primary text
+  @prop {string} [href] - Makes the item a link when set
+  @prop {boolean} [active] - Highlights the item as the currently selected entry
+  @prop {boolean} [disabled] - Greys out the item and disables interaction
+  @prop {boolean} [divider] - Adds a bottom border separator after the item
+
+  @slot leading - Leading content (icon, avatar, checkbox) placed before the text
+  @slot trailing - Trailing content (badge, toggle, chevron) placed after the text
 -->
 <template>
-  <li class="list-item">
+  <div class="list-item">
     <div class="list-item__leading">
       <slot name="leading"></slot>
     </div>
@@ -20,7 +28,7 @@
     <div class="list-item__trailing">
       <slot name="trailing"></slot>
     </div>
-  </li>
+  </div>
 </template>
 
 <style>
@@ -85,3 +93,8 @@
     }
   }
 </style>
+
+<script>
+// Set role="listitem" on the host so it is recognised as a list item when nested in <ul>.
+el.setAttribute('role', 'listitem');
+</script>

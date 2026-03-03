@@ -1,8 +1,14 @@
 <!--
   @component form-field-pk
-  @props label:string; name:string; required:boolean?; error:string?; hint:string?
-  @slots default
   @layer molecules
+
+  @prop {string} label - Visible label text above the input
+  @prop {string} name - Form field name forwarded to the slotted control
+  @prop {boolean} [required] - Marks the field as required and appends a visual indicator
+  @prop {string} [error] - Error message shown below the field; also sets aria-invalid on the wrapper
+  @prop {string} [hint] - Helper text shown below the label
+
+  @slot default - The form control (`<input-pk>`, `<textarea-pk>`, `<select>`, etc.)
 -->
 <template>
   <div class="form-field">

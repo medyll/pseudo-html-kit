@@ -1,8 +1,11 @@
 <!--
   @component pagination-pk
-  @props page:number; total:number; perPage:number?; siblings:number?
-  @slots default
   @layer molecules
+
+  @prop {number} page - Current active page (1-based)
+  @prop {number} total - Total number of items (used with `perPage` to compute page count)
+  @prop {number} [perPage=10] - Number of items per page
+  @prop {number} [siblings=1] - Number of sibling page buttons visible on each side of the active page
 -->
 <template>
   <nav class="pagination" aria-label="Pagination">

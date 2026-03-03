@@ -1,8 +1,14 @@
 <!--
   @component user-info-pk
-  @props name:string; role:string?; src:string?; size:enum(sm|md|lg)?
-  @slots actions, avatar
   @layer molecules
+
+  @prop {string} name - User's display name
+  @prop {string} [role] - User's role or subtitle shown below the name
+  @prop {string} [src] - Avatar image URL passed to the default `<avatar-pk>`
+  @prop {'sm'|'md'|'lg'} [size='md'] - Overall size preset of the user-info block
+
+  @slot avatar - Custom avatar content replacing the default `<avatar-pk>`
+  @slot actions - Action buttons or links placed to the right of the user details
 -->
 <template>
   <div class="user-info">

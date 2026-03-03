@@ -1,8 +1,12 @@
 <!--
   @component rating-pk
-  @props value:number; max:number?; readonly:boolean?; size:enum(sm|md|lg)?; label:string?
-  @slots (none)
   @layer atoms
+
+  @prop {number} value - Current rating value (e.g. 3.5)
+  @prop {number} [max=5] - Total number of stars
+  @prop {boolean} [readonly] - Prevent user interaction (display-only mode)
+  @prop {'sm'|'md'|'lg'} [size='md'] - Star size preset
+  @prop {string} [label] - Accessible label (e.g. "Rating: 4 out of 5 stars")
 -->
 <template>
   <div class="rating" role="img" aria-label="Rating">

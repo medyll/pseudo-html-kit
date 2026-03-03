@@ -1,8 +1,15 @@
 <!--
   @component menu-item-pk
-  @props label:string; href:string?; icon:string?; active:boolean?; disabled:boolean?; danger:boolean?
-  @slots icon
   @layer molecules
+
+  @prop {string} label - Menu item label text
+  @prop {string} [href] - Navigation target; renders the item as an `<a>` when set
+  @prop {string} [icon] - Icon glyph or emoji rendered before the label
+  @prop {boolean} [active] - Marks this item as the currently active/selected entry
+  @prop {boolean} [disabled] - Greys out the item and disables pointer events
+  @prop {boolean} [danger] - Applies destructive/danger colour styling to the item
+
+  @slot icon - Custom icon content placed before the label (overrides `icon` prop)
 -->
 <template>
   <li class="menu-item" role="none">

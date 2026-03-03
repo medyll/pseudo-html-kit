@@ -1,8 +1,17 @@
 <!--
   @component card-pk
-  @props title:string?; subtitle:string?; href:string?; elevated:boolean?; padding:enum(none|sm|md|lg)?
-  @slots default, media, actions, header
   @layer molecules
+
+  @prop {string} [title] - Card title rendered in the header area when no `header` slot is provided
+  @prop {string} [subtitle] - Secondary text below the title
+  @prop {string} [href] - Makes the entire card a clickable link when set
+  @prop {boolean} [elevated] - Adds a drop shadow to lift the card visually
+  @prop {'none'|'sm'|'md'|'lg'} [padding='md'] - Internal padding preset for the card body
+
+  @slot media - Visual media area at the top of the card (use `<card-media-pk>`)
+  @slot header - Custom header content; replaces title/subtitle when provided
+  @slot default - Main body content of the card
+  @slot actions - Footer action area (buttons, links)
 -->
 <template>
   <article class="card">

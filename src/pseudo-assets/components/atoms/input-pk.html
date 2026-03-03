@@ -1,8 +1,19 @@
 <!--
   @component input-pk
-  @props type:enum(text|email|password|number|search|tel|url)?; name:string; id:string?; placeholder:string?; value:string?; disabled:boolean?; required:boolean?; error:string?; size:enum(sm|md|lg)?
-  @slots prefix, suffix
   @layer atoms
+
+  @prop {'text'|'email'|'password'|'number'|'search'|'tel'|'url'} [type='text'] - Native input type
+  @prop {string} name - Form field name (forwarded to inner `<input>`)
+  @prop {string} [id] - Field id; forwarded to inner `<input>` and removed from host
+  @prop {string} [placeholder] - Placeholder text shown when field is empty
+  @prop {string} [value] - Initial field value
+  @prop {boolean} [disabled] - Disables the field
+  @prop {boolean} [required] - Marks the field as required for form validation
+  @prop {string} [error] - Error message; activates error visual state when set
+  @prop {'sm'|'md'|'lg'} [size='md'] - Field size preset
+
+  @slot prefix - Icon or text rendered before (to the left of) the input field
+  @slot suffix - Icon or text rendered after (to the right of) the input field
 -->
 <template>
   <div class="input">

@@ -1,8 +1,13 @@
 <!--
   @component card-media-pk
-  @props src:string; alt:string; ratio:enum(square|16x9|4x3|3x2|auto)?; fit:enum(cover|contain)?
-  @slots overlay
   @layer molecules
+
+  @prop {string} src - Image source URL
+  @prop {string} alt - Alt text for the image
+  @prop {'square'|'16x9'|'4x3'|'3x2'|'auto'} [ratio='16x9'] - Aspect ratio of the media container
+  @prop {'cover'|'contain'} [fit='cover'] - CSS object-fit strategy for the image
+
+  @slot overlay - Overlaid content (badges, play buttons, etc.) positioned above the image
 -->
 <template>
   <figure class="card-media">

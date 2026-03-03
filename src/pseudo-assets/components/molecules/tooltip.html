@@ -1,8 +1,12 @@
 <!--
   @component tooltip-pk
-  @props content:string; position:enum(top|bottom|left|right)?; delay:number?
-  @slots default
   @layer molecules
+
+  @prop {string} content - Tooltip text shown on hover/focus
+  @prop {'top'|'bottom'|'left'|'right'} [position='top'] - Preferred placement of the tooltip bubble
+  @prop {number} [delay=200] - Delay in milliseconds before the tooltip appears
+
+  @slot default - The trigger element that activates the tooltip on hover/focus
 -->
 <template>
   <span class="tooltip" role="tooltip">

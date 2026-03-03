@@ -1,8 +1,18 @@
 <!--
   @component product-tile-pk
-  @props title:string; price:number; src:string?; alt:string?; rating:number?; badge:string?; href:string?
-  @slots actions, badge, media
   @layer molecules
+
+  @prop {string} title - Product name displayed below the media area
+  @prop {number} price - Product price value
+  @prop {string} [src] - Product image URL
+  @prop {string} [alt=''] - Alt text for the product image
+  @prop {number} [rating] - Star rating value (0–5); omit to hide the rating row
+  @prop {string} [badge] - Short badge text (e.g. "Sale", "New") overlaid on the image
+  @prop {string} [href] - Link target; wraps the entire tile in an anchor when set
+
+  @slot media - Custom media content replacing the default `<img>`
+  @slot badge - Custom badge content overlaid on the media area
+  @slot actions - Add-to-cart or other action buttons shown below the price
 -->
 <template>
   <article class="product-tile">

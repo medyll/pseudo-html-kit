@@ -1,8 +1,14 @@
 <!--
   @component toggle-pk
-  @props name:string; id:string?; checked:boolean?; disabled:boolean?; size:enum(sm|md|lg)?
-  @slots label
   @layer atoms
+
+  @prop {string} name - Form field name forwarded to the inner `<input type="checkbox">`
+  @prop {string} [id] - Field id forwarded to the inner checkbox
+  @prop {boolean} [checked] - Initial checked state
+  @prop {boolean} [disabled] - Disables the toggle
+  @prop {'sm'|'md'|'lg'} [size='md'] - Toggle track size preset
+
+  @slot label - Text label shown beside the toggle track
 -->
 <template>
   <label class="toggle">
