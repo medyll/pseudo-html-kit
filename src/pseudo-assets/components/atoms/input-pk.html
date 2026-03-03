@@ -125,3 +125,17 @@
     .input__error { flex: 0 0 100%; }
   }
 </style>
+
+<script>
+// Forward host attributes to the inner <input> for proper labelling and semantics.
+const field = el.querySelector('.input__field');
+if (field) {
+  const fwd = ['type', 'name', 'placeholder', 'value', 'autocomplete'];
+  fwd.forEach(attr => { if (el.hasAttribute(attr)) field.setAttribute(attr, el.getAttribute(attr)); });
+  if (el.hasAttribute('id'))          { field.setAttribute('id', el.getAttribute('id')); el.removeAttribute('id'); }
+  if (el.hasAttribute('aria-label'))  { field.setAttribute('aria-label', el.getAttribute('aria-label')); el.removeAttribute('aria-label'); }
+  if (el.hasAttribute('aria-labelledby')) { field.setAttribute('aria-labelledby', el.getAttribute('aria-labelledby')); el.removeAttribute('aria-labelledby'); }
+  if (el.hasAttribute('disabled'))    field.setAttribute('disabled', '');
+  if (el.hasAttribute('required'))    field.setAttribute('required', '');
+}
+</script>

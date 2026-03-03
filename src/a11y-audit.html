@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pseudo-kit A11y Audit Harness</title>
+  <style>
+    /* Design tokens — ensures components get real colours for contrast testing */
+    :root {
+      --color-primary: #3b82f6;
+      --color-primary-contrast: #ffffff;
+      --color-primary-hover: #2563eb;
+      --color-surface-1: #f7fafc;
+      --color-surface-2: #e2e8f0;
+      --color-text: #1a202c;
+      --color-text-muted: #718096;
+      --color-border: #cbd5e0;
+      --color-danger: #ef4444;
+      --color-danger-hover: #dc2626;
+      --color-danger-bg: #fee2e2;
+      --color-danger-text: #991b1b;
+      --color-success-bg: #d1fae5;
+      --color-success-text: #065f46;
+      --color-warning-bg: #fef3c7;
+      --color-warning-text: #92400e;
+      --color-badge-bg: #e2e8f0;
+      --color-badge-text: #2d3748;
+      --color-avatar-bg: #e2e8f0;
+      --color-avatar-text: #4a5568;
+      --color-skeleton-bg: #e2e8f0;
+      --font-sans: system-ui, sans-serif;
+      --radius-sm: .25rem;
+      --radius-md: .375rem;
+      --radius-full: 9999px;
+      --text-xs: .75rem;
+      --text-sm: .875rem;
+      --text-base: 1rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      font-size: 16px;
+      background: #fff;
+      color: #1a202c;
+      padding: 2rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    h2 { margin: 2rem 0 1rem; font-size: 1.25rem; border-bottom: 1px solid #e2e8f0; padding-bottom: .5rem; }
+    .component-grid { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+    .component-sample { border: 1px solid #e2e8f0; border-radius: .375rem; padding: .75rem; min-width: 180px; }
+    .component-label { font-size: .6875rem; color: #718096; margin-bottom: .5rem; font-family: monospace; }
+
+    #status { position: fixed; top: 1rem; right: 1rem; background: #3b82f6; color: #fff;
+      padding: .5rem 1rem; border-radius: .375rem; font-size: .875rem; }
+    #status.done { background: #22c55e; }
+  </style>
+</head>
+<body>
+
+<div id="status" aria-live="polite">Loading components…</div>
+
+<main id="audit-root">
+
+  <h2>Atoms</h2>
+  <div class="component-grid" data-layer="atoms">
+
+    <div class="component-sample">
+      <div class="component-label">avatar-pk</div>
+      <avatar-pk size="md"><img src="https://placehold.co/40x40/e2e8f0/4a5568" alt="Jane Doe avatar" /></avatar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">badge-pk</div>
+      <badge-pk variant="success" aria-label="Status: Active">Active</badge-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">button-pk</div>
+      <button-pk variant="primary">Save</button-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">chip-pk</div>
+      <chip-pk label="React" aria-label="React chip"></chip-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">divider-pk</div>
+      <divider-pk aria-label="Section divider">OR</divider-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">icon-pk</div>
+      <icon-pk aria-label="Home icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </icon-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">image-pk</div>
+      <image-pk src="https://placehold.co/120x80" alt="Placeholder landscape image" ratio="4x3"></image-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">input-pk</div>
+      <label for="a11y-email" style="display:block;margin-bottom:.25rem;font-size:.875rem">Email address</label>
+      <input-pk name="email" id="a11y-email" type="email" placeholder="you@example.com" aria-label="Email address"></input-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">label-pk</div>
+      <label-pk for="a11y-name">Full name</label-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">loader-pk</div>
+      <loader-pk aria-label="Loading content"></loader-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">progress-bar-pk</div>
+      <progress-bar-pk value="65" max="100" aria-label="Upload progress 65%"></progress-bar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">rating-pk</div>
+      <rating-pk value="4" max="5" readonly aria-label="Rating: 4 out of 5 stars"></rating-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">skeleton-pk</div>
+      <skeleton-pk variant="text" aria-label="Loading text placeholder"></skeleton-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">spinner-pk</div>
+      <spinner-pk aria-label="Loading"></spinner-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">tag-pk</div>
+      <tag-pk variant="primary" aria-label="Tag: Design">Design</tag-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">textarea-pk</div>
+      <label for="a11y-bio" style="display:block;margin-bottom:.25rem;font-size:.875rem">Bio</label>
+      <textarea-pk name="bio" id="a11y-bio" placeholder="Tell us about yourself" aria-label="Bio"></textarea-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">toggle-pk</div>
+      <toggle-pk name="notifications" id="a11y-toggle">
+        <span slot="label">Email notifications</span>
+      </toggle-pk>
+    </div>
+
+  </div><!-- /atoms -->
+
+  <h2>Molecules</h2>
+  <div class="component-grid" data-layer="molecules">
+
+    <div class="component-sample">
+      <div class="component-label">breadcrumb-pk</div>
+      <breadcrumb-pk>
+        <a href="/">Home</a>
+        <span aria-hidden="true">›</span>
+        <a href="/products">Products</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">Widget</span>
+      </breadcrumb-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">card-pk</div>
+      <card-pk style="max-width:200px">
+        <span slot="header"><h3 style="font-size:.875rem">Card Title</h3></span>
+        <p>Card body content with some useful information.</p>
+        <button-pk slot="actions" variant="primary">Learn more</button-pk>
+      </card-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">card-media-pk</div>
+      <card-media-pk src="https://placehold.co/200x120" alt="Product image" style="max-width:200px"></card-media-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">dropdown-pk</div>
+      <dropdown-pk label="Options">
+        <span slot="trigger">Select option</span>
+        <li role="option" slot="items" style="padding:.25rem .5rem;list-style:none">Option A</li>
+        <li role="option" slot="items" style="padding:.25rem .5rem;list-style:none">Option B</li>
+      </dropdown-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">form-field-pk</div>
+      <form-field-pk name="username">
+        <span slot="label">Username</span>
+        <input-pk name="username" placeholder="Enter username" aria-label="Username"></input-pk>
+      </form-field-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">list-item-pk</div>
+      <ul style="list-style:none;padding:0;min-width:180px">
+        <list-item-pk primary="Alice Johnson">
+          <avatar-pk slot="leading" size="sm"><img src="https://placehold.co/32x32" alt="Alice Johnson avatar"/></avatar-pk>
+        </list-item-pk>
+      </ul>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">menu-item-pk</div>
+      <ul role="menu" style="list-style:none;padding:0;min-width:160px" aria-label="Actions menu">
+        <menu-item-pk label="Edit">
+          <icon-pk slot="icon" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10z"/></svg>
+          </icon-pk>
+          Edit item
+        </menu-item-pk>
+      </ul>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">modal-pk</div>
+      <modal-pk aria-labelledby="modal-h" style="position:relative;max-width:280px">
+        <span slot="header" id="modal-h" style="font-weight:600">Confirm action</span>
+        <p>Are you sure you want to proceed?</p>
+        <div slot="footer" style="display:flex;gap:.5rem">
+          <button-pk>Cancel</button-pk>
+          <button-pk variant="primary">Confirm</button-pk>
+        </div>
+      </modal-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">notification-pk</div>
+      <notification-pk variant="success">Operation completed successfully.</notification-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">pagination-pk</div>
+      <pagination-pk page="2" total="10" aria-label="Page navigation"></pagination-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">price-tag-pk</div>
+      <price-tag-pk price="29.99" currency="USD">$29.99</price-tag-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">product-tile-pk</div>
+      <product-tile-pk title="Widget Pro" price="49" style="max-width:180px">
+        <img slot="media" src="https://placehold.co/160x120" alt="Widget Pro product image" style="width:100%;display:block"/>
+        <button-pk slot="actions" variant="primary" style="width:100%">Add to cart</button-pk>
+      </product-tile-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">search-bar-pk</div>
+      <search-bar-pk placeholder="Search products…" aria-label="Search products"></search-bar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">tab-bar-pk</div>
+      <tab-bar-pk active="overview" aria-label="Product tabs">
+        <span slot="tab-1">Overview</span>
+        <span slot="tab-2">Reviews</span>
+        <span slot="tab-3">Specs</span>
+      </tab-bar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">tooltip-pk</div>
+      <tooltip-pk position="top">
+        <button-pk>Hover me</button-pk>
+        <span slot="content">Helpful tooltip text</span>
+      </tooltip-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">user-info-pk</div>
+      <user-info-pk name="Alice Chen">
+        <avatar-pk slot="avatar" size="md"><img src="https://placehold.co/40x40" alt="Alice Chen avatar"/></avatar-pk>
+        <span slot="role">Product Designer</span>
+      </user-info-pk>
+    </div>
+
+  </div><!-- /molecules -->
+
+  <h2>Organisms</h2>
+  <div class="component-grid" data-layer="organisms">
+
+    <div class="component-sample">
+      <div class="component-label">cart-summary-pk</div>
+      <cart-summary-pk style="max-width:240px">
+        <span slot="title">Order Summary</span>
+        <li slot="items" style="list-style:none;padding:.25rem 0">Widget × 2 — $59.98</li>
+      </cart-summary-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">comment-thread-pk</div>
+      <comment-thread-pk count="3" style="max-width:280px">
+        <div>First comment text here.</div>
+        <textarea slot="composer" placeholder="Write a comment…" aria-label="Write a comment" style="width:100%;padding:.5rem;border:1px solid #e2e8f0;border-radius:.25rem"></textarea>
+      </comment-thread-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">content-row-pk</div>
+      <content-row-pk style="max-width:320px">
+        <span slot="title">Popular</span>
+        <div style="width:80px;height:50px;background:#e2e8f0;border-radius:.25rem" role="img" aria-label="Thumbnail 1"></div>
+        <div style="width:80px;height:50px;background:#e2e8f0;border-radius:.25rem" role="img" aria-label="Thumbnail 2"></div>
+      </content-row-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">feed-post-pk</div>
+      <feed-post-pk style="max-width:300px">
+        <avatar-pk slot="avatar" size="sm"><img src="https://placehold.co/32x32" alt="Author avatar"/></avatar-pk>
+        <span slot="header">
+          <span style="font-weight:600">Jane Doe</span>
+          <time datetime="2026-03-03" style="font-size:.75rem;color:#718096">Just now</time>
+        </span>
+        <p>This is a sample feed post with some content.</p>
+      </feed-post-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">footer-pk</div>
+      <footer-pk style="max-width:320px">
+        <span slot="brand" style="font-weight:700">Acme Inc.</span>
+        <a href="/about" slot="links" style="display:block">About</a>
+        <a href="/privacy" slot="links" style="display:block">Privacy</a>
+        <span slot="legal">© 2026 Acme Inc. All rights reserved.</span>
+      </footer-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">hero-banner-pk</div>
+      <hero-banner-pk style="max-width:320px;min-height:120px;position:relative;background:#f7fafc">
+        <h1 slot="headline" style="font-size:1.25rem;font-weight:700">Welcome to Acme</h1>
+        <button-pk slot="cta" variant="primary">Get started</button-pk>
+      </hero-banner-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">navbar-pk</div>
+      <navbar-pk style="max-width:320px">
+        <a href="/" slot="logo" style="font-weight:700;text-decoration:none;color:inherit">Logo</a>
+        <a href="/products" slot="links" style="margin-right:.5rem">Products</a>
+        <a href="/pricing" slot="links">Pricing</a>
+        <button-pk slot="actions" variant="primary">Sign in</button-pk>
+      </navbar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">product-detail-pk</div>
+      <product-detail-pk style="max-width:320px">
+        <img slot="media" src="https://placehold.co/200x200" alt="Product detail image" style="width:100%;display:block;border-radius:.25rem"/>
+        <div slot="info">
+          <h1 style="font-size:1.125rem;font-weight:700">Widget Pro</h1>
+          <p>Professional-grade widget for modern workflows.</p>
+        </div>
+        <button-pk slot="actions" variant="primary">Add to cart</button-pk>
+      </product-detail-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">profile-card-pk</div>
+      <profile-card-pk name="Alice Chen" style="max-width:240px">
+        <avatar-pk slot="avatar" size="lg"><img src="https://placehold.co/56x56" alt="Alice Chen avatar"/></avatar-pk>
+        <button-pk slot="actions" variant="secondary">Follow</button-pk>
+      </profile-card-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">sidebar-pk</div>
+      <sidebar-pk style="position:relative;max-width:200px;max-height:200px;overflow:hidden">
+        <span slot="header" style="font-weight:600">Navigation</span>
+        <ul style="list-style:none;padding:0">
+          <li><a href="/">Home</a></li>
+          <li><a href="/products">Products</a></li>
+        </ul>
+      </sidebar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">story-ring-pk</div>
+      <story-ring-pk aria-label="Stories">
+        <div class="story-ring__item" style="display:flex;flex-direction:column;align-items:center;gap:.25rem">
+          <avatar-pk size="md"><img src="https://placehold.co/40x40" alt="Alice story"/></avatar-pk>
+          <span style="font-size:.625rem">Alice</span>
+        </div>
+      </story-ring-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">thumbnail-grid-pk</div>
+      <thumbnail-grid-pk columns="3" style="max-width:240px" aria-label="Photo gallery">
+        <img src="https://placehold.co/70x70" alt="Photo 1" style="width:70px;height:70px;object-fit:cover;border-radius:.25rem"/>
+        <img src="https://placehold.co/70x70" alt="Photo 2" style="width:70px;height:70px;object-fit:cover;border-radius:.25rem"/>
+        <img src="https://placehold.co/70x70" alt="Photo 3" style="width:70px;height:70px;object-fit:cover;border-radius:.25rem"/>
+      </thumbnail-grid-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">topbar-pk</div>
+      <topbar-pk style="max-width:320px">
+        <button slot="leading" type="button" aria-label="Go back" style="background:none;border:none;cursor:pointer;padding:.25rem">←</button>
+        <span slot="title" style="font-weight:600">Dashboard</span>
+        <button-pk slot="actions">Menu</button-pk>
+      </topbar-pk>
+    </div>
+
+  </div><!-- /organisms -->
+
+</main>
+
+<script type="module">
+import PseudoKit from './client/pseudo-kit-client.js';
+
+const r = (path) => new URL(path, import.meta.url).href;
+
+// Register all 46 components
+const defs = [
+  // Atoms
+  { name: 'avatar-pk',       src: r('./pseudo-assets/components/atoms/avatar.html') },
+  { name: 'badge-pk',        src: r('./pseudo-assets/components/atoms/badge.html') },
+  { name: 'button-pk',       src: r('./pseudo-assets/components/atoms/button-pk.html') },
+  { name: 'chip-pk',         src: r('./pseudo-assets/components/atoms/chip.html') },
+  { name: 'divider-pk',      src: r('./pseudo-assets/components/atoms/divider.html') },
+  { name: 'icon-pk',         src: r('./pseudo-assets/components/atoms/icon.html') },
+  { name: 'image-pk',        src: r('./pseudo-assets/components/atoms/image.html') },
+  { name: 'input-pk',        src: r('./pseudo-assets/components/atoms/input-pk.html') },
+  { name: 'label-pk',        src: r('./pseudo-assets/components/atoms/label-pk.html') },
+  { name: 'loader-pk',       src: r('./pseudo-assets/components/atoms/loader.html') },
+  { name: 'progress-bar-pk', src: r('./pseudo-assets/components/atoms/progress-bar.html') },
+  { name: 'rating-pk',       src: r('./pseudo-assets/components/atoms/rating.html') },
+  { name: 'skeleton-pk',     src: r('./pseudo-assets/components/atoms/skeleton.html') },
+  { name: 'spinner-pk',      src: r('./pseudo-assets/components/atoms/spinner.html') },
+  { name: 'tag-pk',          src: r('./pseudo-assets/components/atoms/tag.html') },
+  { name: 'textarea-pk',     src: r('./pseudo-assets/components/atoms/textarea-pk.html') },
+  { name: 'toggle-pk',       src: r('./pseudo-assets/components/atoms/toggle.html') },
+  // Molecules
+  { name: 'breadcrumb-pk',   src: r('./pseudo-assets/components/molecules/breadcrumb.html') },
+  { name: 'card-pk',         src: r('./pseudo-assets/components/molecules/card.html') },
+  { name: 'card-media-pk',   src: r('./pseudo-assets/components/molecules/card-media.html') },
+  { name: 'dropdown-pk',     src: r('./pseudo-assets/components/molecules/dropdown.html') },
+  { name: 'form-field-pk',   src: r('./pseudo-assets/components/molecules/form-field.html') },
+  { name: 'list-item-pk',    src: r('./pseudo-assets/components/molecules/list-item.html') },
+  { name: 'menu-item-pk',    src: r('./pseudo-assets/components/molecules/menu-item.html') },
+  { name: 'modal-pk',        src: r('./pseudo-assets/components/molecules/modal.html') },
+  { name: 'notification-pk', src: r('./pseudo-assets/components/molecules/notification.html') },
+  { name: 'pagination-pk',   src: r('./pseudo-assets/components/molecules/pagination.html') },
+  { name: 'price-tag-pk',    src: r('./pseudo-assets/components/molecules/price-tag.html') },
+  { name: 'product-tile-pk', src: r('./pseudo-assets/components/molecules/product-tile.html') },
+  { name: 'search-bar-pk',   src: r('./pseudo-assets/components/molecules/search-bar.html') },
+  { name: 'tab-bar-pk',      src: r('./pseudo-assets/components/molecules/tab-bar.html') },
+  { name: 'tooltip-pk',      src: r('./pseudo-assets/components/molecules/tooltip.html') },
+  { name: 'user-info-pk',    src: r('./pseudo-assets/components/molecules/user-info.html') },
+  // Organisms
+  { name: 'cart-summary-pk',   src: r('./pseudo-assets/components/organisms/cart-summary.html') },
+  { name: 'comment-thread-pk', src: r('./pseudo-assets/components/organisms/comment-thread.html') },
+  { name: 'content-row-pk',    src: r('./pseudo-assets/components/organisms/content-row.html') },
+  { name: 'feed-post-pk',      src: r('./pseudo-assets/components/organisms/feed-post.html') },
+  { name: 'footer-pk',         src: r('./pseudo-assets/components/organisms/footer-pk.html') },
+  { name: 'hero-banner-pk',    src: r('./pseudo-assets/components/organisms/hero-banner.html') },
+  { name: 'navbar-pk',         src: r('./pseudo-assets/components/organisms/navbar.html') },
+  { name: 'product-detail-pk', src: r('./pseudo-assets/components/organisms/product-detail.html') },
+  { name: 'profile-card-pk',   src: r('./pseudo-assets/components/organisms/profile-card.html') },
+  { name: 'sidebar-pk',        src: r('./pseudo-assets/components/organisms/sidebar.html') },
+  { name: 'story-ring-pk',     src: r('./pseudo-assets/components/organisms/story-ring.html') },
+  { name: 'thumbnail-grid-pk', src: r('./pseudo-assets/components/organisms/thumbnail-grid.html') },
+  { name: 'topbar-pk',         src: r('./pseudo-assets/components/organisms/topbar.html') },
+];
+
+defs.forEach(d => PseudoKit.register(d));
+PseudoKit.init(document.body);
+
+// Signal readiness once all registered components resolve
+function waitForAll() {
+  return new Promise(resolve => {
+    const names = new Set(defs.map(d => d.name));
+    function check() {
+      const pending = [...names].filter(
+        n => document.querySelector(`${n}:not([data-pk-resolved])`)
+      );
+      if (pending.length === 0) {
+        resolve();
+      } else {
+        setTimeout(check, 50);
+      }
+    }
+    check();
+  });
+}
+
+waitForAll().then(() => {
+  document.getElementById('status').textContent = 'All components resolved';
+  document.getElementById('status').className = 'done';
+  window.__pkA11yReady = true;
+});
+</script>
+
+</body>
+</html>

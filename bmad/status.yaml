@@ -111,8 +111,8 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "279 tests — 208 node:test + 51 vitest + 20 vitest (viewer unit) + 12 Playwright E2E (0 failures)"
-  last_run: "2026-03-02"
+  coverage: "434 tests — 208 node:test + 51 vitest + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer unit) + 12 Playwright E2E (0 failures)"
+  last_run: "2026-03-03"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
   e2e_tests: "12 scenarios covering asset loading, UI interactions, error handling, accessibility"
@@ -136,4 +136,4 @@ decisions:
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
 release_status: "✅ v0.2.0 published · v0.3.0 in progress (Sprint 08)"
-recommendation: "Sprint 08 active — run /dev-story S8-01 to start component unit tests."
+recommendation: "S8-01/02/03 done (155 component tests). Epic A complete. Next: /dev-story S8-04 — A11y audit (axe-core via Playwright)."

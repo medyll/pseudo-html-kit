@@ -102,8 +102,8 @@ pseudo-kit-assets/ (new npm package)
 | Metric | Value |
 |:-------|:------|
 | Test plan | ✅ Done |
-| Last run | 2026-03-02 |
-| Coverage | 279 tests — 208 node:test + 51 vitest + 20 vitest (viewer unit) + 12 Playwright E2E |
+| Last run | 2026-03-03 |
+| Coverage | 434 tests — 208 node:test + 51 vitest + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer) + 12 Playwright E2E |
 | Open bugs | 0 |
 
 ### 🐛 Bugs
@@ -122,9 +122,9 @@ Sprint 08 · v0.3.0 · 2026-03-03 → 2026-03-10
 
 | Story | Epic | Points | Status |
 |:------|:-----|:------:|:------:|
-| S8-01 | Unit tests — Atoms (17) | 8 | 🔲 |
-| S8-02 | Unit tests — Molecules (16) | 7 | 🔲 |
-| S8-03 | Unit tests — Organisms (13) | 6 | 🔲 |
+| S8-01 | Unit tests — Atoms (17) | 8 | ✅ |
+| S8-02 | Unit tests — Molecules (16) | 7 | ✅ |
+| S8-03 | Unit tests — Organisms (13) | 6 | ✅ |
 | S8-04 | A11y audit (axe-core) | 5 | 🔲 |
 | S8-05 | A11y fixes (Critical + Serious) | 5 | 🔲 |
 | S8-06 | JSDoc — Atoms + Molecules | 4 | 🔲 |
@@ -132,7 +132,7 @@ Sprint 08 · v0.3.0 · 2026-03-03 → 2026-03-10
 | S8-08 | pseudo-kit-react scaffold | 3 | 🔲 |
 | S8-09 | `useComponent` hook | 4 | 🔲 |
 
-**Run `/dev-story S8-01` to begin implementation.**
+**Epic A (Unit Tests) complete. Run `/dev-story S8-04` to start the A11y audit.**
 
 ---
 

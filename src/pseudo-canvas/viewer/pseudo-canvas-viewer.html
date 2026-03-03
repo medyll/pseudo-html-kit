@@ -77,6 +77,7 @@
       flex: 1;
       display: grid;
       grid-template-columns: var(--panel-left) 1fr var(--panel-right);
+      grid-template-rows: 1fr;
       min-height: 0;
       overflow: hidden;
     }
@@ -805,7 +806,7 @@ const ui     = new ViewerUI(loader);
 
 /** Derive the index.js URL relative to this viewer file */
 function indexUrl() {
-  return new URL('../index.js', import.meta.url).href;
+  return new URL('../../pseudo-assets/index.js', import.meta.url).href;
 }
 
 /** Load all assets from index.js */

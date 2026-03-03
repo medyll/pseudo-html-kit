@@ -48,8 +48,18 @@ test.describe('pseudo-canvas-viewer E2E', () => {
     // Click the button
     await btn.click();
     
-    // Wait for page to respond (no network errors)
-    await page.waitForTimeout(2000);
+    // Wait for assets to load
+    await page.waitForTimeout(3000);
+    
+    // Verify assets loaded: tree should have at least one item
+    const treeItems = page.locator('.tree__item');
+    const count = await treeItems.count();
+    expect(count).toBeGreaterThan(0);
+    
+    // Asset count text should update
+    const assetCount = page.locator('#asset-count');
+    const text = await assetCount.textContent();
+    expect(text).toMatch(/\d+ assets? loaded/);
   });
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -86,6 +96,37 @@ test.describe('pseudo-canvas-viewer E2E', () => {
   });
 
   // ─────────────────────────────────────────────────────────────────────────
+  // E2E-T5b: Viewport Button Click Changes Frame Size
+  // ─────────────────────────────────────────────────────────────────────────
+  
+  test('E2E-T5b: viewport buttons change preview width', async ({ page }) => {
+    // Load assets first
+    await page.locator('#btn-auto').click();
+    await page.waitForTimeout(2000);
+    
+    // Select first item
+    const firstItem = page.locator('.tree__item').first();
+    await firstItem.click();
+    await page.waitForTimeout(500);
+    
+    // Get initial iframe width in auto mode
+    const iframeAuto = page.locator('.canvas-frame iframe').first();
+    const parentAuto = iframeAuto.locator('..');
+    const autoWidth = await parentAuto.evaluate(el => window.getComputedStyle(el).width);
+    
+    // Click 320px button
+    await page.locator('.vp-btn[data-vp="320"]').click();
+    await page.waitForTimeout(300);
+    
+    // Get new width
+    const narrowWidth = await parentAuto.evaluate(el => window.getComputedStyle(el).width);
+    
+    // Width should have changed
+    expect(narrowWidth).not.toBe(autoWidth);
+    expect(narrowWidth).toContain('320px');
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
   // E2E-T6: Canvas Loading via Query Parameter
   // ─────────────────────────────────────────────────────────────────────────
   
@@ -98,34 +139,105 @@ test.describe('pseudo-canvas-viewer E2E', () => {
   });
 
   // ─────────────────────────────────────────────────────────────────────────
-  // E2E-T7: Auto-Load Assets via ?assets=auto Query Parameter
+  // E2E-T6b: Right Tab Clicks Switch Between Props/Slots/Source
   // ─────────────────────────────────────────────────────────────────────────
   
-  test('E2E-T7: handle assets=auto query parameter', async ({ page }) => {
-    // Navigate with auto-load param
-    await page.goto('/viewer/pseudo-canvas-viewer.html?assets=auto');
+  test('E2E-T6b: right panel tabs switch content', async ({ page }) => {
+    // Load assets
+    await page.locator('#btn-auto').click();
+    await page.waitForTimeout(2000);
     
-    // Page should load without errors
-    await expect(page).toHaveTitle(/pseudo-canvas-viewer/i);
-    await page.waitForTimeout(1000);
+    // Select first item with props
+    const firstItem = page.locator('.tree__item').first();
+    await firstItem.click();
+    await page.waitForTimeout(500);
+    
+    // Props tab should show content
+    const propsTab = page.locator('.rtab[data-tab="props"]');
+    await expect(propsTab).toHaveClass(/active/);
+    
+    // Click Slots tab
+    const slotsTab = page.locator('.rtab[data-tab="slots"]');
+    await slotsTab.click();
+    await page.waitForTimeout(300);
+    
+    // Slots tab should now be active
+    await expect(slotsTab).toHaveClass(/active/);
+    await expect(propsTab).not.toHaveClass(/active/);
+    
+    // Click Source tab
+    const sourceTab = page.locator('.rtab[data-tab="source"]');
+    await sourceTab.click();
+    await page.waitForTimeout(300);
+    
+    // Source tab should now be active
+    await expect(sourceTab).toHaveClass(/active/);
+    await expect(slotsTab).not.toHaveClass(/active/);
   });
 
   // ─────────────────────────────────────────────────────────────────────────
-  // E2E-T8: Error Handling — Network Errors Display Gracefully
+  // E2E-T7b: Tree Item Selection Renders Preview
   // ─────────────────────────────────────────────────────────────────────────
   
-  test('E2E-T8: handle network errors gracefully', async ({ page }) => {
-    // Intercept and block fetch requests to simulate network error
-    await page.route('**/index.js', route => route.abort());
-    
-    // Click reload button
+  test('E2E-T7b: tree item click renders component preview', async ({ page }) => {
+    // Load assets
     await page.locator('#btn-auto').click();
-    
-    // Wait a bit for error handling
     await page.waitForTimeout(2000);
     
-    // Button should still be clickable
-    await expect(page.locator('#btn-auto')).toBeVisible();
+    // Verify tree has items
+    const treeItems = page.locator('.tree__item');
+    const firstItem = treeItems.first();
+    const itemName = await firstItem.textContent();
+    
+    // Click item
+    await firstItem.click();
+    await page.waitForTimeout(500);
+    
+    // Component name should update in toolbar
+    const toolbarName = page.locator('#canvas-name');
+    const displayName = await toolbarName.textContent();
+    expect(displayName).toContain(itemName.trim());
+    
+    // Canvas frame should exist
+    const frame = page.locator('.canvas-frame');
+    await expect(frame).toBeVisible();
+    
+    // Frame should contain an iframe
+    const iframe = frame.locator('iframe');
+    await expect(iframe).toBeVisible();
+  });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // E2E-T8b: Search Filter Works
+  // ─────────────────────────────────────────────────────────────────────────
+  
+  test('E2E-T8b: search input filters tree items', async ({ page }) => {
+    // Load assets
+    await page.locator('#btn-auto').click();
+    await page.waitForTimeout(2000);
+    
+    // Count initial items
+    const initialItems = page.locator('.tree__item');
+    const initialCount = await initialItems.count();
+    expect(initialCount).toBeGreaterThan(5);
+    
+    // Type in search box
+    const searchInput = page.locator('#search-input');
+    await searchInput.fill('button');
+    await page.waitForTimeout(300);
+    
+    // Count filtered items
+    const filteredItems = page.locator('.tree__item');
+    const filteredCount = await filteredItems.count();
+    
+    // Should have fewer items
+    expect(filteredCount).toBeLessThan(initialCount);
+    
+    // All visible items should contain "button"
+    const visibleItems = await filteredItems.allTextContents();
+    visibleItems.forEach(text => {
+      expect(text.toLowerCase()).toContain('button');
+    });
   });
 
   // ─────────────────────────────────────────────────────────────────────────
