@@ -27,7 +27,10 @@
     "test":         "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js",
     "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
     "test:viewer":  "vitest run tests/pseudo-canvas-viewer.client.test.js",
-    "test:all":     "pnpm test && pnpm run test:client && pnpm run test:viewer",
+    "test:e2e":     "playwright test --config playwright.config.js",
+    "test:e2e:ui":  "playwright test --config playwright.config.js --ui",
+    "test:e2e:debug":"playwright test --config playwright.config.js --debug",
+    "test:all":     "pnpm test && pnpm run test:client && pnpm run test:viewer && pnpm run test:e2e",
     "test:coverage":"vitest run --coverage",
     "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000"
   },
