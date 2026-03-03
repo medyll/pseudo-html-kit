@@ -18,10 +18,10 @@
     "README.md"
   ],
   "peerDependencies": {
-    "pseudo-kit": ">=0.1.0"
+    "pseudo-stack": ">=0.1.0"
   },
   "devDependencies": {
-    "pseudo-kit": "workspace:*"
+    "pseudo-stack": "workspace:*"
   },
   "keywords": [
     "pseudo-kit",

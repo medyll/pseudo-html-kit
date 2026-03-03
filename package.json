@@ -5,12 +5,12 @@
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".":             "./src/client/pseudo-kit-client.js",
-    "./client":      "./src/client/pseudo-kit-client.js",
-    "./server":      "./src/server/pseudo-kit-server.js",
-    "./validator":   "./src/server/canvas-validator.js",
-    "./normalizer":  "./src/server/canvas-normalize.js",
-    "./shared":      "./src/shared/index.js"
+    ".": "./src/client/pseudo-kit-client.js",
+    "./client": "./src/client/pseudo-kit-client.js",
+    "./server": "./src/server/pseudo-kit-server.js",
+    "./validator": "./src/server/canvas-validator.js",
+    "./normalizer": "./src/server/canvas-normalize.js",
+    "./shared": "./src/shared/index.js"
   },
   "files": [
     "src/client/",
@@ -20,23 +20,24 @@
     "README.md"
   ],
   "scripts": {
-    "validate":        "node src/server/canvas-validator.js",
-    "validate:json":   "node src/server/canvas-validator.js --json",
-    "normalize":       "node src/server/canvas-normalize.js",
+    "validate": "node src/server/canvas-validator.js",
+    "validate:json": "node src/server/canvas-validator.js --json",
+    "normalize": "node src/server/canvas-normalize.js",
     "normalize:write": "node src/server/canvas-normalize.js --in-place",
-    "test":         "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js",
-    "test:client":  "vitest run tests/pseudo-kit-client.client.test.js",
-    "test:viewer":  "vitest run tests/pseudo-canvas-viewer.client.test.js",
-    "test:e2e":     "playwright test --config playwright.config.js",
-    "test:e2e:ui":  "playwright test --config playwright.config.js --ui",
-    "test:e2e:debug":"playwright test --config playwright.config.js --debug",
-    "test:all":     "pnpm test && pnpm run test:client && pnpm run test:viewer && pnpm run test:e2e",
-    "test:coverage":"vitest run --coverage",
+    "test": "node --test tests/registry-shared.test.js tests/state-shared.test.js tests/pseudo-kit-server.test.js tests/canvas-validator.test.js tests/canvas-normalize.test.js tests/pseudo-assets-index.test.js",
+    "test:client": "vitest run tests/pseudo-kit-client.client.test.js",
+    "test:viewer": "vitest run tests/pseudo-canvas-viewer.client.test.js",
+    "test:e2e": "playwright test --config playwright.config.js",
+    "test:e2e:ui": "playwright test --config playwright.config.js --ui",
+    "test:e2e:debug": "playwright test --config playwright.config.js --debug",
+    "test:all": "pnpm test && pnpm run test:client && pnpm run test:viewer && pnpm run test:e2e",
+    "test:coverage": "vitest run --coverage",
     "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000"
   },
   "devDependencies": {
-    "vitest":    "^2.0.0",
-    "happy-dom": "^14.0.0"
+    "@playwright/test": "^1.58.2",
+    "happy-dom": "^14.0.0",
+    "vitest": "^2.0.0"
   },
   "engines": {
     "node": ">=22.0.0"
