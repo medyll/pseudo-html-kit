@@ -1,6 +1,6 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-02 | **Phase:** Implementation (Complete) | **Progress:** 100% — Released v0.2.0 ✅ | **Team:** 3 devs | **Timeline:** 7 sprints × 1 semaine
+> **Sync:** 2026-03-03 | **Phase:** Implementation (Sprint 08) | **Progress:** 88% — v0.3.0 in progress | **Team:** 3 devs | **Timeline:** 8 sprints × 1 semaine
 
 ---
 
@@ -39,8 +39,9 @@
 | [Sprint 5](artifacts/sprints/sprint-05.md) | W5 | pseudo-canvas-viewer | 28 | PKA-004 | ✅ |
 | [Sprint 6](artifacts/sprints/sprint-06.md) | W6 | Demos Netflix & Amazon | 22 | PKA-005/006 | ✅ |
 | [Sprint 7](artifacts/sprints/sprint-07.md) | W7 | Demo Facebook + SSR + Publish | 22 | PKA-007 + core | ✅ |
+| [Sprint 8](artifacts/sprints/sprint-08.md) | W8 | Quality, DX & Framework Reach | 45 | v0.3.0 | 🔄 |
 
-**Total : 175 pts · 7 semaines · 3 devs — ALL DONE**
+**Total : 220 pts · 8 semaines · 3 devs — Sprint 08 in progress**
 
 ---
 
@@ -102,7 +103,7 @@ pseudo-kit-assets/ (new npm package)
 |:-------|:------|
 | Test plan | ✅ Done |
 | Last run | 2026-03-02 |
-| Coverage | 259 tests — 208 node:test + 51 vitest |
+| Coverage | 279 tests — 208 node:test + 51 vitest + 20 vitest (viewer unit) + 12 Playwright E2E |
 | Open bugs | 0 |
 
 ### 🐛 Bugs
@@ -115,19 +116,23 @@ pseudo-kit-assets/ (new npm package)
 
 ---
 
-## 👉 **Next Step — Maintenance & Support**
+## 👉 **Next Step — Sprint 08 Active**
 
-✅ **v0.2.0 Release Complete + Documentation Delivered.**
+Sprint 08 · v0.3.0 · 2026-03-03 → 2026-03-10
 
-- [📦 pseudo-kit on npm](https://www.npmjs.com/package/pseudo-kit)
-- 📚 Consumer-focused README (Installation, Development, Testing, Release)
-- 🧪 259 tests passing, 0 failures
-- 🎉 All deliverables shipped (46 components, 20 frames, 3 demos)
+| Story | Epic | Points | Status |
+|:------|:-----|:------:|:------:|
+| S8-01 | Unit tests — Atoms (17) | 8 | 🔲 |
+| S8-02 | Unit tests — Molecules (16) | 7 | 🔲 |
+| S8-03 | Unit tests — Organisms (13) | 6 | 🔲 |
+| S8-04 | A11y audit (axe-core) | 5 | 🔲 |
+| S8-05 | A11y fixes (Critical + Serious) | 5 | 🔲 |
+| S8-06 | JSDoc — Atoms + Molecules | 4 | 🔲 |
+| S8-07 | JSDoc — Organisms + Frames | 3 | 🔲 |
+| S8-08 | pseudo-kit-react scaffold | 3 | 🔲 |
+| S8-09 | `useComponent` hook | 4 | 🔲 |
 
-**Optional next steps:**
-- `/sprint-planning` — plan v0.3.0 features (post-launch feedback)
-- `/test-plan` — expand test coverage for edge cases
-- `/brainstorm` — ideas for next release (new components, patterns, frameworks)
+**Run `/dev-story S8-01` to begin implementation.**
 
 ---
 

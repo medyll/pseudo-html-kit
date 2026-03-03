@@ -1,5 +1,5 @@
-current_phase: "Phase 4 – Implementation (Complete)"
-progress: 100
+current_phase: "Phase 4 – Implementation (Sprint 08 in progress)"
+progress: 88
 
 phases:
   - id: phase-1
@@ -71,7 +71,12 @@ phases:
         theme: "Demo Facebook + README + Publish"
         status: done
         points: 22
-    status: done
+      - id: sprint-08
+        file: artifacts/sprints/sprint-08.md
+        theme: "Quality, DX & Framework Reach"
+        status: in_progress
+        points: 45
+    status: in_progress
 
 pseudo_assets:
   deliverables:
@@ -130,5 +135,5 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ Published to npm (v0.2.0) + E2E test suite added"
-recommendation: "Viewer tested with 12 Playwright E2E tests across 3 browsers. Run `npm run test:e2e` to execute. All systems ready for maintenance phase."
+release_status: "✅ v0.2.0 published · v0.3.0 in progress (Sprint 08)"
+recommendation: "Sprint 08 active — run /dev-story S8-01 to start component unit tests."
