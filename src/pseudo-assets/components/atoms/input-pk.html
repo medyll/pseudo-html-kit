@@ -9,7 +9,9 @@
   @prop {string} [value] - Initial field value
   @prop {boolean} [disabled] - Disables the field
   @prop {boolean} [required] - Marks the field as required for form validation
-  @prop {string} [error] - Error message; activates error visual state when set
+  @prop {string} [pattern] - Regex pattern for validation (forwarded to inner `<input>`)
+  @prop {string|number} [min] - Minimum value (forwarded to inner `<input>`)
+  @prop {string|number} [max] - Maximum value (forwarded to inner `<input>`)
   @prop {'sm'|'md'|'lg'} [size='md'] - Field size preset
 
   @slot prefix - Icon or text rendered before (to the left of) the input field
@@ -24,7 +26,8 @@
     <span class="input__suffix" aria-hidden="true">
       <slot name="suffix"></slot>
     </span>
-    <span class="input__error" role="alert" aria-live="polite"></span>
+    <div class="input__error-popover" popover="auto" role="alert" aria-live="polite" aria-atomic="true"></div>
+    <span class="input__error-fallback" role="alert" aria-live="polite" aria-atomic="true"></span>
   </div>
 </template>
 
@@ -82,7 +85,53 @@
       background-color: var(--color-surface-2, #edf2f7);
     }
 
-    /* Error state */
+    /* HTML5 Constraint Validation States */
+    .input__field:invalid {
+      border-color: var(--color-danger, #ef4444);
+    }
+    .input__field:invalid:focus {
+      box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
+    }
+
+    .input__field:user-invalid {
+      border-color: var(--color-danger, #ef4444);
+    }
+    .input__field:user-invalid:focus {
+      box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
+    }
+
+    .input__field:valid:not(:placeholder-shown) {
+      border-color: var(--color-success, #10b981);
+    }
+
+    /* Popover error hint */
+    .input__error-popover {
+      position: absolute;
+      padding: .5rem .75rem;
+      background-color: var(--color-surface-1, #fff);
+      border: 1.5px solid var(--color-danger, #ef4444);
+      border-radius: var(--input-radius, .375rem);
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-danger, #ef4444);
+      max-width: 200px;
+      word-wrap: break-word;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+    }
+
+    /* Fallback error span (for older browsers without Popover API) */
+    .input__error-fallback {
+      display: none;
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-danger, #ef4444);
+      flex: 0 0 100%;
+    }
+    :scope[data-validation-error="true"] .input__error-fallback {
+      display: block;
+    }
+
+    /* Legacy error state (deprecated, kept for backward compatibility) */
+    /* Legacy error state (deprecated, kept for backward compatibility) */
     :scope[error] .input__field {
       border-color: var(--color-danger, #ef4444);
     }
@@ -132,7 +181,9 @@
       flex-direction: row;
       flex-wrap: wrap;
       align-items: stretch;
+      position: relative;
     }
+    .input__error-fallback { flex: 0 0 100%; }
     .input__error { flex: 0 0 100%; }
   }
 </style>
@@ -140,13 +191,82 @@
 <script>
 // Forward host attributes to the inner <input> for proper labelling and semantics.
 const field = el.querySelector('.input__field');
+const errorPopover = el.querySelector('.input__error-popover');
+const errorFallback = el.querySelector('.input__error-fallback');
+const supportsPopover = 'popover' in HTMLElement.prototype;
+
 if (field) {
-  const fwd = ['type', 'name', 'placeholder', 'value', 'autocomplete'];
+  const fwd = ['type', 'name', 'placeholder', 'value', 'autocomplete', 'required', 'pattern', 'min', 'max'];
   fwd.forEach(attr => { if (el.hasAttribute(attr)) field.setAttribute(attr, el.getAttribute(attr)); });
   if (el.hasAttribute('id'))          { field.setAttribute('id', el.getAttribute('id')); el.removeAttribute('id'); }
   if (el.hasAttribute('aria-label'))  { field.setAttribute('aria-label', el.getAttribute('aria-label')); el.removeAttribute('aria-label'); }
   if (el.hasAttribute('aria-labelledby')) { field.setAttribute('aria-labelledby', el.getAttribute('aria-labelledby')); el.removeAttribute('aria-labelledby'); }
   if (el.hasAttribute('disabled'))    field.setAttribute('disabled', '');
-  if (el.hasAttribute('required'))    field.setAttribute('required', '');
 }
+
+// Validation event handlers
+field?.addEventListener('invalid', (evt) => {
+  evt.preventDefault();
+  showValidationError();
+});
+
+field?.addEventListener('input', () => {
+  if (field.validity.valid) {
+    hideValidationError();
+  } else {
+    showValidationError();
+  }
+});
+
+function showValidationError() {
+  const msg = field.validationMessage || getConstraintMessage(field);
+  
+  if (supportsPopover && errorPopover) {
+    errorPopover.textContent = msg;
+    field.setAttribute('aria-describedby', 'error-popover');
+    errorPopover.id = 'error-popover';
+    errorPopover.showPopover?.();
+  } else if (errorFallback) {
+    errorFallback.textContent = msg;
+    el.setAttribute('data-validation-error', 'true');
+    field.setAttribute('aria-describedby', 'error-fallback');
+    errorFallback.id = 'error-fallback';
+  }
+}
+
+function hideValidationError() {
+  if (supportsPopover && errorPopover) {
+    errorPopover.hidePopover?.();
+  }
+  if (errorFallback) {
+    el.removeAttribute('data-validation-error');
+  }
+  field?.removeAttribute('aria-describedby');
+}
+
+function getConstraintMessage(input) {
+  const { validity } = input;
+  if (validity.valueMissing) return `${input.name || 'This field'} is required.`;
+  if (validity.typeMismatch) return `Please enter a valid ${input.type}.`;
+  if (validity.patternMismatch) return `Please match the requested format.`;
+  if (validity.tooShort) return `Please lengthen this text to ${input.minLength} characters or more.`;
+  if (validity.tooLong) return `Please shorten this text to ${input.maxLength} characters or less.`;
+  if (validity.rangeUnderflow) return `Value must be at least ${input.min}.`;
+  if (validity.rangeOverflow) return `Value must be no more than ${input.max}.`;
+  if (validity.stepMismatch) return `Please provide a valid value.`;
+  return 'This field is invalid.';
+}
+
+// Expose validation methods on component element
+el.checkValidity = function() {
+  return field?.checkValidity?.() ?? true;
+};
+
+el.reportValidity = function() {
+  const valid = field?.checkValidity?.() ?? true;
+  if (!valid) {
+    showValidationError();
+  }
+  return valid;
+};
 </script>
