@@ -199,13 +199,13 @@ migration_v040:
           status: done
     - id: sprint-10
       file: artifacts/sprints/sprint-10.md
-      status: pending
+      status: in_progress
       progress: 0
       stories:
       - id: S10-01
           title: "Input: HTML5 constraint validation + Popover hints"
           points: 5
-          status: pending
+          status: in_progress
         - id: S10-03
           title: "Checkbox/Radio: :checked/:invalid + indeterminate"
           points: 3
@@ -219,4 +219,5 @@ migration_v040:
           points: 4
           status: pending
 
-recommendation: "✅ Sprint 09 Complete (7/7 stories done = 100% functionality). v0.4.0-alpha release candidate ready. Sprint 10 drafted: form controls (Input, Checkbox/Radio) + layout (Grid Lanes) + testing phase. Estimated 16 pts achievable in 2 weeks. Next: Confirm Sprint 10 scope and begin component migrations."
+recommendation: "✅ Sprint 10 IN_PROGRESS (20%). S10-01 (Input validation) started. Estimated 17 pts over 2 weeks (Tier 1: S10-01/S10-03/S10-05 = 13 pts + S10-07 testing = 4 pts). Current: Migrating input-pk.html to HTML5 constraint validation API + Popover API for error hints."
+
