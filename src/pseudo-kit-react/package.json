@@ -1,12 +1,14 @@
 {
   "name": "pseudo-kit-react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React adapter for pseudo-html-kit — load and use pseudo-html components inside React 18+ apps.",
   "type": "module",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./types": "./src/index.d.ts"
   },
+  "types": "./src/index.d.ts",
   "files": [
     "src/",
     "README.md"

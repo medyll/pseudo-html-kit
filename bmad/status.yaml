@@ -1,4 +1,4 @@
-current_phase: "Phase 4 – Implementation (Sprint 08 complete)"
+current_phase: "Phase 5 – Release (v0.3.0)"
 progress: 100
 
 phases:
@@ -34,50 +34,44 @@ phases:
 
   - id: phase-4
     name: "Implementation"
-    status: in_progress
-    sprints:
+    status: done
+    artifacts:
       - id: sprint-01
         file: artifacts/sprints/sprint-01.md
-        theme: "Foundation & Atoms"
         status: done
-        points: 25
       - id: sprint-02
         file: artifacts/sprints/sprint-02.md
-        theme: "Molecules"
         status: done
-        points: 21
       - id: sprint-03
         file: artifacts/sprints/sprint-03.md
-        theme: "Organisms"
         status: done
-        points: 28
       - id: sprint-04
         file: artifacts/sprints/sprint-04.md
-        theme: "Frames"
         status: done
-        points: 29
       - id: sprint-05
         file: artifacts/sprints/sprint-05.md
-        theme: "pseudo-canvas-viewer"
         status: done
-        points: 28
       - id: sprint-06
         file: artifacts/sprints/sprint-06.md
-        theme: "Demos Netflix & Amazon"
         status: done
-        points: 22
       - id: sprint-07
         file: artifacts/sprints/sprint-07.md
-        theme: "Demo Facebook + README + Publish"
         status: done
-        points: 22
       - id: sprint-08
         file: artifacts/sprints/sprint-08.md
-        theme: "Quality, DX & Framework Reach"
         status: done
-        points: 45
-    status: in_progress
 
+  - id: phase-5
+    name: "Release"
+    status: in_progress
+    artifacts:
+      - id: release-v0.3.0
+        file: artifacts/release-notes-v0.3.0.md
+        status: done
+      - id: changelog-v0.3.0
+        file: CHANGELOG-v0.3.0.md
+        status: done
+    # duplicate status key removed; pseudo_assets starts here
 pseudo_assets:
   deliverables:
     - id: PKA-001
@@ -135,5 +129,5 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.2.0 published · v0.3.0 ready (Sprint 08 complete)"
-recommendation: "Sprint 08 done. All 9 stories complete. v0.3.0 CHANGELOG + publish prep → run /dev-story or /doc for release notes."
+release_status: "✅ v0.3.0 released"
+recommendation: "Phase 5 complete. Next: develop new features or improvements."

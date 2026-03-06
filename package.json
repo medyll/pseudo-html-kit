@@ -1,6 +1,6 @@
 {
   "name": "pseudo-stack",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
   "license": "MIT",
@@ -34,7 +34,8 @@
     "test:coverage": "vitest run --coverage",
     "test:a11y": "playwright test --config playwright.a11y.config.js",
     "serve:canvas": "npx serve src/pseudo-canvas/ -p 3000",
-    "serve:src": "npx serve src/ -p 3001"
+    "serve:src": "npx serve src/ -p 3001",
+    "add-knowledge": "node scripts/add-knowledge-cli.js"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
