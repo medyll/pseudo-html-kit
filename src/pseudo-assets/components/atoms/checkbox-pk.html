@@ -1,0 +1,154 @@
+<!--
+  @component checkbox-pk
+  @layer atoms
+
+  @prop {string} name - Form field name forwarded to the inner `<input type="checkbox">`
+  @prop {string} [id] - Field id forwarded to the inner checkbox
+  @prop {string} [value='on'] - Value submitted when checkbox is checked
+  @prop {boolean} [checked] - Initial checked state
+  @prop {boolean} [disabled] - Disables the checkbox
+  @prop {boolean} [required] - Marks the checkbox as required for form validation
+
+  @slot default - Label text shown beside the checkbox
+-->
+<template>
+  <label class="checkbox">
+    <input class="checkbox__input" type="checkbox" />
+    <span class="checkbox__box" aria-hidden="true">
+      <svg class="checkbox__check-icon" viewBox="0 0 16 16" width="12" height="12">
+        <path d="M13.5 2.5L6 10l-3.5-3.5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <span class="checkbox__label">
+      <slot></slot>
+    </span>
+  </label>
+</template>
+
+<style>
+  @scope (.checkbox) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      cursor: pointer;
+      user-select: none;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+    }
+
+    .checkbox__input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* Checkbox box */
+    .checkbox__box {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-sm, .25rem);
+      background-color: var(--color-surface-1, #fff);
+      transition: border-color .15s, background-color .15s, box-shadow .15s;
+      flex-shrink: 0;
+    }
+
+    .checkbox__input:focus-visible ~ .checkbox__box {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
+    }
+
+    .checkbox__input:disabled ~ .checkbox__box {
+      opacity: .5;
+      cursor: not-allowed;
+      background-color: var(--color-surface-2, #edf2f7);
+    }
+
+    /* Unchecked state */
+    .checkbox__input:not(:checked) ~ .checkbox__box {
+      background-color: var(--color-surface-1, #fff);
+    }
+
+    /* Checked state */
+    .checkbox__input:checked ~ .checkbox__box {
+      border-color: var(--color-primary, #3b82f6);
+      background-color: var(--color-primary, #3b82f6);
+    }
+
+    /* Check icon visibility */
+    .checkbox__check-icon {
+      color: #fff;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+
+    .checkbox__input:checked ~ .checkbox__box .checkbox__check-icon {
+      opacity: 1;
+    }
+
+    /* Indeterminate state (tri-state checkbox) */
+    .checkbox__input:indeterminate ~ .checkbox__box {
+      border-color: var(--color-primary, #3b82f6);
+      background-color: var(--color-primary, #3b82f6);
+    }
+
+    .checkbox__input:indeterminate ~ .checkbox__box::after {
+      content: '';
+      position: absolute;
+      width: .5rem;
+      height: 2px;
+      background-color: #fff;
+      border-radius: 1px;
+    }
+
+    .checkbox__input:indeterminate ~ .checkbox__box .checkbox__check-icon {
+      opacity: 0;
+    }
+
+    /* Invalid state (required checkbox unchecked) */
+    .checkbox__input:invalid ~ .checkbox__box {
+      border-color: var(--color-danger, #ef4444);
+    }
+
+    .checkbox__input:invalid:focus-visible ~ .checkbox__box {
+      box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
+    }
+
+    .checkbox__label {
+      display: inline;
+    }
+
+    .checkbox__label:empty {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .checkbox__box,
+      .checkbox__check-icon {
+        transition: none;
+      }
+    }
+  }
+</style>
+
+<script>
+const field = el.querySelector('.checkbox__input');
+if (field) {
+  const fwd = ['name', 'value', 'disabled', 'required'];
+  fwd.forEach(attr => { if (el.hasAttribute(attr)) field.setAttribute(attr, el.getAttribute(attr)); });
+  if (el.hasAttribute('id')) { field.setAttribute('id', el.getAttribute('id')); el.removeAttribute('id'); }
+  if (el.hasAttribute('checked')) { field.checked = true; el.removeAttribute('checked'); }
+}
+</script>

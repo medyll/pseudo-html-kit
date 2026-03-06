@@ -1,0 +1,137 @@
+<!--
+  @component radio-pk
+  @layer atoms
+
+  @prop {string} name - Form field name (shared across radio group)
+  @prop {string} id - Field id (required for accessibility)
+  @prop {string} value - Value submitted when this radio is selected (required)
+  @prop {boolean} [checked] - Initial checked state
+  @prop {boolean} [disabled] - Disables the radio button
+  @prop {boolean} [required] - Marks the radio group as required for form validation
+
+  @slot default - Label text shown beside the radio button
+-->
+<template>
+  <label class="radio">
+    <input class="radio__input" type="radio" />
+    <span class="radio__circle" aria-hidden="true">
+      <span class="radio__dot"></span>
+    </span>
+    <span class="radio__label">
+      <slot></slot>
+    </span>
+  </label>
+</template>
+
+<style>
+  @scope (.radio) {
+    :scope {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      cursor: pointer;
+      user-select: none;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+    }
+
+    .radio__input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* Radio circle */
+    .radio__circle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: 50%;
+      background-color: var(--color-surface-1, #fff);
+      transition: border-color .15s, background-color .15s, box-shadow .15s;
+      flex-shrink: 0;
+    }
+
+    .radio__input:focus-visible ~ .radio__circle {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
+    }
+
+    .radio__input:disabled ~ .radio__circle {
+      opacity: .5;
+      cursor: not-allowed;
+      background-color: var(--color-surface-2, #edf2f7);
+    }
+
+    /* Unchecked state */
+    .radio__input:not(:checked) ~ .radio__circle {
+      background-color: var(--color-surface-1, #fff);
+    }
+
+    /* Radio dot visibility */
+    .radio__dot {
+      position: absolute;
+      width: .5rem;
+      height: .5rem;
+      border-radius: 50%;
+      background-color: var(--color-primary, #3b82f6);
+      opacity: 0;
+      transition: opacity .15s;
+    }
+
+    /* Checked state */
+    .radio__input:checked ~ .radio__circle {
+      border-color: var(--color-primary, #3b82f6);
+      background-color: var(--color-surface-1, #fff);
+    }
+
+    .radio__input:checked ~ .radio__circle .radio__dot {
+      opacity: 1;
+    }
+
+    /* Invalid state (required radio group with no selection) */
+    .radio__input:invalid ~ .radio__circle {
+      border-color: var(--color-danger, #ef4444);
+    }
+
+    .radio__input:invalid:focus-visible ~ .radio__circle {
+      box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
+    }
+
+    .radio__label {
+      display: inline;
+    }
+
+    .radio__label:empty {
+      display: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .radio__circle,
+      .radio__dot {
+        transition: none;
+      }
+    }
+  }
+</style>
+
+<script>
+const field = el.querySelector('.radio__input');
+if (field) {
+  const fwd = ['name', 'value', 'disabled', 'required'];
+  fwd.forEach(attr => { if (el.hasAttribute(attr)) field.setAttribute(attr, el.getAttribute(attr)); });
+  if (el.hasAttribute('id')) { field.setAttribute('id', el.getAttribute('id')); el.removeAttribute('id'); }
+  if (el.hasAttribute('checked')) { field.checked = true; el.removeAttribute('checked'); }
+}
+</script>
