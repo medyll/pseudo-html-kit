@@ -12,8 +12,7 @@
   @slot footer - Footer area for action buttons
 -->
 <template>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div class="modal__backdrop"></div>
+  <dialog class="modal" aria-labelledby="modal-title">
     <div class="modal__container">
       <div class="modal__header">
         <slot name="header">
@@ -28,26 +27,23 @@
         <slot name="footer"></slot>
       </div>
     </div>
-  </div>
+  </dialog>
 </template>
 
 <style>
-  @scope (.modal) {
+  @scope (dialog.modal) {
     :scope {
-      display: none;
-      position: fixed;
-      inset: 0;
+      border: none;
+      padding: 0;
+      margin: auto;
+      max-width: 32rem;
+      max-height: calc(100dvh - 2rem);
+      background-color: transparent;
+      box-shadow: none;
       z-index: var(--z-modal, 500);
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
     }
 
-    :scope[open] { display: flex; }
-
-    .modal__backdrop {
-      position: absolute;
-      inset: 0;
+    ::backdrop {
       background-color: rgba(0, 0, 0, .5);
     }
 
@@ -56,8 +52,8 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      max-width: 32rem;
-      max-height: calc(100dvh - 2rem);
+      max-width: inherit;
+      max-height: inherit;
       background-color: var(--color-surface, #fff);
       border-radius: var(--radius-xl, .75rem);
       box-shadow: 0 20px 60px rgba(0,0,0,.2);
@@ -67,8 +63,8 @@
     :scope[size="sm"] .modal__container { max-width: 20rem; }
     :scope[size="lg"] .modal__container { max-width: 48rem; }
     :scope[size="fullscreen"] .modal__container {
-      max-width: 100%;
-      max-height: 100dvh;
+      max-width: 100vw;
+      max-height: 100vh;
       border-radius: 0;
     }
 
@@ -125,16 +121,42 @@
 </style>
 
 <script>
-// Forward aria-labelledby / aria-label from host to the inner role="dialog" element.
-const dialog = el.querySelector('.modal');
-if (dialog) {
-  if (el.hasAttribute('aria-labelledby')) {
-    dialog.setAttribute('aria-labelledby', el.getAttribute('aria-labelledby'));
-    el.removeAttribute('aria-labelledby');
-  }
-  if (el.hasAttribute('aria-label')) {
-    dialog.setAttribute('aria-label', el.getAttribute('aria-label'));
-    el.removeAttribute('aria-label');
-  }
+const dialog = el.querySelector('dialog.modal');
+if (!dialog) {
+  // <dialog> element not found — component initialization failed
+  return;
 }
+
+// Close button wiring (works with or without Invoker Commands)
+const closeBtn = dialog.querySelector('.modal__close');
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => dialog.close());
+}
+
+// Backdrop click-to-close: clicking on the dialog itself (not on container) closes it
+dialog.addEventListener('click', (e) => {
+  if (e.target === dialog) dialog.close();
+});
+
+// Forward title prop to .modal__title if not using header slot
+const titleEl = dialog.querySelector('.modal__title');
+if (titleEl && el.hasAttribute('title')) {
+  titleEl.textContent = el.getAttribute('title');
+}
+
+// Observe host [open] attribute for programmatic control
+const observer = new MutationObserver(() => {
+  const shouldBeOpen = el.hasAttribute('open');
+  if (shouldBeOpen && !dialog.open) {
+    dialog.showModal();
+  } else if (!shouldBeOpen && dialog.open) {
+    dialog.close();
+  }
+});
+observer.observe(el, { attributes: true, attributeFilter: ['open'] });
+
+// Sync dialog close event back to host [open] attribute
+dialog.addEventListener('close', () => {
+  el.removeAttribute('open');
+});
 </script>

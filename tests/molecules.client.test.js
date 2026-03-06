@@ -354,24 +354,28 @@ describe('modal-pk', () => {
     obs.disconnect();
   });
 
-  it('stamps .modal with role=dialog and aria-modal', async () => {
+  it('stamps <dialog> element with implicit dialog role and aria-labelledby', async () => {
     const obs = registerAndInit('modal-pk', SRC, HTML);
     document.body.innerHTML = '<modal-pk></modal-pk>';
     PseudoKit.init(document.body);
     await flush();
-    const el = document.querySelector('.modal');
-    expect(el).toBeTruthy();
-    expect(el.getAttribute('role')).toBe('dialog');
-    expect(el.getAttribute('aria-modal')).toBe('true');
+    const dialog = document.querySelector('dialog.modal');
+    expect(dialog).toBeTruthy();
+    // <dialog> provides implicit role="dialog" and aria-modal="true" — no manual attributes needed
+    expect(dialog.getAttribute('aria-labelledby')).toBe('modal-title');
     obs.disconnect();
   });
 
-  it('contains backdrop, container, header, body, footer and close button', async () => {
+  it('contains container, header, body, footer and close button (no backdrop DOM)', async () => {
     const obs = registerAndInit('modal-pk', SRC, HTML);
     document.body.innerHTML = '<modal-pk></modal-pk>';
     PseudoKit.init(document.body);
     await flush();
-    expect(document.querySelector('.modal__backdrop')).toBeTruthy();
+    // <dialog> element (replaces .modal div)
+    expect(document.querySelector('dialog.modal')).toBeTruthy();
+    // .modal__backdrop removed — ::backdrop pseudo-element is native now
+    expect(document.querySelector('.modal__backdrop')).toBeFalsy();
+    // Container and slots preserved
     expect(document.querySelector('.modal__container')).toBeTruthy();
     expect(document.querySelector('.modal__header')).toBeTruthy();
     expect(document.querySelector('.modal__body')).toBeTruthy();

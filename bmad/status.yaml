@@ -130,4 +130,72 @@ decisions:
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
 release_status: "✅ v0.3.0 released"
-recommendation: "Phase 5 complete. Next: develop new features or improvements."
+
+# v0.4.0 cycle — Phase 1: Interaction Components Migration
+migration_v040:
+  current_phase: "Phase 4 – Implementation"
+  progress: 50
+  phases:
+    - id: planning
+      name: "Planning"
+      status: done
+      artifacts:
+        - id: prd-phase1-migration
+          file: artifacts/prd-phase1-migration.md
+          status: done
+        - id: tech-spec-phase1
+          file: artifacts/tech-spec-phase1-migration.md
+          status: done
+    - id: solutioning
+      name: "Solutioning"
+      status: done
+      note: "Tech spec includes full component-level design"
+    - id: implementation
+      name: "Implementation"
+      status: in_progress
+      sprint: sprint-09
+      components:
+        - modal: pending
+        - tooltip: pending
+        - dropdown: pending
+        - notification: pending
+    - id: testing
+      name: "Testing"
+      status: pending
+
+  sprints:
+    - id: sprint-09
+      file: artifacts/sprints/sprint-09.md
+      status: in_progress
+      progress: 0
+      stories:
+        - id: S9-01
+          title: "Modal: <dialog> + Invoker Commands"
+          points: 5
+          status: done
+        - id: S9-02
+          title: "Dropdown: Popover API + popovertarget"
+          points: 5
+          status: pending
+        - id: S9-03
+          title: "Tooltip: CSS Anchor Positioning"
+          points: 3
+          status: pending
+        - id: S9-04
+          title: "Notification: autodismiss + Interest Invokers"
+          points: 3
+          status: pending
+        - id: S9-05
+          title: "Unit test mocks + updates"
+          points: 3
+          status: pending
+        - id: S9-06
+          title: "E2E tests native API behavior"
+          points: 3
+          status: pending
+        - id: S9-07
+          title: "Cross-browser fallback validation"
+          points: 2
+          status: pending
+
+recommendation: "Sprint 09 planned. Next: /dev-story S9-01 to start modal migration, or /next to auto-chain all stories."
