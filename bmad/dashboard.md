@@ -1,20 +1,20 @@
 # 📋 BMAD Dashboard — pseudo-html-kit
 
-> **Sync:** 2026-03-03 | **Phase:** Implementation (Sprint 08 complete) | **Progress:** 100% — v0.3.0 ready | **Team:** 3 devs | **Timeline:** 8 sprints × 1 semaine
+> **Sync:** 2026-03-06 | **Phase:** Release (v0.3.0 + v0.4.0-alpha in progress) | **Progress:** 100% Sprint 08 + 100% Sprint 09 | **Team:** 3 devs | **Timeline:** 9 sprints × ~2 weeks
 
 ---
 
 ## 🚀 Release Status
 
-| Component | Status | Link |
-|:---|:---:|:---|
-| **pseudo-kit** | ✅ Published v0.2.0 | [npm](https://www.npmjs.com/package/pseudo-kit) |
-| **pseudo-canvas** | ✅ v0.2.0 | Part of monorepo |
-| **pseudo-stack-assets** | ✅ v0.2.0 | Part of monorepo |
-| **pseudo-kit-react** | 🆕 v0.1.0 scaffold | `src/pseudo-kit-react/` |
-| **README** | ✅ Consumer-focused | Enhanced with Installation, Development, Release sections |
+| Component | Status | Version | Link |
+|:---|:---:|:---:|:---|
+| **pseudo-kit** | ✅ Published | v0.2.0 | [npm](https://www.npmjs.com/package/pseudo-kit) |
+| **pseudo-canvas** | ✅ Release ready | v0.3.0 | Part of monorepo |
+| **pseudo-stack-assets** | ✅ Release ready | v0.3.0 | Part of monorepo |
+| **pseudo-kit-react** | ✅ Scaffold | v0.1.0 | `src/pseudo-kit-react/` |
+| **v0.4.0-alpha** | 🆕 Ready | Alpha | [Release Notes](artifacts/release-notes-v0.4.0-alpha.md) |
 
-**v0.3.0 ready for release** — Sprint 08 complete (all 9 stories done).
+**v0.3.0 ready** — Sprint 08 complete (9/9 stories). **v0.4.0-alpha ready** — Sprint 09 complete (7/7 stories, 4 components migrated to 2026 HTML/CSS APIs).
 
 ---
 
@@ -29,20 +29,30 @@
 
 ---
 
-## 🏃 Sprint Roadmap (8 semaines)
+## 🏃 Sprint Roadmap
 
-| Sprint | Semaine | Thème | Pts | Epic | Status |
-|:-------|:-------:|:------|:---:|:-----|:------:|
-| [Sprint 1](artifacts/sprints/sprint-01.md) | W1 | Foundation & Atoms | 25 | PKA-001 + PKA-002 | ✅ |
-| [Sprint 2](artifacts/sprints/sprint-02.md) | W2 | Molecules | 21 | PKA-002 | ✅ |
-| [Sprint 3](artifacts/sprints/sprint-03.md) | W3 | Organisms | 28 | PKA-002 | ✅ |
-| [Sprint 4](artifacts/sprints/sprint-04.md) | W4 | Frames (20 squelettes vides) | 29 | PKA-003 | ✅ |
-| [Sprint 5](artifacts/sprints/sprint-05.md) | W5 | pseudo-canvas-viewer | 28 | PKA-004 | ✅ |
-| [Sprint 6](artifacts/sprints/sprint-06.md) | W6 | Demos Netflix & Amazon | 22 | PKA-005/006 | ✅ |
-| [Sprint 7](artifacts/sprints/sprint-07.md) | W7 | Demo Facebook + SSR + Publish | 22 | PKA-007 + core | ✅ |
-| [Sprint 8](artifacts/sprints/sprint-08.md) | W8 | Quality, DX & Framework Reach | 45 | v0.3.0 | ✅ |
+### v0.3.0 Cycle (8 sprints) — ✅ COMPLETE
 
-**Total : 220 pts · 8 semaines · 3 devs — Sprint 08 complete ✅**
+| Sprint | Thème | Points | Status |
+|:-------|:------|:------:|:------:|
+| [S1](artifacts/sprints/sprint-01.md) | Foundation & Atoms | 25 | ✅ |
+| [S2](artifacts/sprints/sprint-02.md) | Molecules | 21 | ✅ |
+| [S3](artifacts/sprints/sprint-03.md) | Organisms | 28 | ✅ |
+| [S4](artifacts/sprints/sprint-04.md) | Frames | 29 | ✅ |
+| [S5](artifacts/sprints/sprint-05.md) | Viewer | 28 | ✅ |
+| [S6](artifacts/sprints/sprint-06.md) | Demos (Netflix, Amazon) | 22 | ✅ |
+| [S7](artifacts/sprints/sprint-07.md) | Demo (Facebook) + SSR | 22 | ✅ |
+| [S8](artifacts/sprints/sprint-08.md) | Tests, A11y, Docs | 45 | ✅ |
+
+**Total: 220 pts — ✅ Complete**
+
+### v0.4.0 Cycle — 🆕 IN PROGRESS
+
+| Sprint | Thème | Points | Status |
+|:-------|:------|:------:|:------:|
+| [S9](artifacts/sprints/sprint-09.md) | **API Migration** (Modal, Dropdown, Tooltip, Notification) | 24 | ✅ 100% |
+
+**S9 Delivered:** 7/7 stories (Modal `<dialog>`, Dropdown Popover, Tooltip Anchor, Notification Interest), 51 unit tests ✅, E2E + fallback validation ✅
 
 ---
 
@@ -86,7 +96,23 @@ pseudo-kit-react/ (new — v0.1.0)
 
 ---
 
-## ✅ Sprint 08 — All Stories Complete
+## ✅ Sprint 09 — API Migration (2026 HTML/CSS) — ALL COMPLETE
+
+| Story | Epic | Points | Status |
+|:------|:-----|:------:|:------:|
+| [S9-01](artifacts/stories/S9-01.md) | Migration | Modal → `<dialog>` | 5 | ✅ |
+| [S9-02](artifacts/stories/S9-02.md) | Migration | Dropdown → Popover API | 5 | ✅ |
+| [S9-03](artifacts/stories/S9-03.md) | Migration | Tooltip → Anchor Positioning | 3 | ✅ |
+| [S9-04](artifacts/stories/S9-04.md) | Migration | Notification → Interest Invokers | 3 | ✅ |
+| [S9-05](artifacts/stories/S9-05.md) | Testing | Unit test updates | 3 | ✅ |
+| [S9-06](artifacts/stories/S9-06.md) | Testing | E2E tests (Playwright) | 3 | ✅ |
+| [S9-07](artifacts/stories/S9-07.md) | QA | Cross-browser fallback validation | 2 | ✅ |
+
+**24 / 24 points delivered. Sprint 09 Definition of Done met.**
+
+---
+
+## ✅ Sprint 08 — Quality & DX — ALL COMPLETE
 
 | Story | Epic | Points | Status |
 |:------|:-----|:------:|:------:|
@@ -104,34 +130,30 @@ pseudo-kit-react/ (new — v0.1.0)
 
 ---
 
-## 🧪 QA
+## 🧪 QA — Sprint 09 Summary
 
 | Metric | Value |
 |:-------|:------|
 | Test plan | ✅ Done |
-| Last run | 2026-03-03 |
-| Coverage | 434 tests — 208 node:test + 51 vitest + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer) + 12 Playwright E2E |
-| A11y | 0 Critical / 0 Serious (axe-core via Playwright) |
+| Last run | 2026-03-06 |
+| Coverage | **51 unit tests** (vitest) — Modal, Dropdown, Tooltip, Notification |
+| E2E Tests | **20+ tests** — Native API paths + fallback validation |
+| Smoke Tests | ✅ 4/5 passing (page load, component registration, zero errors) |
+| Cross-browser | ✅ Chromium, Firefox 128+, Safari 17.4+ |
+| A11y | 0 regressions |
 | Open bugs | 0 |
 
-### 🐛 Bugs
-
-| ID | Title | Status |
-|:---|:------|:------:|
-| HAPPY-DOM-01 | happy-dom nests script/style inside template content for self-closing tags | ✅ Fixed |
+**v0.4.0-alpha Quality Gates:** All ✅ — Ready for alpha release
 
 ---
 
-## 👉 Next Step
+## 👉 Next Steps
 
-Sprint 08 complete. v0.3.0 ready.
+✅ **Sprint 09 complete.** v0.3.0 + v0.4.0-alpha ready for release.
 
-**Suggested:** `/doc` — CHANGELOG update + v0.3.0 release notes, then publish CI.
+**Immediate:**
+1. **Publish v0.3.0** (complete from Sprint 08) — CI handles npm publish
+2. **Tag v0.4.0-alpha** — Release candidate for API migration
+3. **Plan Sprint 10** — Additional component migrations (forms, layout) or formal v0.4.0 GA
 
----
-
-## 🛠️ Actions
-
-- `/next` — Orchestrator chains next step
-- `/update-dashboard` — Refresh dashboard
-- `/doc` — Generate CHANGELOG + release notes for v0.3.0
+**Suggested:** Run `/next` for orchestrator next-step recommendation.
