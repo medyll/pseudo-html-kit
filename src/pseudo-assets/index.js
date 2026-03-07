@@ -77,6 +77,7 @@ export const componentNames = {
   storyRing:      'story-ring-pk',
   thumbnailGrid:  'thumbnail-grid-pk',
   topbar:         'topbar-pk',
+  carousel:       'carousel-pk',
   accordion:      'accordion-pk',
 };
 
@@ -135,6 +136,7 @@ export const components = {
   storyRing:      r('./components/organisms/story-ring.html'),
   thumbnailGrid:  r('./components/organisms/thumbnail-grid.html'),
   topbar:         r('./components/organisms/topbar.html'),
+  carousel:       r('./components/organisms/carousel-pk.html'),
   accordion:      r('./components/organisms/accordion-pk.html'),
 };
 
@@ -217,6 +219,7 @@ export const componentsMeta = {
   storyRing:      { props: '', slots: 'default', layer: 'organisms' },
   thumbnailGrid:  { props: 'columns:number?; gap:enum(sm|md|lg)?', slots: 'default', layer: 'organisms' },
   topbar:         { props: 'elevated:boolean?', slots: 'leading, title, actions', layer: 'organisms' },
+  carousel:       { props: 'autoplay:boolean?; interval:number?', slots: 'default', layer: 'organisms' },
   accordion:      { props: 'exclusive:boolean?', slots: 'default', layer: 'organisms' },
 };
 
