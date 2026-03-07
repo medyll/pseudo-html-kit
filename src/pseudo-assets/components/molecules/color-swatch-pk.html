@@ -1,0 +1,68 @@
+<!--
+  @component color-swatch-pk
+  @layer molecules
+
+  @prop {string} [value]
+
+  @slot default - swatch items
+-->
+<template>
+  <div class="color-swatch" role="listbox" tabindex="0" aria-label="Color swatches">
+    <slot></slot>
+  </div>
+</template>
+
+<style>
+  @scope (.color-swatch) {
+    :scope { display: flex; gap: .5rem; align-items: center; }
+    ::slotted(button) { width: 2rem; height: 2rem; border-radius: .25rem; border: 1px solid #ccc; cursor: pointer; }
+    ::slotted([aria-selected="true"]) { outline: 2px solid Highlight; }
+  }
+</style>
+
+<script>
+// Keyboard navigation and ARIA state management for swatches
+const list = el;
+const items = Array.from(el.querySelectorAll('button'));
+let selectedIndex = items.findIndex(i => i.getAttribute('aria-selected') === 'true');
+if (selectedIndex === -1 && items.length) selectedIndex = 0;
+
+function updateSelection(newIndex) {
+  items.forEach((it, idx) => {
+    if (idx === newIndex) {
+      it.setAttribute('aria-selected', 'true');
+      it.setAttribute('tabindex', '0');
+      el.setAttribute('aria-activedescendant', it.id || `swatch-${idx}`);
+    } else {
+      it.removeAttribute('aria-selected');
+      it.setAttribute('tabindex', '-1');
+    }
+  });
+}
+
+list.addEventListener('keydown', (e) => {
+  if (items.length === 0) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    e.preventDefault();
+    selectedIndex = Math.min(items.length - 1, selectedIndex + 1);
+    updateSelection(selectedIndex);
+    items[selectedIndex].focus();
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    selectedIndex = Math.max(0, selectedIndex - 1);
+    updateSelection(selectedIndex);
+    items[selectedIndex].focus();
+  } else if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    const sel = items[selectedIndex];
+    sel.dispatchEvent(new CustomEvent('select', { bubbles: true, composed: true, detail: { value: sel.dataset.value } }));
+  }
+});
+
+// Initialize ids and state
+items.forEach((it, idx) => {
+  if (!it.id) it.id = `swatch-${idx}`;
+  if (!it.hasAttribute('tabindex')) it.setAttribute('tabindex', idx === selectedIndex ? '0' : '-1');
+});
+updateSelection(selectedIndex);
+</script>

@@ -139,6 +139,7 @@ export const components = {
   topbar:         r('./components/organisms/topbar.html'),
   carousel:       r('./components/organisms/carousel-pk.html'),
   accordion:      r('./components/organisms/accordion-pk.html'),
+  colorSwatch:    r('./components/molecules/color-swatch-pk.html'),
 };
 
 // ── Frame URLs ─────────────────────────────────────────────────────────────
@@ -206,6 +207,7 @@ export const componentsMeta = {
   tooltip:      { props: 'content:string; position:enum(top|bottom|left|right)?; delay:number?', slots: 'default', layer: 'molecules' },
   userInfo:     { props: 'name:string; role:string?; src:string?; size:enum(sm|md|lg)?', slots: 'actions', layer: 'molecules' },
   combobox:     { props: 'name:string; placeholder:string?; value:string?; disabled:boolean?; required:boolean?', slots: 'default', layer: 'molecules' },
+  colorSwatch:   { props: 'value:string?; name:string?', slots: 'default', layer: 'molecules' },
 
   // Organisms (Sprint 3 — metadata placeholders)
   cartSummary:    { props: 'count:number?; total:number?; currency:string?', slots: 'items, actions', layer: 'organisms' },
