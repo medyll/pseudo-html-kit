@@ -12,11 +12,14 @@ phases:
 
   - id: phase-2
     name: "Planning"
-    status: done
+    status: in_progress
     artifacts:
       - id: prd
         file: artifacts/prd.md
         status: done
+      - id: prd-v0.5.0
+        file: artifacts/prd-v0.5.0.md
+        status: in_progress
       - id: tech-spec
         file: artifacts/tech-spec.md
         status: done
@@ -34,7 +37,8 @@ phases:
 
   - id: phase-4
     name: "Implementation"
-    status: done
+    status: in_progress
+    progress: 0
     artifacts:
       - id: sprint-01
         file: artifacts/sprints/sprint-01.md
@@ -69,6 +73,9 @@ phases:
       - id: sprint-11
         file: artifacts/sprints/sprint-11.md
         status: done
+      - id: sprint-12
+        file: artifacts/sprints/sprint-12.md
+        status: pending
 
   - id: phase-5
     name: "Release"

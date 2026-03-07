@@ -1,8 +1,8 @@
 # BMAD Auto-Discovery Connector
-# Generated: 2026-03-07T13:02:00.223Z
+# Generated: 2026-03-07T13:22:37.737Z
 # Do not edit manually — regenerate with: node bmad.mjs connector
 meta:
-  generated: '2026-03-07T13:02:00.223Z'
+  generated: '2026-03-07T13:22:37.737Z'
   bmad_version: 3.2.0
   project: pseudo-html-kit
   root: bmad/
@@ -95,6 +95,7 @@ architecture:
               - sprint-09.md
               - sprint-10.md
               - sprint-11.md
+              - sprint-12.md
           - path: stories/
             type: dir
             role: developer
@@ -108,6 +109,9 @@ architecture:
               - S11-02.md
               - S11-03.md
               - S11-04.md
+              - S12-01.md
+              - S12-02.md
+              - S12-03.md
               - S8-01.md
               - S8-02.md
               - S8-03.md
