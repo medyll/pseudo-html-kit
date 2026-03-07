@@ -1,0 +1,28 @@
+{
+  "sync": "2026-03-07",
+  "generatedAt": "2026-03-07T13:02:33.659Z",
+  "totalInstances": 1,
+  "instances": [
+    {
+      "package": "pseudo-html-kit",
+      "phase": "Analysis",
+      "progress": 100,
+      "bugs": [
+        "[object Object]",
+        "[object Object]"
+      ],
+      "dashboardPath": "bmad\\artifacts\\dashboard.md"
+    }
+  ],
+  "criticalIssues": [
+    {
+      "package": "pseudo-html-kit",
+      "bug": "[object Object]"
+    },
+    {
+      "package": "pseudo-html-kit",
+      "bug": "[object Object]"
+    }
+  ],
+  "generatedMarkdown": "# 👑 BMAD Master Dashboard\n> **Scope:** Monorepo Root | **Total Instances:** 1 | **Sync:** 2026-03-07\n\n---\n\n## 🏗️ Project Overview\n\n| Package | Phase | Progress | Status | Action |\n| :--- | :--- | :---: | :---: | :--- |\n| **pseudo-html-kit** | Analysis | 100% | 🟢 | [Open Dash](bmad/artifacts/dashboard.md) |\n\n---\n\n## ⚠️ Critical Issues (QA/Bugs)\n- [ ] **pseudo-html-kit**: [object Object]\n- [ ] **pseudo-html-kit**: [object Object]\n\n---\n\n## 🛠️ Global Actions\n- [🔄 Full Rescan](command:bmad.run?%5B%22dashboard%22%5D)\n- [➕ New Package](command:bmad.run?%5B%22init%22%5D)\n"
+}
