@@ -1,6 +1,6 @@
 # Sprint 12 — v0.5.0 (CSS 2026 theme)
 
-Status: planned
+Status: in progress
 
 ## Theme
 CSS 2026: carousel (Scroll Snap), date-picker, color-swatch, text-wrap balance, CSS `if()` pass.
