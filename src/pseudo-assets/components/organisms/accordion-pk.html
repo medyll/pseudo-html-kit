@@ -1,0 +1,138 @@
+<!--
+  @component accordion-pk
+  @layer organisms
+
+  @prop {boolean} [exclusive] - Only one panel can be open at a time (accordion mode)
+
+  @slot default - `<details>/<summary>` panel elements; each panel is a native <details>
+                  element with a <summary> header and a <div class="accordion__content"> body
+-->
+<template>
+  <div class="accordion">
+    <slot></slot>
+  </div>
+</template>
+
+<style>
+  @scope (.accordion) {
+    :scope {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    details {
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-md, .375rem);
+      overflow: hidden;
+      background-color: var(--color-surface-1, #fff);
+    }
+
+    details + details {
+      margin-block-start: .375rem;
+    }
+
+    details > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .75rem 1rem;
+      cursor: pointer;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      font-weight: 600;
+      color: var(--color-text, #1a202c);
+      background-color: var(--color-surface-1, #fff);
+      user-select: none;
+      list-style: none;
+      transition: background-color .15s;
+    }
+
+    details > summary::-webkit-details-marker { display: none; }
+    details > summary::marker { display: none; }
+
+    details > summary:hover {
+      background-color: var(--color-surface-2, #f7fafc);
+    }
+
+    details[open] > summary {
+      border-block-end: 1.5px solid var(--color-border, #cbd5e0);
+    }
+
+    details > summary::after {
+      content: '▾';
+      font-size: .75rem;
+      color: var(--color-text-muted, #a0aec0);
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+
+    details[open] > summary::after {
+      transform: rotate(-180deg);
+    }
+
+    .accordion__content {
+      padding: .75rem 1rem;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      line-height: 1.6;
+    }
+
+    /* Slide animation — always available */
+    @keyframes accordion-slide-in {
+      from { opacity: 0; transform: translateY(-.25rem); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    details[open] > :not(summary) {
+      animation: accordion-slide-in .2s ease forwards;
+    }
+
+    /* View Transitions enhancement (Chrome 111+) */
+    @supports (view-transition-name: none) {
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation-duration: .2s;
+      }
+    }
+  }
+</style>
+
+<script>
+const panels = el.querySelectorAll('details');
+
+panels.forEach((d, i) => {
+  // Assign unique view-transition-name per panel for Chrome VT API
+  if (typeof CSS !== 'undefined' && CSS.supports?.('view-transition-name', 'none')) {
+    d.style.setProperty('view-transition-name', `accordion-panel-${i}`);
+  }
+
+  d.addEventListener('click', (e) => {
+    if (!e.target.closest('summary')) return;
+    e.preventDefault();
+
+    const isOpen = d.hasAttribute('open');
+    const willOpen = !isOpen;
+
+    function applyToggle() {
+      if (el.hasAttribute('exclusive') && willOpen) {
+        panels.forEach(other => {
+          if (other !== d) other.removeAttribute('open');
+        });
+      }
+      if (willOpen) {
+        d.setAttribute('open', '');
+      } else {
+        d.removeAttribute('open');
+      }
+    }
+
+    if (document.startViewTransition) {
+      document.startViewTransition(applyToggle);
+    } else {
+      applyToggle();
+    }
+  });
+});
+</script>

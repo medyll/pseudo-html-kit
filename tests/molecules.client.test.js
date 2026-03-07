@@ -740,3 +740,55 @@ describe('user-info-pk', () => {
     obs.disconnect();
   });
 });
+
+
+// =============================================================================
+// combobox-pk
+// =============================================================================
+
+describe('combobox-pk', () => {
+  const HTML = readMolecule('combobox-pk.html');
+  const SRC  = 'components/combobox-pk.html';
+
+  it('resolves', async () => {
+    const obs = registerAndInit('combobox-pk', SRC, HTML);
+    document.body.innerHTML = '<combobox-pk name="lang"><option value="en">English</option></combobox-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('combobox-pk').dataset.pkResolved).toBe('true');
+    obs.disconnect();
+  });
+
+  it('stamps .combobox wrapper with .combobox__input', async () => {
+    const obs = registerAndInit('combobox-pk', SRC, HTML);
+    document.body.innerHTML = '<combobox-pk name="lang"></combobox-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.combobox')).toBeTruthy();
+    expect(document.querySelector('input.combobox__input')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('contains .combobox__listbox with role=listbox', async () => {
+    const obs = registerAndInit('combobox-pk', SRC, HTML);
+    document.body.innerHTML = '<combobox-pk name="lang"></combobox-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const listbox = document.querySelector('.combobox__listbox');
+    expect(listbox).toBeTruthy();
+    expect(listbox.getAttribute('role')).toBe('listbox');
+    obs.disconnect();
+  });
+
+  it('contains .combobox__hidden for form submission', async () => {
+    const obs = registerAndInit('combobox-pk', SRC, HTML);
+    document.body.innerHTML = '<combobox-pk name="country"></combobox-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const hidden = document.querySelector('input.combobox__hidden');
+    expect(hidden).toBeTruthy();
+    expect(hidden.type).toBe('hidden');
+    expect(hidden.getAttribute('name')).toBe('country');
+    obs.disconnect();
+  });
+});

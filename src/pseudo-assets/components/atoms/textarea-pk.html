@@ -10,10 +10,12 @@
   @prop {boolean} [required] - Marks the field as required for form validation
   @prop {string} [error] - Error message; activates error visual state when set
   @prop {'none'|'vertical'|'horizontal'|'both'} [resize='vertical'] - CSS resize behaviour
+  @prop {number} [maxlength] - Maximum character count; enables the hint badge when set
 -->
 <template>
   <div class="textarea">
     <textarea class="textarea__field" rows="4"></textarea>
+    <span class="textarea__hint" aria-live="polite"></span>
     <span class="textarea__error" role="alert" aria-live="polite"></span>
   </div>
 </template>
@@ -41,6 +43,10 @@
       outline: none;
       transition: border-color .15s, box-shadow .15s;
       box-sizing: border-box;
+      /* Progressive enhancement: auto-grow without JS (Chrome 123+) */
+      field-sizing: content;
+      /* Anchor for hint badge positioning */
+      anchor-name: --textarea-anchor;
     }
 
     .textarea__field::placeholder {
@@ -72,6 +78,32 @@
       box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
     }
 
+    /* Hint badge — static fallback (always below the field) */
+    .textarea__hint {
+      display: none;
+      align-self: flex-end;
+      font-size: var(--text-xs, .75rem);
+      color: var(--color-text-muted, #a0aec0);
+      padding: .125rem .375rem;
+      border: 1px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-sm, .25rem);
+      background-color: var(--color-surface-1, #fff);
+      margin-block-start: .25rem;
+      pointer-events: none;
+    }
+    :scope[maxlength] .textarea__hint { display: inline-block; }
+
+    /* Anchor-positioned hint (Chrome 125+) */
+    @supports (anchor-name: --a) {
+      .textarea__hint {
+        position: absolute;
+        position-anchor: --textarea-anchor;
+        inset-block-end: calc(anchor(top) - 100% - .375rem);
+        inset-inline-end: calc(100% - anchor(right));
+        margin-block-start: 0;
+      }
+    }
+
     .textarea__error {
       display: none;
       font-size: var(--text-xs, .75rem);
@@ -84,13 +116,24 @@
 <script>
 // Forward host attributes to the inner <textarea> for proper labelling and semantics.
 const field = el.querySelector('.textarea__field');
+const hint  = el.querySelector('.textarea__hint');
 if (field) {
-  const fwd = ['name', 'placeholder', 'rows', 'autocomplete'];
+  const fwd = ['name', 'placeholder', 'rows', 'autocomplete', 'maxlength'];
   fwd.forEach(attr => { if (el.hasAttribute(attr)) field.setAttribute(attr, el.getAttribute(attr)); });
   if (el.hasAttribute('id'))          { field.setAttribute('id', el.getAttribute('id')); el.removeAttribute('id'); }
   if (el.hasAttribute('aria-label'))  { field.setAttribute('aria-label', el.getAttribute('aria-label')); el.removeAttribute('aria-label'); }
   if (el.hasAttribute('aria-labelledby')) { field.setAttribute('aria-labelledby', el.getAttribute('aria-labelledby')); el.removeAttribute('aria-labelledby'); }
   if (el.hasAttribute('disabled'))    field.setAttribute('disabled', '');
   if (el.hasAttribute('required'))    field.setAttribute('required', '');
+
+  // Character count hint badge
+  if (hint && el.hasAttribute('maxlength')) {
+    const max = el.getAttribute('maxlength');
+    function updateCount() {
+      hint.textContent = `${field.value.length} / ${max}`;
+    }
+    updateCount();
+    field.addEventListener('input', updateCount);
+  }
 }
 </script>

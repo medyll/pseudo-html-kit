@@ -105,8 +105,8 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "434 tests — 208 node:test + 51 vitest + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer unit) + 12 Playwright E2E (0 failures)"
-  last_run: "2026-03-03"
+  coverage: "509 tests — 208 node:test + 51 vitest (client) + 63 vitest (atoms) + 53 vitest (molecules) + 39 vitest (organisms) + 20 vitest (viewer unit) + 12 Playwright E2E (0 failures)"
+  last_run: "2026-03-28"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
   e2e_tests: "12 scenarios covering asset loading, UI interactions, error handling, accessibility"
@@ -115,6 +115,10 @@ qa:
       title: "happy-dom nests script/style inside template content for self-closing tags"
       status: fixed
       fix: "strip script/style from def.template after importNode in _loadComponent (line 284-288)"
+    - id: HAPPY-DOM-02
+      title: "happy-dom executes <script> content during DOMParser.parseFromString"
+      status: fixed
+      fix: "strip <script> tag from HTML string before DOMParser call in _loadComponent; captured via rawScriptMatch regex first"
 
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"
@@ -219,7 +223,29 @@ migration_v040:
         points: 4
         status: done
 
-recommendation: "✅ Sprint 10 COMPLETE (100%). All 4 stories done (17/17 pts). Form & layout components migrated to native 2026 APIs. Ready for v0.4.0 GA release. Run `npm run test:e2e` to validate E2E tests in real browsers."
+recommendation: "✅ Sprint 11 DONE. All stories complete. v0.4.0 GA released."
+
+sprint_11:
+  file: artifacts/sprints/sprint-11.md
+  status: done
+  progress: 100
+  stories:
+    - id: S11-01
+      title: "Select: Listbox + Combobox (new Listbox API)"
+      points: 5
+      status: done
+    - id: S11-02
+      title: "Textarea: Anchor Positioning for auto-resize hints"
+      points: 3
+      status: done
+    - id: S11-03
+      title: "Accordion: CSS @supports + View Transitions API"
+      points: 3
+      status: done
+    - id: S11-04
+      title: "v0.4.0 GA Release"
+      points: 3
+      status: done
 
 
 

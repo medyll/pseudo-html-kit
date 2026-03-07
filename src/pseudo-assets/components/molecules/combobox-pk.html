@@ -1,0 +1,238 @@
+<!--
+  @component combobox-pk
+  @layer molecules
+
+  @prop {string} name - Form field name (written to hidden input on selection)
+  @prop {string} [placeholder='Search…'] - Placeholder text for the filter input
+  @prop {string} [value] - Pre-selected option value
+  @prop {boolean} [disabled] - Disables the combobox
+  @prop {boolean} [required] - Marks the field as required
+
+  @slot default - `<option>` elements; each needs `value` and text content
+-->
+<template>
+  <div class="combobox">
+    <div class="combobox__trigger">
+      <input
+        class="combobox__input"
+        type="text"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        autocomplete="off"
+        placeholder="Search…"
+      />
+      <button class="combobox__toggle" type="button" aria-label="Toggle options" tabindex="-1">▾</button>
+    </div>
+    <div
+      class="combobox__listbox"
+      role="listbox"
+      popover="auto"
+      id=""
+    ></div>
+    <input class="combobox__hidden" type="hidden" />
+    <slot class="combobox__slot"></slot>
+  </div>
+</template>
+
+<style>
+  @scope (.combobox) {
+    :scope {
+      display: inline-flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+    }
+
+    .combobox__trigger {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-md, .375rem);
+      background-color: var(--color-surface-1, #fff);
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    .combobox__trigger:focus-within {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
+    }
+
+    .combobox__input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: .5rem .75rem;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      outline: none;
+      min-width: 0;
+    }
+
+    .combobox__input::placeholder {
+      color: var(--color-text-muted, #a0aec0);
+    }
+
+    .combobox__toggle {
+      padding: .25rem .5rem;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--color-text-muted, #a0aec0);
+      font-size: .875rem;
+      line-height: 1;
+    }
+
+    .combobox__listbox {
+      width: 100%;
+      max-height: 16rem;
+      overflow-y: auto;
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-md, .375rem);
+      background-color: var(--color-surface-1, #fff);
+      box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,.12));
+      padding: .25rem;
+      margin-block-start: .25rem;
+
+      /* Anchor positioning (Chrome 125+) */
+      @supports (anchor-name: --a) {
+        position: absolute;
+        position-anchor: --combobox-trigger;
+        inset-block-start: anchor(bottom);
+        inset-inline-start: anchor(left);
+        width: anchor-size(width);
+        margin-block-start: .25rem;
+      }
+    }
+
+    .combobox__trigger {
+      anchor-name: --combobox-trigger;
+    }
+
+    .combobox__option {
+      display: block;
+      padding: .5rem .75rem;
+      border-radius: var(--radius-sm, .25rem);
+      cursor: pointer;
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      color: var(--color-text, #1a202c);
+      transition: background-color .1s;
+    }
+
+    .combobox__option:hover,
+    .combobox__option[aria-selected="true"] {
+      background-color: var(--color-primary-light, #ebf4ff);
+      color: var(--color-primary, #3b82f6);
+    }
+
+    .combobox__option[hidden] { display: none; }
+
+    .combobox__slot { display: none; }
+  }
+</style>
+
+<script>
+const input    = el.querySelector('.combobox__input');
+const toggle   = el.querySelector('.combobox__toggle');
+const listbox  = el.querySelector('.combobox__listbox');
+const hidden   = el.querySelector('.combobox__hidden');
+const slotWrap = el.querySelector('.combobox__slot');
+
+const uid = 'cbx-' + Math.random().toString(36).slice(2, 7);
+listbox.id = uid;
+input.setAttribute('aria-controls', uid);
+
+const name = el.getAttribute('name');
+if (name) hidden.setAttribute('name', name);
+if (el.getAttribute('placeholder')) input.placeholder = el.getAttribute('placeholder');
+if (el.hasAttribute('disabled')) input.setAttribute('disabled', '');
+if (el.hasAttribute('required')) hidden.setAttribute('required', '');
+
+// Build options from slotted <option> elements
+const sourceOptions = el.querySelectorAll('option');
+const optionData = Array.from(sourceOptions).map(o => ({ value: o.value, label: o.textContent.trim() }));
+
+function buildListbox(filter) {
+  listbox.innerHTML = '';
+  const q = filter.toLowerCase();
+  optionData.forEach(o => {
+    if (q && !o.label.toLowerCase().includes(q)) return;
+    const item = document.createElement('div');
+    item.className = 'combobox__option';
+    item.setAttribute('role', 'option');
+    item.setAttribute('data-value', o.value);
+    item.textContent = o.label;
+    item.addEventListener('click', () => selectOption(o));
+    listbox.appendChild(item);
+  });
+}
+
+function selectOption(o) {
+  input.value = o.label;
+  hidden.value = o.value;
+  listbox.hidePopover?.();
+  input.setAttribute('aria-expanded', 'false');
+  listbox.querySelectorAll('.combobox__option').forEach(opt =>
+    opt.setAttribute('aria-selected', opt.dataset.value === o.value ? 'true' : 'false')
+  );
+}
+
+// Pre-select if value attribute set
+const preset = el.getAttribute('value');
+if (preset) {
+  const match = optionData.find(o => o.value === preset);
+  if (match) selectOption(match);
+}
+
+function openListbox() {
+  buildListbox(input.value);
+  listbox.showPopover?.();
+  input.setAttribute('aria-expanded', 'true');
+}
+
+input.addEventListener('input', () => {
+  buildListbox(input.value);
+  if (!input.getAttribute('aria-expanded') || input.getAttribute('aria-expanded') === 'false') {
+    listbox.showPopover?.();
+    input.setAttribute('aria-expanded', 'true');
+  }
+});
+
+input.addEventListener('focus', openListbox);
+toggle.addEventListener('click', () => {
+  if (input.getAttribute('aria-expanded') === 'true') {
+    listbox.hidePopover?.();
+    input.setAttribute('aria-expanded', 'false');
+  } else {
+    openListbox();
+  }
+});
+
+// Keyboard navigation
+input.addEventListener('keydown', (e) => {
+  const items = [...listbox.querySelectorAll('.combobox__option:not([hidden])')];
+  const current = listbox.querySelector('[aria-selected="true"]');
+  const idx = items.indexOf(current);
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    const next = items[idx + 1] ?? items[0];
+    if (next) next.click();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const prev = items[idx - 1] ?? items[items.length - 1];
+    if (prev) prev.click();
+  } else if (e.key === 'Escape') {
+    listbox.hidePopover?.();
+    input.setAttribute('aria-expanded', 'false');
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (current) current.click();
+  }
+});
+
+buildListbox('');
+</script>

@@ -1,0 +1,127 @@
+<!--
+  @component select-pk
+  @layer atoms
+
+  @prop {string} name - Form field name (forwarded to inner `<select>`)
+  @prop {string} [id] - Field id; forwarded to inner `<select>`
+  @prop {boolean} [disabled] - Disables the select
+  @prop {boolean} [required] - Marks the field as required for form validation
+  @prop {'sm'|'md'|'lg'} [size='md'] - Field size preset
+  @prop {boolean} [multiple] - Enable multi-select mode
+
+  @slot default - `<option>` and `<optgroup>` elements; rendered as native options
+-->
+<template>
+  <div class="select">
+    <select class="select__field">
+      <slot></slot>
+    </select>
+    <span class="select__arrow" aria-hidden="true">▾</span>
+  </div>
+</template>
+
+<style>
+  @scope (.select) {
+    :scope {
+      display: inline-flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative;
+    }
+
+    .select__field {
+      width: 100%;
+      padding: .5rem .75rem;
+      padding-inline-end: 2rem;
+      border: 1.5px solid var(--color-border, #cbd5e0);
+      border-radius: var(--radius-md, .375rem);
+      background-color: var(--color-surface-1, #fff);
+      color: var(--color-text, #1a202c);
+      font-family: var(--font-sans, system-ui, sans-serif);
+      font-size: var(--text-sm, .875rem);
+      line-height: 1.5;
+      cursor: pointer;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      appearance: none;
+    }
+
+    .select__field:focus {
+      border-color: var(--color-primary, #3b82f6);
+      box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
+    }
+
+    .select__field:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      background-color: var(--color-surface-2, #f7fafc);
+    }
+
+    .select__field:invalid,
+    .select__field:user-invalid {
+      border-color: var(--color-error, #e53e3e);
+    }
+
+    .select__arrow {
+      position: absolute;
+      inset-inline-end: .75rem;
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--color-text-muted, #a0aec0);
+      font-size: .875rem;
+    }
+
+    /* Sizes */
+    :scope[size="sm"] .select__field { padding: .25rem .5rem; padding-inline-end: 1.75rem; font-size: .75rem; }
+    :scope[size="lg"] .select__field { padding: .75rem 1rem; padding-inline-end: 2.25rem; font-size: 1rem; }
+
+    /* 2026: base-select — fully styleable native select */
+    @supports selector(::picker(select)) {
+      .select__field {
+        appearance: base-select;
+        padding-inline-end: .75rem;
+      }
+
+      .select__arrow { display: none; }
+
+      .select__field::picker-icon { color: var(--color-text-muted, #a0aec0); }
+
+      .select__field::picker(select) {
+        border: 1.5px solid var(--color-border, #cbd5e0);
+        border-radius: var(--radius-md, .375rem);
+        background-color: var(--color-surface-1, #fff);
+        box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,.12));
+        padding: .25rem;
+        overflow: hidden;
+      }
+
+      .select__field option {
+        padding: .5rem .75rem;
+        border-radius: var(--radius-sm, .25rem);
+        cursor: pointer;
+      }
+
+      .select__field option:hover,
+      .select__field option:checked {
+        background-color: var(--color-primary-light, #ebf4ff);
+        color: var(--color-primary, #3b82f6);
+      }
+    }
+  }
+</style>
+
+<script>
+const field = el.querySelector('.select__field');
+if (field) {
+  const name = el.getAttribute('name');
+  if (name) field.setAttribute('name', name);
+
+  const id = el.getAttribute('id');
+  if (id) { field.setAttribute('id', id); el.removeAttribute('id'); }
+
+  if (el.hasAttribute('disabled')) field.setAttribute('disabled', '');
+  if (el.hasAttribute('required')) field.setAttribute('required', '');
+  if (el.hasAttribute('multiple')) field.setAttribute('multiple', '');
+}
+</script>

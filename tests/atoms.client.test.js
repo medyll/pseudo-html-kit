@@ -764,6 +764,27 @@ describe('textarea-pk', () => {
     expect(err.getAttribute('role')).toBe('alert');
     obs.disconnect();
   });
+
+  it('contains .textarea__hint element', async () => {
+    const obs = registerAndInit('textarea-pk', SRC, HTML);
+    document.body.innerHTML = '<textarea-pk name="bio"></textarea-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.textarea__hint')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('forwards maxlength to inner textarea and initialises hint count', async () => {
+    const obs = registerAndInit('textarea-pk', SRC, HTML);
+    document.body.innerHTML = '<textarea-pk name="bio" maxlength="200"></textarea-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const field = document.querySelector('textarea.textarea__field');
+    expect(field.getAttribute('maxlength')).toBe('200');
+    const hint = document.querySelector('.textarea__hint');
+    expect(hint.textContent).toBe('0 / 200');
+    obs.disconnect();
+  });
 });
 
 // =============================================================================
@@ -811,6 +832,55 @@ describe('toggle-pk', () => {
     PseudoKit.init(document.body);
     await flush();
     expect(document.querySelector('.toggle-label-text')).toBeTruthy();
+    obs.disconnect();
+  });
+});
+
+
+// =============================================================================
+// select-pk
+// =============================================================================
+
+describe('select-pk', () => {
+  const HTML = readAtom('select-pk.html');
+  const SRC  = 'components/select-pk.html';
+
+  it('resolves', async () => {
+    const obs = registerAndInit('select-pk', SRC, HTML);
+    document.body.innerHTML = '<select-pk name="country"></select-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('select-pk').dataset.pkResolved).toBe('true');
+    obs.disconnect();
+  });
+
+  it('stamps .select wrapper with select.select__field', async () => {
+    const obs = registerAndInit('select-pk', SRC, HTML);
+    document.body.innerHTML = '<select-pk name="country"></select-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.select')).toBeTruthy();
+    expect(document.querySelector('select.select__field')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('contains .select__arrow decorative element', async () => {
+    const obs = registerAndInit('select-pk', SRC, HTML);
+    document.body.innerHTML = '<select-pk name="country"></select-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    const arrow = document.querySelector('.select__arrow');
+    expect(arrow).toBeTruthy();
+    expect(arrow.getAttribute('aria-hidden')).toBe('true');
+    obs.disconnect();
+  });
+
+  it('forwards name attribute to inner select', async () => {
+    const obs = registerAndInit('select-pk', SRC, HTML);
+    document.body.innerHTML = '<select-pk name="lang"></select-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('select.select__field').getAttribute('name')).toBe('lang');
     obs.disconnect();
   });
 });

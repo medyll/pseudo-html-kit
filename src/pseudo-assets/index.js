@@ -44,6 +44,7 @@ export const componentNames = {
   tag:          'tag-pk',
   textarea:     'textarea-pk',
   toggle:       'toggle-pk',
+  select:       'select-pk',
   // Molecules
   breadcrumb:   'breadcrumb-pk',
   card:         'card-pk',
@@ -61,6 +62,7 @@ export const componentNames = {
   tabBar:       'tab-bar-pk',
   tooltip:      'tooltip-pk',
   userInfo:     'user-info-pk',
+  combobox:     'combobox-pk',
   // Organisms
   cartSummary:    'cart-summary-pk',
   commentThread:  'comment-thread-pk',
@@ -75,6 +77,7 @@ export const componentNames = {
   storyRing:      'story-ring-pk',
   thumbnailGrid:  'thumbnail-grid-pk',
   topbar:         'topbar-pk',
+  accordion:      'accordion-pk',
 };
 
 // ── Component URLs ─────────────────────────────────────────────────────────
@@ -97,6 +100,7 @@ export const components = {
   tag:          r('./components/atoms/tag.html'),
   textarea:     r('./components/atoms/textarea-pk.html'),
   toggle:       r('./components/atoms/toggle.html'),
+  select:       r('./components/atoms/select-pk.html'),
 
   // Molecules (Sprint 2)
   breadcrumb:   r('./components/molecules/breadcrumb.html'),
@@ -115,6 +119,7 @@ export const components = {
   tabBar:       r('./components/molecules/tab-bar.html'),
   tooltip:      r('./components/molecules/tooltip.html'),
   userInfo:     r('./components/molecules/user-info.html'),
+  combobox:     r('./components/molecules/combobox-pk.html'),
 
   // Organisms (Sprint 3)
   cartSummary:    r('./components/organisms/cart-summary.html'),
@@ -130,6 +135,7 @@ export const components = {
   storyRing:      r('./components/organisms/story-ring.html'),
   thumbnailGrid:  r('./components/organisms/thumbnail-grid.html'),
   topbar:         r('./components/organisms/topbar.html'),
+  accordion:      r('./components/organisms/accordion-pk.html'),
 };
 
 // ── Frame URLs ─────────────────────────────────────────────────────────────
@@ -174,8 +180,9 @@ export const componentsMeta = {
   skeleton:     { props: 'width:string?; height:string?; variant:enum(text|circle|rect)?; lines:number?; animated:boolean?', slots: '', layer: 'atoms' },
   spinner:      { props: 'size:enum(sm|md|lg)?; label:string?; variant:enum(default|primary|white)?', slots: '', layer: 'atoms' },
   tag:          { props: 'label:string; variant:enum(default|primary|success|warning|danger|info)?; size:enum(sm|md)?; outline:boolean?', slots: 'icon', layer: 'atoms' },
-  textarea:     { props: 'name:string; id:string?; placeholder:string?; rows:number?; disabled:boolean?; required:boolean?; error:string?; resize:enum(none|vertical|horizontal|both)?', slots: '', layer: 'atoms' },
+  textarea:     { props: 'name:string; id:string?; placeholder:string?; rows:number?; disabled:boolean?; required:boolean?; error:string?; resize:enum(none|vertical|horizontal|both)?; maxlength:number?', slots: '', layer: 'atoms' },
   toggle:       { props: 'name:string; id:string?; checked:boolean?; disabled:boolean?; size:enum(sm|md|lg)?', slots: 'label', layer: 'atoms' },
+  select:       { props: 'name:string; id:string?; disabled:boolean?; required:boolean?; multiple:boolean?; size:enum(sm|md|lg)?', slots: 'default', layer: 'atoms' },
 
   // Molecules (Sprint 2 — metadata placeholders)
   breadcrumb:   { props: 'items:[label:string, href:string?][]', slots: 'default', layer: 'molecules' },
@@ -194,6 +201,7 @@ export const componentsMeta = {
   tabBar:       { props: 'active:string?; variant:enum(line|pill)?', slots: 'default', layer: 'molecules' },
   tooltip:      { props: 'content:string; position:enum(top|bottom|left|right)?; delay:number?', slots: 'default', layer: 'molecules' },
   userInfo:     { props: 'name:string; role:string?; src:string?; size:enum(sm|md|lg)?', slots: 'actions', layer: 'molecules' },
+  combobox:     { props: 'name:string; placeholder:string?; value:string?; disabled:boolean?; required:boolean?', slots: 'default', layer: 'molecules' },
 
   // Organisms (Sprint 3 — metadata placeholders)
   cartSummary:    { props: 'count:number?; total:number?; currency:string?', slots: 'items, actions', layer: 'organisms' },
@@ -209,6 +217,7 @@ export const componentsMeta = {
   storyRing:      { props: '', slots: 'default', layer: 'organisms' },
   thumbnailGrid:  { props: 'columns:number?; gap:enum(sm|md|lg)?', slots: 'default', layer: 'organisms' },
   topbar:         { props: 'elevated:boolean?', slots: 'leading, title, actions', layer: 'organisms' },
+  accordion:      { props: 'exclusive:boolean?', slots: 'default', layer: 'organisms' },
 };
 
 // ── Frame Metadata ─────────────────────────────────────────────────────────

@@ -485,6 +485,83 @@ describe('story-ring-pk', () => {
 });
 
 // =============================================================================
+// accordion-pk
+// =============================================================================
+
+describe('accordion-pk', () => {
+  const HTML = readOrganism('accordion-pk.html');
+  const SRC  = 'components/accordion-pk.html';
+
+  it('resolves', async () => {
+    const obs = registerAndInit('accordion-pk', SRC, HTML);
+    document.body.innerHTML = '<accordion-pk></accordion-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('accordion-pk').dataset.pkResolved).toBe('true');
+    obs.disconnect();
+  });
+
+  it('stamps .accordion wrapper', async () => {
+    const obs = registerAndInit('accordion-pk', SRC, HTML);
+    document.body.innerHTML = '<accordion-pk></accordion-pk>';
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.accordion')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('routes slotted <details> elements through default slot', async () => {
+    const obs = registerAndInit('accordion-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <accordion-pk>
+        <details class="panel-a"><summary>Panel A</summary><div class="accordion__content">Content A</div></details>
+        <details class="panel-b"><summary>Panel B</summary><div class="accordion__content">Content B</div></details>
+      </accordion-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    expect(document.querySelector('.panel-a')).toBeTruthy();
+    expect(document.querySelector('.panel-b')).toBeTruthy();
+    obs.disconnect();
+  });
+
+  it('toggles panel open state on summary click', async () => {
+    const obs = registerAndInit('accordion-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <accordion-pk>
+        <details class="panel-one"><summary class="panel-one-summary">Panel 1</summary><div class="accordion__content">Body 1</div></details>
+      </accordion-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    const details = document.querySelector('.panel-one');
+    const summary = document.querySelector('.panel-one-summary');
+    expect(details.hasAttribute('open')).toBe(false);
+    summary.click();
+    await flush();
+    expect(details.hasAttribute('open')).toBe(true);
+    obs.disconnect();
+  });
+
+  it('closes other panels in exclusive mode', async () => {
+    const obs = registerAndInit('accordion-pk', SRC, HTML);
+    document.body.innerHTML = `
+      <accordion-pk exclusive>
+        <details class="p1" open><summary class="s1">Panel 1</summary><div class="accordion__content">Body 1</div></details>
+        <details class="p2"><summary class="s2">Panel 2</summary><div class="accordion__content">Body 2</div></details>
+      </accordion-pk>`;
+    PseudoKit.init(document.body);
+    await flush();
+    const p1 = document.querySelector('.p1');
+    const s2 = document.querySelector('.s2');
+    expect(p1.hasAttribute('open')).toBe(true);
+    s2.click();
+    await flush();
+    expect(p1.hasAttribute('open')).toBe(false);
+    expect(document.querySelector('.p2').hasAttribute('open')).toBe(true);
+    obs.disconnect();
+  });
+});
+
+// =============================================================================
 // thumbnail-grid-pk
 // =============================================================================
 
