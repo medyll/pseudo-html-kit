@@ -1,0 +1,58 @@
+<!--
+  @component date-picker-pk
+  @layer atoms
+
+  @prop {string} [value]
+
+  @slot default - optional input markup
+-->
+<template>
+  <div class="date-picker">
+    <input type="date" class="date-picker__input" aria-label="Choose a date" />
+    <button type="button" class="date-picker__toggle" aria-haspopup="dialog" aria-expanded="false">Open calendar</button>
+    <div class="date-picker__popover" role="dialog" aria-hidden="true" hidden>
+      <!-- lightweight fallback calendar placeholder (JS will implement full picker later) -->
+      <div class="date-picker__calendar">Calendar fallback</div>
+    </div>
+  </div>
+</template>
+
+<style>
+  @scope (.date-picker) {
+    :scope { display: inline-block; position: relative; }
+    .date-picker__input { padding: .5rem; border: 1px solid #ccc; border-radius: .25rem; }
+    .date-picker__toggle { margin-left: .5rem; }
+    .date-picker__popover { position: absolute; top: 100%; left: 0; background: white; border: 1px solid #ddd; padding: .5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.08); z-index: 10; }
+  }
+</style>
+
+<script>
+const input = el.querySelector('input[type="date"]');
+const toggle = el.querySelector('.date-picker__toggle');
+const popover = el.querySelector('.date-picker__popover');
+
+// Detect native date support (basic)
+const nativeInput = document.createElement('input');
+nativeInput.type = 'date';
+const hasNative = nativeInput.type === 'date';
+
+if (!hasNative) {
+  // Show fallback toggle
+  toggle.addEventListener('click', () => {
+    const open = popover.hasAttribute('hidden') === false;
+    if (open) {
+      popover.setAttribute('hidden', '');
+      popover.setAttribute('aria-hidden', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+    } else {
+      popover.removeAttribute('hidden');
+      popover.setAttribute('aria-hidden', 'false');
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+  });
+} else {
+  // Native supported — hide toggle and popover
+  toggle.style.display = 'none';
+  popover.setAttribute('hidden', '');
+}
+</script>

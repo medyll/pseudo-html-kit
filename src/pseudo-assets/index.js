@@ -100,6 +100,7 @@ export const components = {
   spinner:      r('./components/atoms/spinner.html'),
   tag:          r('./components/atoms/tag.html'),
   textarea:     r('./components/atoms/textarea-pk.html'),
+  datePicker:    r('./components/atoms/date-picker-pk.html'),
   toggle:       r('./components/atoms/toggle.html'),
   select:       r('./components/atoms/select-pk.html'),
 
@@ -183,6 +184,7 @@ export const componentsMeta = {
   spinner:      { props: 'size:enum(sm|md|lg)?; label:string?; variant:enum(default|primary|white)?', slots: '', layer: 'atoms' },
   tag:          { props: 'label:string; variant:enum(default|primary|success|warning|danger|info)?; size:enum(sm|md)?; outline:boolean?', slots: 'icon', layer: 'atoms' },
   textarea:     { props: 'name:string; id:string?; placeholder:string?; rows:number?; disabled:boolean?; required:boolean?; error:string?; resize:enum(none|vertical|horizontal|both)?; maxlength:number?', slots: '', layer: 'atoms' },
+  datePicker:   { props: 'name:string?; value:string?; min:string?; max:string?; disabled:boolean?', slots: '', layer: 'atoms' },
   toggle:       { props: 'name:string; id:string?; checked:boolean?; disabled:boolean?; size:enum(sm|md|lg)?', slots: 'label', layer: 'atoms' },
   select:       { props: 'name:string; id:string?; disabled:boolean?; required:boolean?; multiple:boolean?; size:enum(sm|md|lg)?', slots: 'default', layer: 'atoms' },
 
