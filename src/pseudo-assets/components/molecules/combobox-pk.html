@@ -158,12 +158,15 @@ const optionData = Array.from(sourceOptions).map(o => ({ value: o.value, label: 
 function buildListbox(filter) {
   listbox.innerHTML = '';
   const q = filter.toLowerCase();
-  optionData.forEach(o => {
+  optionData.forEach((o, i) => {
     if (q && !o.label.toLowerCase().includes(q)) return;
     const item = document.createElement('div');
     item.className = 'combobox__option';
     item.setAttribute('role', 'option');
     item.setAttribute('data-value', o.value);
+    // Provide an id so aria-activedescendant can reference the active option
+    item.id = `${uid}-opt-${i}`;
+    item.tabIndex = -1;
     item.textContent = o.label;
     item.addEventListener('click', () => selectOption(o));
     listbox.appendChild(item);
@@ -175,9 +178,17 @@ function selectOption(o) {
   hidden.value = o.value;
   listbox.hidePopover?.();
   input.setAttribute('aria-expanded', 'false');
-  listbox.querySelectorAll('.combobox__option').forEach(opt =>
+  listbox.querySelectorAll('.combobox__option').forEach((opt) =>
     opt.setAttribute('aria-selected', opt.dataset.value === o.value ? 'true' : 'false')
   );
+  // Update aria-activedescendant to point at the selected option
+  const selected = listbox.querySelector(`.combobox__option[data-value="${o.value}"]`);
+  if (selected) {
+    input.setAttribute('aria-activedescendant', selected.id);
+    try { selected.focus(); } catch (e) { /* ignore focus errors in non-DOM tests */ }
+  } else {
+    input.removeAttribute('aria-activedescendant');
+  }
 }
 
 // Pre-select if value attribute set
