@@ -30,6 +30,8 @@
       role="listbox"
       popover="auto"
       id=""
+      style="display:none"
+      aria-hidden="true"
     ></div>
     <input class="combobox__hidden" type="hidden" />
     <slot class="combobox__slot"></slot>
@@ -176,7 +178,13 @@ function buildListbox(filter) {
 function selectOption(o) {
   input.value = o.label;
   hidden.value = o.value;
-  listbox.hidePopover?.();
+  // Hide using popover API if available, otherwise set aria-hidden/display
+  if (typeof listbox.hidePopover === 'function') {
+    listbox.hidePopover();
+  } else {
+    listbox.style.display = 'none';
+    listbox.setAttribute('aria-hidden', 'true');
+  }
   input.setAttribute('aria-expanded', 'false');
   listbox.querySelectorAll('.combobox__option').forEach((opt) =>
     opt.setAttribute('aria-selected', opt.dataset.value === o.value ? 'true' : 'false')
@@ -200,7 +208,15 @@ if (preset) {
 
 function openListbox() {
   buildListbox(input.value);
-  listbox.showPopover?.();
+  // Use popover API when available, otherwise toggle visibility via ARIA/fallback styles
+  if (typeof listbox.showPopover === 'function') {
+    listbox.showPopover();
+    listbox.style.display = '';
+    listbox.removeAttribute('aria-hidden');
+  } else {
+    listbox.style.display = '';
+    listbox.removeAttribute('aria-hidden');
+  }
   input.setAttribute('aria-expanded', 'true');
 }
 

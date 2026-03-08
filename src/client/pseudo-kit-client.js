@@ -49,8 +49,23 @@ import {
  *
  * @type {CSSStyleSheet}
  */
-const _componentSheet = new CSSStyleSheet();
-document.adoptedStyleSheets = [...document.adoptedStyleSheets, _componentSheet];
+const _componentSheet = (typeof CSSStyleSheet !== 'undefined') ? new CSSStyleSheet() : null;
+let _styleTagFallback = null;
+try {
+  if (_componentSheet && 'adoptedStyleSheets' in document) {
+    document.adoptedStyleSheets = [...document.adoptedStyleSheets, _componentSheet];
+  } else {
+    // Fallback: create a <style> tag to hold component rules when adoptedStyleSheets isn't supported
+    _styleTagFallback = document.createElement('style');
+    _styleTagFallback.setAttribute('data-pk-component-styles', '');
+    document.head.appendChild(_styleTagFallback);
+  }
+} catch (err) {
+  console.warn('[pseudo-kit] adoptedStyleSheets not available, using <style> fallback');
+  _styleTagFallback = document.createElement('style');
+  _styleTagFallback.setAttribute('data-pk-component-styles', '');
+  document.head.appendChild(_styleTagFallback);
+}
 
 /**
  * Index of known @scope rule positions in _componentSheet, keyed by component name.
@@ -82,21 +97,35 @@ const _scopeRuleIndex = new Map();
  */
 function _upsertComponentStyle(name, css) {
   try {
-    if (_scopeRuleIndex.has(name)) {
-      // Replace existing rule in-place — no new DOM node
-      const idx = _scopeRuleIndex.get(name);
-      _componentSheet.deleteRule(idx);
-      _componentSheet.insertRule(css, idx);
+    if (_componentSheet) {
+      if (_scopeRuleIndex.has(name)) {
+        // Replace existing rule in-place — no new DOM node
+        const idx = _scopeRuleIndex.get(name);
+        _componentSheet.deleteRule(idx);
+        _componentSheet.insertRule(css, idx);
+      } else {
+        // Append new rule and record its index
+        const idx = _componentSheet.cssRules.length;
+        _componentSheet.insertRule(css, idx);
+        _scopeRuleIndex.set(name, idx);
+      }
+    } else if (_styleTagFallback) {
+      // Append to fallback <style> tag
+      _styleTagFallback.textContent += `\n/* ${name} */\n` + css;
     } else {
-      // Append new rule and record its index
-      const idx = _componentSheet.cssRules.length;
-      _componentSheet.insertRule(css, idx);
-      _scopeRuleIndex.set(name, idx);
+      // No stylesheet mechanism available — log and skip
+      console.warn(`[pseudo-kit] No stylesheet mechanism available for "${name}"`);
     }
   } catch (err) {
     // insertRule may fail in non-browser environments (e.g. happy-dom in tests)
     // for complex CSS like @layer/@scope — log and continue
     console.warn(`[pseudo-kit] Could not insert CSS for "${name}": ${err.message}`);
+    if (!_styleTagFallback) {
+      _styleTagFallback = document.createElement('style');
+      _styleTagFallback.setAttribute('data-pk-component-styles', '');
+      document.head.appendChild(_styleTagFallback);
+      _styleTagFallback.textContent += `\n/* ${name} */\n` + css;
+    }
   }
 }
 
