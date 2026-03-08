@@ -201,7 +201,12 @@ async function renderComponent_server(name, props = {}, children = '', base) {
     .map(([k, v]) => v === true ? k : `${k}="${String(v).replace(/"/g, '&quot;')}"`)
     .join(' ');
 
-  return `<${name}${attrs ? ' ' + attrs : ''}>${inner}</${name}>`;
+  // Mark server-rendered components as hydrated so the client can detect
+  // the SSR path without relying solely on the presence of a <pk-slot>
+  // wrapper (which may be affected by whitespace or parser differences).
+  const hydratedAttr = parsed.template ? ' data-pk-hydrated="true"' : '';
+
+  return `<${name}${attrs ? ' ' + attrs : ''}${hydratedAttr}>${inner}</${name}>`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

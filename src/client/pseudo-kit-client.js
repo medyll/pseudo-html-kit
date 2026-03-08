@@ -182,6 +182,11 @@ function _collectComponents(root) {
  * @returns {boolean} True if the element was server-rendered.
  */
 function _isSSRHydrated(el) {
+  // Prefer explicit server hydration marker when present (more robust across
+  // parsers and whitespace differences). Fall back to detecting a <pk-slot>
+  // wrapper for older server output.
+  if (el.dataset.pkHydrated === 'true' || el.hasAttribute('data-pk-hydrated')) return true;
+
   for (let c = el.firstElementChild; c; c = c.nextElementSibling) {
     if (c.tagName.toLowerCase() === 'pk-slot') return true;
   }
