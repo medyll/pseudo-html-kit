@@ -102,5 +102,8 @@
 
       :scope[open] .sidebar__backdrop { display: block; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

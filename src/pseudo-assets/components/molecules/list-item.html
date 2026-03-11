@@ -91,6 +91,9 @@
       flex-shrink: 0;
       color: var(--color-text-muted, #64748b);
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

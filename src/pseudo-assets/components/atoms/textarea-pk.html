@@ -53,7 +53,7 @@
       color: var(--color-text-muted, #a0aec0);
     }
 
-    .textarea__field:focus {
+    .textarea__field:focus-visible {
       border-color: var(--color-primary, #3b82f6);
       box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
     }
@@ -74,7 +74,7 @@
     :scope[error] .textarea__field {
       border-color: var(--color-danger, #ef4444);
     }
-    :scope[error] .textarea__field:focus {
+    :scope[error] .textarea__field:focus-visible {
       box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
     }
 
@@ -110,6 +110,9 @@
       color: var(--color-danger, #ef4444);
     }
     :scope[error] .textarea__error { display: block; }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

@@ -71,5 +71,8 @@
 
     .menu-item__icon:empty { display: none; }
     .menu-item__icon { flex-shrink: 0; width: 1.1em; }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

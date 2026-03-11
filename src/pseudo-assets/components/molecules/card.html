@@ -77,5 +77,8 @@
     :scope[padding="none"] .card__body { padding: 0; }
     :scope[padding="sm"]   .card__body { padding: .5rem; }
     :scope[padding="lg"]   .card__body { padding: 1.5rem; }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

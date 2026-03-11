@@ -101,5 +101,9 @@
     /* Icon slots: hide wrapper when empty */
     .button__icon-left:empty,
     .button__icon-right:empty { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      :scope { transition: none; }
+    }
   }
 </style>

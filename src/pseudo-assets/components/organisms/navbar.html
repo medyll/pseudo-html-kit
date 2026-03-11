@@ -128,5 +128,12 @@
       .navbar__hamburger { display: flex; }
       .navbar__inner { padding: 0 1.25rem; }
     }
+    .navbar__hamburger:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

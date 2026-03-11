@@ -136,6 +136,10 @@
     .tabs__body [role="tabpanel"]:not([hidden]):not([data-vt]) {
       animation: tabs-fade-in .15s ease-out;
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tabs__body [role="tabpanel"] { animation: none; }
+    }
   }
 </style>
 

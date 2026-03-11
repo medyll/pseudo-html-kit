@@ -116,5 +116,13 @@
       padding: .5rem .75rem .75rem;
     }
     .product-tile__actions:empty { display: none; }
+    .product-tile__media:focus-visible,
+    .product-tile__title:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

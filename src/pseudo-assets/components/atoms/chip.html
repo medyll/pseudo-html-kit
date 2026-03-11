@@ -72,5 +72,12 @@
     }
     .chip__remove:hover { opacity: 1; }
     :scope[removable] .chip__remove { display: inline-flex; }
+    .chip__remove:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

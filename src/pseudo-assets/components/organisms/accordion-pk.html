@@ -96,6 +96,10 @@
         animation-duration: .2s;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      details[open] > :not(summary) { animation: none; }
+    }
   }
 </style>
 

@@ -71,5 +71,8 @@
     :scope:has(.image__img[src]:not([src=""])) .image__fallback {
       opacity: 0;
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

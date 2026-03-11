@@ -46,7 +46,7 @@
       appearance: none;
     }
 
-    .select__field:focus {
+    .select__field:focus-visible {
       border-color: var(--color-primary, #3b82f6);
       box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
     }
@@ -107,6 +107,9 @@
         background-color: var(--color-primary-light, #ebf4ff);
         color: var(--color-primary, #3b82f6);
       }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
     }
   }
 </style>

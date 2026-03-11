@@ -142,7 +142,7 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "641 passing — 226 node:test + 377 vitest (345 main + 14 react + 18 svelte) + 38 E2E Chromium · 0 failures"
+  coverage: "656 passing — 226 node:test + 392 vitest (345 main + 29 react + 18 svelte) + 38 E2E Chromium · 0 failures"
   last_run: "2026-03-11"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
@@ -178,6 +178,12 @@ qa:
       reported_by: bmad-master
       linked_story: artifacts/stories/S13-02-fix-webkit-e2e.md
 
+deferred_backlog:
+  - id: vscode-extension
+    title: "VSCode extension — syntax highlight + autocomplete for pseudo-html .html files"
+    priority: "last — do not schedule until all other v1.0.0 goals are done"
+    note: "Explicitly deprioritized by user on 2026-03-11"
+
 decisions:
   - pkg_structure: "pseudo-kit-assets as separate npm package"
   - naming: "component files use -pk suffix to match their tag name (e.g. button-pk.html → <button-pk>)"
@@ -191,7 +197,7 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.5.1 stable · v0.6.0 GA released"
+release_status: "✅ v0.5.1 stable · v0.6.0 GA released · v0.6.1 in progress (Sprint 18 WCAG + SSR)"
 
 # v0.4.0 cycle — Phase 1: Interaction Components Migration
 migration_v040:
@@ -300,7 +306,7 @@ sprint_13_stories:
     status: done
     story: artifacts/stories/S13-05-theme-skin-system.md
 
-recommendation: "Sprint 17 complete. v0.6.0 GA released. 641 tests passing. Next: Sprint 18 — VSCode extension (syntax highlight + autocomplete) or v1.0.0 planning + accessibility audit."
+recommendation: "Sprint 19 in progress. S19-01 ✅ (24 components +reduced-motion, 8 +focus-visible) · S19-02 ✅ (date-picker aria-label) · S19-03 ⏳ (axe-core Playwright) · S19-04 ✅ (bundle check script, 7.7 KB). Next: S19-03 axe-core color contrast audit."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md

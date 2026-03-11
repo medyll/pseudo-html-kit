@@ -87,6 +87,9 @@
     /* Native Popover API state (Chrome 146+) */
     .dropdown__menu:popover-open { display: block; }
     :scope .dropdown__menu:popover-open ~ .dropdown__arrow { transform: rotate(180deg); }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

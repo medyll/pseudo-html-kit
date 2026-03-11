@@ -112,5 +112,8 @@
       border-radius: calc(var(--radius-md, .375rem) - 2px);
     }
     :scope[variant="boxed"] .tab-bar__tab::after { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

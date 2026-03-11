@@ -90,5 +90,11 @@
     :scope[loading] .search-bar__loader { display: block; }
 
     @keyframes sb-spin { to { transform: rotate(360deg); } }
+    .search-bar__input:focus-visible {
+      outline: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

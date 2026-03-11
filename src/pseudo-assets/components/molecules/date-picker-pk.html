@@ -1,6 +1,10 @@
 <!--
   @component date-picker-pk
   @layer molecules
+
+  @prop {string} [label] - Accessible label forwarded to the date input via aria-label
+  @prop {string} [name] - Form field name forwarded to the inner input
+
   @slot default - optional calendar content
 -->
 <template>
@@ -21,8 +25,14 @@
 </style>
 
 <script>
-// Minimal enhancement: show popover fallback when browser doesn't support native date UI or when the input receives focus
+// Wire label and name props to input for accessibility (WCAG 1.3.1, 4.1.2)
 const input = el.querySelector('.date-picker__input');
+if (input) {
+  const label = el.getAttribute('label') || el.getAttribute('aria-label');
+  if (label) input.setAttribute('aria-label', label);
+  const name = el.getAttribute('name');
+  if (name) input.setAttribute('name', name);
+}
 const pop = el.querySelector('.date-picker__popover');
 
 function _supportsNativeDate() {

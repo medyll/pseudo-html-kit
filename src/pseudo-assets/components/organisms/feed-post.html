@@ -147,5 +147,12 @@
     @media (max-width: 480px) {
       .feed-post__action { padding: .4rem .5rem; font-size: var(--text-xs, .75rem); }
     }
+    .feed-post__action:focus-visible {
+      outline: 2px solid var(--color-primary, #3b82f6);
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

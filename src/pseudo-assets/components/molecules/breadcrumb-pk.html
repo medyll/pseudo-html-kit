@@ -66,6 +66,9 @@
       font-weight: 500;
       pointer-events: none;
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

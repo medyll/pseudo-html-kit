@@ -56,5 +56,8 @@
       clip: rect(0,0,0,0);
       white-space: nowrap;
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>

@@ -83,6 +83,9 @@
     :scope[variant="primary"] .slider__input::-moz-range-track              { background: color-mix(in oklch, var(--color-primary, #3b82f6) 25%, transparent); }
     :scope[variant="primary"] .slider__input::-webkit-slider-thumb { background: var(--color-primary, #3b82f6); }
     :scope[variant="primary"] .slider__input::-moz-range-thumb     { background: var(--color-primary, #3b82f6); }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

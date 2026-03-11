@@ -74,7 +74,7 @@
       color: var(--color-text-muted, #a0aec0);
     }
 
-    .input__field:focus {
+    .input__field:focus-visible {
       border-color: var(--color-primary, #3b82f6);
       box-shadow: 0 0 0 3px var(--color-primary-ring, rgba(59,130,246,.2));
     }
@@ -89,14 +89,14 @@
     .input__field:invalid {
       border-color: var(--color-danger, #ef4444);
     }
-    .input__field:invalid:focus {
+    .input__field:invalid:focus-visible {
       box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
     }
 
     .input__field:user-invalid {
       border-color: var(--color-danger, #ef4444);
     }
-    .input__field:user-invalid:focus {
+    .input__field:user-invalid:focus-visible {
       box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
     }
 
@@ -135,7 +135,7 @@
     :scope[error] .input__field {
       border-color: var(--color-danger, #ef4444);
     }
-    :scope[error] .input__field:focus {
+    :scope[error] .input__field:focus-visible {
       box-shadow: 0 0 0 3px var(--color-danger-ring, rgba(239,68,68,.2));
     }
 
@@ -185,6 +185,9 @@
     }
     .input__error-fallback { flex: 0 0 100%; }
     .input__error { flex: 0 0 100%; }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

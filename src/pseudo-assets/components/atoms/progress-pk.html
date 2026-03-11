@@ -82,6 +82,9 @@
       animation: progress-indeterminate 1.5s ease-in-out infinite;
       width: 25% !important;
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
 

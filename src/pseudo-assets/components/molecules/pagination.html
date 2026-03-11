@@ -87,5 +87,8 @@
       .pagination__page,
       .pagination__btn { min-width: 1.75rem; height: 1.75rem; }
     }
+    @media (prefers-reduced-motion: reduce) {
+      :scope, :scope * { transition: none; animation: none; }
+    }
   }
 </style>
