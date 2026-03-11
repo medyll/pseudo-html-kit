@@ -3,12 +3,10 @@
 > Vanilla HTML component system. No build step. No framework. No dependencies.
 
 [![version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG-v1.0.0.md)
-[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG%202.2-AA%20✓-green)](bmad/artifacts/a11y-audit-v0.6.0.md)
+[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG%202.2-AA-green)](bmad/artifacts/a11y-audit-v0.6.0.md)
 [![bundle](https://img.shields.io/badge/gzip-7.7%20KB-brightgreen)](scripts/check-bundle-size.js)
 [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 [![components](https://img.shields.io/badge/components-61-purple)](pseudo-kit-context.json)
-
-pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface descriptor that bridges UI specification and working code. Write your UI as annotated HTML, render it in the browser as-is, generate real components for any framework, or serve it via SSR from Node.js.
 
 ---
 
@@ -17,12 +15,18 @@ pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface de
 - [What is pseudo-HTML?](#what-is-pseudo-html)
 - [What is pseudo-kit?](#what-is-pseudo-kit)
 - [How it works](#how-it-works)
+- [Browser support](#browser-support)
 - [Installation](#installation)
 - [Quick start](#quick-start)
 - [Component files](#component-files)
-  - [Anatomy](#anatomy)
+  - [File anatomy](#file-anatomy)
+  - [Naming convention](#naming-convention)
   - [Script modes](#script-modes)
   - [Self-registration](#self-registration)
+- [Registering components](#registering-components)
+  - [Manual registration](#manual-registration)
+  - [Chained registration](#chained-registration)
+  - [Auto-registration with pseudo-kit-assets](#auto-registration-with-pseudo-kit-assets)
 - [Slots](#slots)
   - [Default slot](#default-slot)
   - [Named slots](#named-slots)
@@ -30,1422 +34,1533 @@ pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface de
   - [pk-slot wrapper](#pk-slot-wrapper)
 - [Loop rendering](#loop-rendering)
 - [Reactive state](#reactive-state)
+  - [Writing state](#writing-state)
+  - [Reading state in CSS](#reading-state-in-css)
+  - [SSR state hydration](#ssr-state-hydration)
 - [Events](#events)
 - [Theme system](#theme-system)
-  - [theme.css — tokens + reset + palette](#themecss--tokens--reset--palette)
-  - [utils.css — native CSS @function mixins](#utilscss--native-css-function-mixins)
-  - [Skins — brand overrides](#skins--brand-overrides)
-  - [Creating a custom skin](#creating-a-custom-skin)
+  - [theme.css — tokens + reset + palette](#themecss)
+  - [utils.css — CSS @function mixins](#utilscss)
+  - [Skins — brand overrides](#skins)
+  - [Layer order](#layer-order)
 - [CSS architecture](#css-architecture)
-  - [@layer](#layer)
-  - [@scope](#scope)
-  - [CSSStyleSheet — no DOM injection](#cssstylesheet--no-dom-injection)
-- [Layout elements](#layout-elements)
-- [File naming conventions](#file-naming-conventions)
-- [Canvas → components workflow](#canvas--components-workflow)
-  - [Running the normalizer](#running-the-normalizer)
-  - [Running the validator](#running-the-validator)
-- [Guidelines](#guidelines)
-  - [Taxonomy](#taxonomy)
-  - [File naming](#file-naming)
-  - [IDs and attributes](#ids-and-attributes)
-- [Server-side rendering (SSR)](#server-side-rendering-ssr)
-  - [Rendering a component](#rendering-a-component)
-  - [State hydration](#state-hydration)
-  - [CSS generation](#css-generation)
-  - [Layout validation](#layout-validation)
-- [Client API](#client-api)
-- [Server API](#server-api)
-- [Shared API](#shared-api)
-- [Project structure](#project-structure)
-- [Tests](#tests)
-- [Browser support](#browser-support)
-- [Framework references](#framework-references)
+  - [@scope per component](#scope-per-component)
+  - [adoptedStyleSheets](#adoptedstylesheets)
+  - [prefers-reduced-motion](#prefers-reduced-motion)
+  - [focus-visible](#focus-visible)
+- [pseudo-kit-assets — component library](#pseudo-kit-assets)
+  - [Atoms](#atoms)
+  - [Molecules](#molecules)
+  - [Organisms](#organisms)
+  - [pseudo-canvas-viewer](#pseudo-canvas-viewer)
+- [Server-side rendering (Node.js)](#server-side-rendering)
+  - [Server API](#server-api)
+  - [Hydration on the client](#hydration-on-the-client)
+- [React adapter](#react-adapter)
+  - [PseudoKitProvider](#pseudokitprovider)
+  - [useComponent](#usecomponent)
+  - [usePseudoKit](#usepseudokit)
+  - [usePseudoKitReady](#usepseudokitready)
+  - [useRegisterComponent](#useregistercomponent)
+  - [SSR with React — renderComponent + hydrateMarker](#ssr-with-react)
+- [Svelte adapter](#svelte-adapter)
+- [CLI](#cli)
+- [Client API reference](#client-api-reference)
+- [Server API reference](#server-api-reference)
+- [Data attributes reference](#data-attributes-reference)
+- [Accessibility](#accessibility)
+- [Performance](#performance)
+- [Testing](#testing)
+- [Scripts reference](#scripts-reference)
+- [Contributing](#contributing)
 - [License](#license)
 
 ---
 
 ## What is pseudo-HTML?
 
-Pseudo-HTML is a language-agnostic interface descriptor. It describes a UI — its components, their props, data, events, and behaviour — without styling or business logic.
+**pseudo-HTML** is a language-agnostic interface descriptor. It describes a UI as annotated HTML elements — components with attributes, children, slots, events, and loops — without requiring any framework, build step, or runtime.
 
-It is **not** valid HTML. It borrows HTML syntax for readability, but its semantics are its own. It is consumed by:
-- AI code generators (LLM reads the file and generates real components)
-- Human developers (as a single source of truth for the UI)
-- pseudo-kit (renders it directly in the browser as a functional wireframe)
-
-A pseudo-HTML file has this structure:
+A pseudo-HTML layout file looks like regular HTML. You write component tags, provide props as attributes, fill slots with children, and declare loops. The browser renders it as-is, and the pseudo-kit runtime resolves each component tag into its full template.
 
 ```html
-<!-- [spec] header: attribute model, type grammar, state refs -->
+<!-- A pseudo-HTML layout file -->
+<navbar>
+  <logo slot="start" src="/logo.svg"></logo>
+  <nav-link slot="links" href="/" label="Home"></nav-link>
+  <nav-link slot="links" href="/about" label="About"></nav-link>
+  <button-pk slot="end" variant="primary">Sign in</button-pk>
+</navbar>
 
-<template>
-  <!-- component declarations -->
-  <chat-bubble
-    props="role:string"
-    data="entity:string; confidence:number"
-    on="select:string"
-    layer="components"
-    component-role="Alert bubble with confidence level"
-  />
-</template>
+<hero-banner headline="Build without frameworks" cta="Get started"></hero-banner>
 
-<!-- screen implementations -->
-<column id="app-root">
-  <chat-bubble role="coherence-alert" loop="" />
-</column>
-
-<!-- base styles -->
-<style>
-  @layer base, layout, components, utils;
-  /* ... */
-</style>
+<product-tile loop id="featured-products"></product-tile>
 ```
 
-See `src/pseudo-html/SPEC.md` for the full attribute model and type grammar.
+This file is valid HTML. You can open it in a browser and the runtime will resolve each tag by fetching its component definition.
 
 ---
 
 ## What is pseudo-kit?
 
-pseudo-kit is the runtime layer that makes pseudo-HTML functional:
+**pseudo-kit** is the runtime and toolchain for pseudo-HTML:
 
-- **Browser**: observes the DOM, loads `.html` component files, stamps templates, manages CSS without DOM injection, handles slots, loops, state, and events.
-- **Server (Node.js)**: renders components to HTML strings, generates CSS, serializes state for hydration, validates layout files.
-- **Shared**: a registry and state model that works in both environments.
+- A browser runtime (`pseudo-kit-client.js`) that resolves component tags into templates using fetch and MutationObserver
+- A Node.js server runtime (`pseudo-kit-server.js`) that renders components to HTML strings without a browser
+- A component library (`pseudo-kit-assets`) with 61 production-ready components across three layers
+- Framework adapters for React and Svelte
+- A CLI for project initialization
+- A canvas viewer (`pseudo-canvas-viewer.html`) for visual design exploration
+
+Key properties:
+
+- No build step required
+- No framework dependency
+- 7.7 KB gzip for the client runtime
+- WCAG 2.2 AA compliant
+- Works in plain HTML files, Node.js, React, Svelte, or any combination
 
 ---
 
 ## How it works
 
-1. Custom tags (`<panel>`, `<chat-bubble>`, `<toolbar>`…) are unknown to the browser — it renders them as inline elements by default.
-2. A `MutationObserver` watches the DOM for registered component names.
-3. When a component appears, pseudo-kit fetches its `.html` file, parses the `<template>`, `<style>`, and `<script>` blocks, stamps the template into the element, and injects CSS into the document's adopted stylesheet — **no `<style>` tags added to the DOM**.
-4. Conditional visibility is expressed as CSS `:has()` reading `data-*` attributes on `:root` — set by `PseudoKit.state`, no JS conditionals needed.
-5. On the server, components render to HTML strings with `<pk-slot>` wrappers. The client detects these and skips re-stamping.
+1. You write a layout file with component tags (`<button-pk>`, `<modal-pk>`, `<card>`)
+2. You register each component with a URL pointing to its `.html` definition file
+3. You call `PseudoKit.init()` to start the runtime
+4. The runtime uses MutationObserver to detect registered component tags as they appear in the DOM
+5. For each detected tag, the runtime fetches the `.html` definition file once and caches it
+6. The `<template>` block is stamped into the element; named and default slots are resolved
+7. The `<style>` block is inserted via `adoptedStyleSheets` — no `<style>` tags added to the DOM
+8. The `<script>` block is evaluated in a sandboxed function scope with `el`, `state`, `emit`, and `renderLoop` available
+9. Elements with `loop` attribute are marked for deferred rendering
+10. Elements with `data-pk-hydrated` (SSR output) are skipped for template stamping, but scripts are evaluated
+
+---
+
+## Browser support
+
+| Browser  | Minimum version | Notes                                    |
+|----------|-----------------|------------------------------------------|
+| Chrome   | 118+            | Full support                             |
+| Firefox  | 128+            | Full support                             |
+| Safari   | 17.4+           | Full support (CSS Anchor Positioning)    |
+
+Required browser features: `adoptedStyleSheets`, `@scope`, CSS `@layer`, `popover` attribute, `<dialog>`, CSS Anchor Positioning, `MutationObserver`.
 
 ---
 
 ## Installation
 
-### Core Library
-
+**npm:**
 ```bash
-npm install pseudo-kit
-# or
-pnpm add pseudo-kit
+npm install pseudo-html-kit
 ```
 
-**Requirements:**
-- Node.js 22+ (server runtime)
-- Browser: Chrome 118+, Firefox 128+, Safari 17.4+ (for `@scope`, `CSSStyleSheet`, `:has()`)
-
-### With Pre-built Asset Library (optional)
-
-For 61 pre-built components (atoms, molecules, organisms), frame skeletons, and demo apps:
-
+**pnpm:**
 ```bash
-npm install pseudo-stack-assets
-# or
-pnpm add pseudo-stack-assets
+pnpm add pseudo-html-kit
 ```
 
-See [Asset Library](#asset-library--pre-built-components) below.
+**CDN (no install needed):**
+```html
+<script type="module">
+  import PseudoKit from 'https://cdn.jsdelivr.net/npm/pseudo-html-kit/src/client/pseudo-kit-client.js';
+  // ... register and init
+</script>
+```
+
+**Node.js version requirement:** `>=22.0.0`
 
 ---
 
 ## Quick start
 
-### Viewer Setup
+The minimum viable setup: one HTML file, one component file, no server, no bundler.
 
-The **pseudo-canvas-viewer** is a Figma-style component preview tool. It requires HTTP to load components (not `file://`):
-
-```bash
-npm run serve:canvas
-# → Serves on http://localhost:3000
-# → Open: http://localhost:3000/viewer/pseudo-canvas-viewer.html
-
-Note: This project targets Chromium as the primary browser runtime. Some features rely on modern CSS/HTML APIs (Anchor Positioning, Popover API, Interest Invokers) and may not fully work in WebKit/older Firefox. WebKit compatibility tests are deferred.
-```
-
-### Creating a Component
-
-An HTML file with `<template>`, `<style>`, and `<script>` sections:
+### 1. Create a component file
 
 ```html
-<!-- components/chat-bubble.html -->
+<!-- components/greeting.html -->
 <template>
-  <div class="bubble-body">
-    <pk-slot/>
-  </div>
-</template>
-
-<style>
-  @scope {
-    :scope { display: flex; padding: 1rem; border-radius: 8px; }
-  }
-</style>
-
-<script type="module">
-  import PseudoKit from 'pseudo-kit';
-  PseudoKit.register(import.meta);
-</script>
-```
-
-Then use it in your layout:
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="styles/base.css" />
-</head>
-<body>
-
-<input type="checkbox" id="theme-toggle" hidden />
-
-<column id="app-root">
-  <toolbar id="main-toolbar">
-    <text label="My App" />
-    <button-theme />
-  </toolbar>
-
-  <column id="alerts">
-    <chat-bubble role="alert" loop=""></chat-bubble>
-  </column>
-</column>
-
-<script type="module">
-  import PseudoKit from 'pseudo-kit';
-
-  PseudoKit
-    .register({ name: 'toolbar',      src: 'components/toolbar.html' })
-    .register({ name: 'chat-bubble',  src: 'components/chat-bubble.html' })
-    .register({ name: 'button-theme', src: 'components/button-theme.html' })
-    .init();
-
-  PseudoKit.renderLoop('alerts', [
-    { entity: 'Aria', confidence: '0.9' },
-    { entity: 'Bram', confidence: '0.5' },
-  ]);
-</script>
-
-</body>
-</html>
-```
-
----
-
-## Component files
-
-### Anatomy
-
-Each component is a single `.html` file with three optional sections:
-
-```html
-<!-- components/chat-bubble.html -->
-
-<template>
-  <!-- The component's internal markup structure -->
-  <!-- <slot /> marks where instance-level content is injected -->
-  <div class="bubble-body">
-    <slot data-entity="" data-confidence="" />
-  </div>
+  <p class="greeting__text">Hello, <span class="greeting__name"></span>!</p>
 </template>
 
 <style>
   @layer components {
-    @scope (chat-bubble) {
-      :scope {
-        display: block;
-        border-radius: 8px;
-        padding: 8px 12px;
-        background: var(--color-secondary);
-      }
-
-      :scope[role="coherence-alert"][data-confidence="high"] {
-        background: var(--color-accent);
-      }
+    @scope (greeting) {
+      :scope { display: block; padding: 1rem; }
+      .greeting__text { font-size: 1.25rem; }
     }
   }
 </style>
 
 <script>
-  // Inline script — runs in component context
-  // Available: el, state, emit, renderLoop, register
-  el.addEventListener('click', () => emit(el, 'select', { id: el.dataset.id }));
+  const nameEl = el.querySelector('.greeting__name');
+  nameEl.textContent = el.getAttribute('name') ?? 'World';
 </script>
 ```
 
+### 2. Use the component in your HTML page
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+</head>
+<body>
+  <greeting name="Alice"></greeting>
+  <greeting name="Bob"></greeting>
+
+  <script type="module">
+    import PseudoKit from './node_modules/pseudo-html-kit/src/client/pseudo-kit-client.js';
+
+    PseudoKit
+      .register({ name: 'greeting', src: './components/greeting.html' })
+      .init();
+  </script>
+</body>
+</html>
+```
+
+### 3. Serve with any static server
+
+```bash
+npx serve . -p 3000
+# or
+python -m http.server 3000
+```
+
+That is all that is required. No compilation, no bundler, no config files.
+
+---
+
+## Component files
+
+### File anatomy
+
+Each component is a single `.html` file containing three optional blocks:
+
+```html
+<!-- components/my-card.html -->
+
+<!-- 1. TEMPLATE — required. Defines the component's HTML structure. -->
+<template>
+  <article class="card">
+    <header class="card__header">
+      <slot name="header"></slot>
+    </header>
+    <div class="card__body">
+      <slot></slot>  <!-- default slot -->
+    </div>
+  </article>
+</template>
+
+<!-- 2. STYLE — optional. Scoped to this component via @scope. -->
+<style>
+  @layer components {
+    @scope (my-card) {
+      :scope {
+        display: block;
+        border: 1px solid var(--color-border, #e0e0e0);
+        border-radius: 8px;
+      }
+      .card__header { padding: 1rem; font-weight: bold; }
+      .card__body   { padding: 1rem; }
+
+      @media (prefers-reduced-motion: reduce) {
+        :scope, :scope * { transition: none; animation: none; }
+      }
+    }
+  }
+</style>
+
+<!-- 3. SCRIPT — optional. Runs once per instance, with el = the host element. -->
+<script>
+  const title = el.getAttribute('title');
+  if (title) {
+    el.querySelector('.card__header').textContent = title;
+  }
+</script>
+```
+
+The three blocks can appear in any order. Only `<template>` is required.
+
+### Naming convention
+
+Component file names must match the tag name they register as. The library components use the `-pk` suffix to avoid conflicts with HTML built-in elements:
+
+```
+button-pk.html   →  <button-pk>
+input-pk.html    →  <input-pk>
+modal-pk.html    →  <modal-pk>
+card.html        →  <card>
+navbar.html      →  <navbar>
+```
+
+For custom components outside the library, use any hyphenated name (custom element requirement: must contain at least one hyphen).
+
 ### Script modes
 
-Two script modes are supported:
+There are two ways to include JavaScript in a component.
 
-| Mode | Syntax | Use for |
-|---|---|---|
-| **Inline** | `<script>` | Simple logic, event listeners, `el` available directly |
-| **Module** | `<script type="module" src="./component.js">` | ES module imports, self-registration |
+**Inline script** (most common):
 
-**Inline script** is evaluated via `new Function()` with `el`, `state`, `emit`, `renderLoop`, and `register` in scope.
+```html
+<script>
+  // `el` is the component host element — available as both `this` and `el`
+  // `state` is the global PseudoKit reactive state proxy
+  // `emit` dispatches a CustomEvent from el
+  // `renderLoop` populates a loop="" container with data
 
-**Module script** is loaded via dynamic `import()`. The module runs in standard ESM scope and is expected to self-register.
+  el.addEventListener('click', () => {
+    emit(el, 'card:clicked', { id: el.dataset.id });
+  });
+</script>
+```
+
+The script runs once per component instance, evaluated via `new Function()` in a sandboxed scope. It does not have access to `import`, `export`, or module-level scope.
+
+**Module script** (for components with external JS dependencies):
+
+```html
+<script type="module" src="./my-component.js"></script>
+```
+
+```javascript
+// my-component.js
+import PseudoKit from '../pseudo-kit-client.js';
+PseudoKit.register(import.meta); // self-registers using file URL
+```
+
+When a module script is detected, the module is dynamically imported. The component's template and styles are still loaded from the `.html` file — only the script logic lives in the external module.
 
 ### Self-registration
 
-A component can register itself without any bootstrap configuration:
+A component can register itself from inside its own module script:
 
-```html
-<!-- components/chat-bubble.html -->
-<template>...</template>
-<style>...</style>
-<script type="module" src="./chat-bubble.js"></script>
-```
-
-```js
-// components/chat-bubble.js
-import PseudoKit from 'pseudo-kit';
-
-// Name is derived from the filename: chat-bubble.js → 'chat-bubble'
+```javascript
+// inside components/chat-bubble.js
+import PseudoKit from '../pseudo-kit-client.js';
 PseudoKit.register(import.meta);
-
-// Component logic runs after registration
-document.querySelectorAll('chat-bubble').forEach(el => {
-  el.addEventListener('click', () => PseudoKit.emit(el, 'select', { id: el.dataset.id }));
-});
+// import.meta.url resolves to: file:///project/components/chat-bubble.js
+// The name is derived from the file stem: "chat-bubble"
 ```
 
-Manual registration works the same way — **first registration wins**, duplicates are ignored with a warning. Register before `init()` to ensure the component is known before DOM observation starts:
+This is useful for component libraries distributed as npm packages. Consumers import the component modules; each module self-registers.
 
-```js
+---
+
+## Registering components
+
+### Manual registration
+
+```javascript
+import PseudoKit from 'pseudo-html-kit';
+
+PseudoKit.register({ name: 'my-button', src: '/components/my-button.html' });
+PseudoKit.init();
+```
+
+The `src` can be:
+- An absolute URL: `https://example.com/components/button.html`
+- A root-relative path: `/components/button.html`
+- A relative path from the page: `./components/button.html`
+
+### Chained registration
+
+`register()` returns `PseudoKit` for chaining. `init()` should be called last.
+
+```javascript
 PseudoKit
-  .register({ name: 'chat-bubble', src: 'components/chat-bubble.html' })
+  .register({ name: 'navbar',    src: '/components/navbar.html' })
+  .register({ name: 'hero-banner', src: '/components/hero-banner.html' })
+  .register({ name: 'card',      src: '/components/card.html' })
+  .register({ name: 'button-pk', src: '/components/button-pk.html' })
   .init();
+```
+
+### Auto-registration with pseudo-kit-assets
+
+The `pseudo-kit-assets` package exports a registry index. Import it and register all components in one call:
+
+```javascript
+import PseudoKit from 'pseudo-html-kit';
+import { components } from 'pseudo-kit-assets';
+// components is an array of { name, src } objects — one entry per component
+
+for (const def of components) {
+  PseudoKit.register(def);
+}
+PseudoKit.init();
+```
+
+Or use `componentsMeta` for programmatic introspection:
+
+```javascript
+import { componentsMeta } from 'pseudo-kit-assets';
+// componentsMeta is an array of { name, src, layer, props, slots } objects
 ```
 
 ---
 
 ## Slots
 
+Slots are the primary mechanism for injecting content into a component's template. They work like HTML `<slot>` elements but are resolved by the pseudo-kit runtime on the client (or server for SSR).
+
 ### Default slot
 
-```html
-<!-- template -->
-<div class="panel-body">
-  <slot />
-</div>
+A `<slot>` with no `name` attribute is the default slot. It receives all children that do not have a `slot` attribute.
 
-<!-- instance -->
-<panel>
-  <text-zone id="editor" />   <!-- injected into <slot /> -->
-</panel>
+**Component template:**
+```html
+<template>
+  <div class="card__body">
+    <slot></slot>
+  </div>
+</template>
+```
+
+**Usage:**
+```html
+<card>
+  <p>This text goes into the default slot.</p>
+  <img src="photo.jpg" alt="Photo">
+</card>
+```
+
+**Resolved output:**
+```html
+<card data-pk-resolved>
+  <div class="card__body">
+    <pk-slot data-slot-component="card" data-slot-name="default" style="display:contents">
+      <p>This text goes into the default slot.</p>
+      <img src="photo.jpg" alt="Photo">
+    </pk-slot>
+  </div>
+</card>
 ```
 
 ### Named slots
 
-Children with a `slot="name"` attribute are routed to the matching `<slot name="name">`. All other children go to the default slot.
+A `<slot name="x">` receives children with `slot="x"`.
 
+**Component template:**
 ```html
-<!-- template -->
-<div class="toolbar-body">
-  <slot name="start" />
-  <spacer />
-  <slot name="end" />
-</div>
-
-<!-- instance -->
-<toolbar>
-  <text slot="start" label="My App" />     <!-- → slot name="start" -->
-  <button slot="end" action="settings" />  <!-- → slot name="end" -->
-  <badge />                                <!-- → default slot (if any) -->
-</toolbar>
+<template>
+  <header>
+    <slot name="header"></slot>
+  </header>
+  <main>
+    <slot></slot>
+  </main>
+  <footer>
+    <slot name="footer"></slot>
+  </footer>
+</template>
 ```
+
+**Usage:**
+```html
+<page-layout>
+  <nav slot="header">Navigation here</nav>
+  <article>Main content here</article>
+  <p slot="footer">Footer text</p>
+</page-layout>
+```
+
+Children with `slot="header"` go to the named slot; the `<article>` (no slot attribute) goes to the default slot.
 
 ### Slot data forwarding
 
-A `<slot>` can declare `data-*` attributes. These are automatically copied to every injected child element — unless the child already defines that attribute.
+A `<slot>` element can carry `data-*` attributes. Those attributes are forwarded to every element child that fills the slot.
 
+**Component template:**
 ```html
-<!-- template declares what data the slot provides -->
-<slot data-entity="" data-confidence="" data-note="" />
+<template>
+  <ul class="list">
+    <slot data-variant="primary"></slot>
+  </ul>
+</template>
 ```
 
+**Usage:**
 ```html
-<!-- instance — children receive the data-* from the slot -->
-<chat-bubble>
-  <span>Aria appears twice</span>
-  <!-- becomes: <span data-entity="" data-confidence="" data-note="">... -->
-</chat-bubble>
-
-<!-- override: parent-provided value wins -->
-<chat-bubble>
-  <span data-entity="Aria" data-confidence="0.9">Aria appears twice</span>
-  <!-- data-entity and data-confidence preserved, data-note added from slot -->
-</chat-bubble>
+<my-list>
+  <li>Item one</li>
+  <li>Item two</li>
+</my-list>
 ```
 
-Rule: **slot declares, parent overrides, component never forces**.
+**Result:** Each `<li>` receives `data-variant="primary"` automatically.
+
+This is useful for passing context (variant, size, theme) from a parent component to its slot content without requiring the consumer to repeat the attribute on each child.
 
 ### pk-slot wrapper
 
-Every resolved slot is wrapped in a `<pk-slot>` element with `display: contents`. This element is invisible to layout but carries slot metadata in the DOM for debugging and CSS targeting.
+Every resolved slot is wrapped in a `<pk-slot>` element with `display: contents`. This element is invisible to layout (it occupies no space) but carries metadata for debugging and CSS targeting:
 
 ```html
 <pk-slot
-  style="display: contents"
-  data-slot-component="chat-bubble"
-  data-slot-name="default"
-  data-slot-props='{"data-entity":"","data-confidence":""}'
+  data-slot-component="card"
+  data-slot-name="header"
+  data-slot-props='{"data-variant":"primary"}'
+  style="display:contents"
 >
-  <span data-entity="Aria">...</span>
+  <!-- slot content here -->
 </pk-slot>
 ```
 
-Useful for targeting in CSS or DevTools:
-
+You can target slot wrappers in CSS:
 ```css
-/* Target all slots in a chat-bubble */
-pk-slot[data-slot-component="chat-bubble"] { }
+pk-slot[data-slot-name="header"] { /* affects the wrapper */ }
 ```
 
 ---
 
 ## Loop rendering
 
-`loop=""` on a child element marks it as a repeated template. It is replaced by cloned instances once data is provided.
+The `loop` attribute on a component tag marks it as a repeating template. The element is used as a template; actual rendering is deferred until `renderLoop()` is called with data.
 
+**Layout:**
 ```html
-<column id="coherence-alerts">
-  <chat-bubble role="coherence-alert" loop=""></chat-bubble>
-</column>
+<section id="product-list">
+  <product-tile loop></product-tile>
+</section>
 ```
 
-```js
-PseudoKit.renderLoop('coherence-alerts', [
-  { entity: 'Aria',  discrepancy_type: 'location', confidence: '0.9', note: 'Ch. 3' },
-  { entity: 'Bram',  discrepancy_type: 'timeline',  confidence: '0.5', note: 'Ch. 7' },
-]);
+**Script:**
+```javascript
+import PseudoKit from 'pseudo-html-kit';
+
+PseudoKit.register({ name: 'product-tile', src: '/components/product-tile.html' }).init();
+
+// Later, when data is available (e.g. from a fetch)
+fetch('/api/products')
+  .then(r => r.json())
+  .then(products => {
+    PseudoKit.renderLoop('product-list', products);
+    // products = [{ id: '1', name: 'Widget', price: '9.99' }, ...]
+  });
 ```
 
-Each item's fields are bound as `data-*` attributes on the clone. Newly created elements are resolved as pseudo-kit components automatically.
+**Inside the component script, data arrives as `data-*` attributes:**
+```html
+<script>
+  const name  = el.dataset.name;   // "Widget"
+  const price = el.dataset.price;  // "9.99"
+  el.querySelector('.tile__name').textContent  = name;
+  el.querySelector('.tile__price').textContent = `$${price}`;
+</script>
+```
+
+`renderLoop(containerId, data)` replaces the loop template element with one clone per data item. Each clone receives the item's key-value pairs as `data-*` attributes. Newly created elements are resolved by the runtime automatically.
 
 ---
 
 ## Reactive state
 
-pseudo-kit provides a reactive state proxy backed by `data-*` attributes on `:root`. Writing a value updates the DOM attribute; CSS `:has()` reacts immediately.
+The global state proxy (`PseudoKit.state`) connects JavaScript state to CSS via `data-*` attributes on `:root`. Writing to the proxy updates an attribute; CSS reads it with `:root[data-*]` or `:root:has([data-*])`.
 
-```js
-// Write
+### Writing state
+
+```javascript
+import PseudoKit from 'pseudo-html-kit';
+
+// camelCase keys are converted to kebab-case data attributes
 PseudoKit.state.focusMode = true;
-// → document.documentElement.setAttribute('data-focus-mode', '')
+// → :root gets attribute data-focus-mode=""
+
+PseudoKit.state.activeTab = 'tab-overview';
+// → :root gets attribute data-active-tab="tab-overview"
 
 PseudoKit.state.focusMode = false;
-// → document.documentElement.removeAttribute('data-focus-mode')
-
-PseudoKit.state.step = '2b';
-// → document.documentElement.setAttribute('data-step', '2b')
-
-// Read
-console.log(PseudoKit.state.focusMode); // true / false
+// → data-focus-mode attribute removed from :root
 ```
 
-camelCase keys are converted to kebab-case attributes:
-- `focusMode` → `data-focus-mode`
-- `tabSuggestionsActive` → `data-tab-suggestions-active`
-- `aiRunning` → `data-ai-running`
-
-CSS consumes the state:
+### Reading state in CSS
 
 ```css
-/* Hide AI panel when focus mode is active */
-:root[data-focus-mode] panel#ai-panel {
+/* Hide the sidebar when focus mode is active */
+:root[data-focus-mode] .sidebar {
   display: none;
 }
 
-/* Show suggestions tab content */
-panel#tab-content-suggestions {
-  display: none;
+/* Show the right tab panel */
+:root[data-active-tab="tab-overview"] #panel-overview {
+  display: block;
 }
-:root[data-tab-suggestions-active] panel#tab-content-suggestions {
-  display: flex;
+
+/* More complex: use :has() to style based on multiple conditions */
+:root:has([data-ai-running]):has([data-focus-mode]) .progress-bar {
+  opacity: 1;
 }
 ```
 
-State is hydrated from SSR automatically — see [State hydration](#state-hydration).
+### SSR state hydration
+
+When rendering server-side, initial state can be embedded in the HTML response and hydrated on the client without a flash of default state:
+
+```html
+<!-- Embedded by the server in the HTML response -->
+<script id="pk-state" type="application/json">
+  {"focusMode": false, "activeTab": "tab-overview", "userLoggedIn": true}
+</script>
+```
+
+The client runtime reads this tag automatically on `PseudoKit.init()` and applies the state before the first render.
 
 ---
 
 ## Events
 
-Components dispatch `CustomEvent` instances that bubble up the DOM. This matches the `on="eventName:payloadType"` declarations in pseudo-HTML.
+Use `emit()` inside component scripts to dispatch events that bubble up the DOM tree.
 
-```js
-// In a component script — dispatch
-emit(el, 'accept', { id: changeId });
+**Inside a component script:**
+```html
+<script>
+  el.querySelector('.card__close').addEventListener('click', () => {
+    emit(el, 'card:dismissed', { id: el.dataset.id });
+  });
+</script>
+```
 
-// Anywhere in the app — listen
-document.addEventListener('accept', (e) => {
-  console.log('accepted:', e.detail.id);
+**Listening in the page:**
+```javascript
+document.addEventListener('card:dismissed', (e) => {
+  console.log('Card dismissed:', e.detail.id);
+  // e.detail = { id: '42' }
+  // e.bubbles = true
+  // e.composed = true
 });
-
-// Or on the component itself
-diffView.addEventListener('accept', (e) => { ... });
 ```
 
-```js
-// Via PseudoKit public API
-PseudoKit.emit(el, 'reject', { id: changeId });
-```
-
-Events are `bubbles: true, composed: true` by default.
+`emit(el, name, detail)` dispatches a `CustomEvent` with `bubbles: true` and `composed: true` (crosses Shadow DOM boundaries if needed). The `detail` parameter is optional.
 
 ---
 
 ## Theme system
 
-pseudo-kit ships a ready-to-use CSS theme engine in `src/pseudo-assets/theme/`. No build step, no preprocessor.
+The `pseudo-kit-assets` package includes a theme system with three layers: base tokens, utility mixins, and brand skins.
 
-### theme.css — tokens + reset + palette
+### theme.css
 
-Add it once as your foundation:
+`theme.css` provides:
+- A modern CSS reset
+- Design tokens as CSS custom properties on `:root`
+- Automatic light/dark mode via `light-dark()` and `color-scheme`
+- Four CSS layers in priority order: `theme.reset`, `theme.tokens`, `theme.palette`, `skin`
 
+**Usage:**
 ```html
-<link rel="stylesheet" href="/src/pseudo-assets/theme/theme.css">
+<link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/theme.css">
 ```
 
-What it provides:
+**Available token categories:**
 
-| Layer | Content |
-|---|---|
-| `theme.reset` | `box-sizing`, margin/padding reset, `font-inherit`, scrollbar styling |
-| `theme.tokens` | Spacing scale (`--space-*`), typography (`--text-*`), z-index, animation durations, border radii, alpha values |
-| `theme.palette` | Default colour palette via `light-dark()` — automatic light/dark mode; semantic tokens: `--color-primary`, `--color-surface`, `--color-text`, shadows |
-| `skin` | Reserved layer for brand skin overrides |
+| Category   | Examples                                              |
+|------------|-------------------------------------------------------|
+| Colors     | `--color-primary`, `--color-surface`, `--color-text` |
+| Typography | `--font-sans`, `--text-base`, `--text-lg`, `--leading-normal` |
+| Spacing    | `--space-1` through `--space-16` (4px scale)         |
+| Radius     | `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-full` |
+| Shadows    | `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl` |
+| Motion     | `--duration-fast`, `--duration-normal`, `--easing-default` |
+| Opacity    | `--alpha-hover`, `--alpha-focus`, `--alpha-pressed`  |
+| Breakpoints| `--bp-sm` (768px), `--bp-md` (1024px), `--bp-lg` (1440px) |
 
-The layer order (`@layer theme.reset, theme.tokens, theme.palette, skin`) means any skin loaded later wins without `!important`.
+### utils.css
 
-### utils.css — native CSS `@function` mixins
+`utils.css` provides native CSS `@function` mixins that operate on the tokens.
 
+**Usage:**
 ```html
-<link rel="stylesheet" href="/src/pseudo-assets/theme/utils.css">
+<link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/theme.css">
+<link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/utils.css">
 ```
 
-Five native CSS functions (no preprocessor):
+**Available mixins:**
 
 ```css
-/* Transparency */
-background: alpha(var(--color-primary), 0.15);
+/* alpha($color, $opacity) — apply transparency to any color value */
+background: alpha(var(--color-primary), 0.12);
+border: 1px solid alpha(var(--color-text), var(--alpha-focus));
 
-/* Elevation shadows */
-box-shadow: elevation(2);
-
-/* Accessible focus ring */
-outline: focus-ring();
-
-/* Consistent transitions */
-transition: transition(opacity, transform);
-
-/* Brand gradient */
-background: brand-gradient(135deg);
+/* elevation($level) — semantic shadow levels 0 through 4 */
+box-shadow: elevation(0);   /* none */
+box-shadow: elevation(1);   /* --shadow-sm */
+box-shadow: elevation(2);   /* --shadow-md */
+box-shadow: elevation(3);   /* --shadow-lg */
+box-shadow: elevation(4);   /* --shadow-xl */
 ```
 
-### Skins — brand overrides
+### Skins
 
-Skins override the token palette for a specific brand. Apply with a `data-skin` attribute — scoped via `@layer skin { @scope }` so they never leak outside the container.
+A skin is a CSS file that overrides token values for a specific brand. Three skins are included:
 
+| File          | Data attribute          | Description               |
+|---------------|-------------------------|---------------------------|
+| `netflix.css` | `data-skin="netflix"`   | Dark mode, red primary    |
+| `amazon.css`  | `data-skin="amazon"`    | Light mode, orange primary|
+| `facebook.css`| `data-skin="facebook"`  | Light mode, blue primary  |
+
+**Usage:**
 ```html
-<!-- Load the skin stylesheet -->
-<link rel="stylesheet" href="/src/pseudo-assets/skins/netflix.css">
-
-<!-- Apply to any container (or <body>) -->
-<div data-skin="netflix">
-  <button-pk>Watch Now</button-pk>
-</div>
+<html data-skin="netflix">
+<head>
+  <link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/theme.css">
+  <link rel="stylesheet" href="node_modules/pseudo-kit-assets/theme/utils.css">
+  <link rel="stylesheet" href="node_modules/pseudo-kit-assets/skins/netflix.css">
+</head>
 ```
 
-Available skins: **netflix** · **amazon** · **facebook**
-
-Each skin overrides `color-scheme`, `--color-primary`, surfaces, and text colours. Components inside the container automatically pick up the new tokens.
-
-### Creating a custom skin
-
+**Creating a custom skin:**
 ```css
-/* my-brand.css */
+/* skins/my-brand.css */
 @layer skin {
   @scope ([data-skin="my-brand"]) {
     :scope {
-      color-scheme: light;
-      --color-primary:       #e91e63;
-      --color-surface:       #fff8f9;
-      --color-surface-2:     #fce4ec;
-      --color-text:          #1a0010;
-      --color-text-muted:    #9c6070;
+      --color-primary:          #ff6600;
+      --color-primary-hover:    hsl(from #ff6600 h s calc(l - 8%));
+      --color-primary-contrast: #ffffff;
+      --color-surface:          #1a1a1a;
+      --color-text:             #f5f5f5;
     }
   }
 }
 ```
+
+Skin rules live in the `skin` layer, which has the highest priority in the stack. They override `theme.palette` without needing `!important`.
+
+### Layer order
+
+The full CSS layer cascade, from lowest to highest priority:
+
+```
+theme.reset  →  theme.tokens  →  theme.palette  →  skin  →  components
+```
+
+Component styles use `@layer components { @scope (tag-name) { ... } }`. This keeps component styles above the theme but prevents them from accidentally overriding skin rules if you add component-level theme properties.
 
 ---
 
 ## CSS architecture
 
-### @layer
+### @scope per component
 
-All styles are organized into four cascade layers:
-
-```css
-@layer base, layout, components, utils;
-```
-
-| Layer | Content |
-|---|---|
-| `base` | CSS vars, theme tokens, resets |
-| `layout` | Layout primitives: `row`, `column`, `grid`, `stack`… |
-| `components` | Component styles via `@scope` |
-| `utils` | Utility classes, populated by the implementation |
-
-### @scope
-
-Each component's styles are scoped using `@scope` to prevent leaking:
+Every component's styles are wrapped in `@scope` to prevent leakage. No class prefixing, no BEM suffix needed for isolation — the scope selector handles it.
 
 ```css
 @layer components {
-  @scope (chat-bubble) {
-    :scope {
-      display: block;
-      border-radius: 8px;
-    }
-    :scope[role="coherence-alert"] {
-      border-left: 3px solid var(--color-accent);
-    }
+  @scope (button-pk) {
+    /* These rules only apply inside <button-pk> elements */
+    :scope { display: inline-flex; align-items: center; }
+    .btn { padding: 0.5rem 1rem; border-radius: var(--radius-md); }
+    .btn:hover { background: var(--color-primary-hover); }
   }
 }
 ```
 
-### CSSStyleSheet — no DOM injection
+`:scope` refers to the host element (`<button-pk>` itself). All descendant selectors are naturally scoped.
 
-Component styles are inserted into the document via a single `CSSStyleSheet` adopted on `document.adoptedStyleSheets`. No `<style>` tags are ever added to the DOM. Rules are inserted or replaced in-place using `insertRule` / `deleteRule` — each component's `@scope` block occupies a stable index.
+### adoptedStyleSheets
 
----
+All component CSS is managed via `CSSStyleSheet` with `document.adoptedStyleSheets`. This means:
 
-## Layout elements
+- No `<style>` tags are added to the `<head>` by the runtime
+- CSS rules are stored in a single shared stylesheet
+- Rules are replaced in-place (not appended) when a component is re-registered
+- Falls back to a single `<style data-pk-component-styles>` tag in environments that do not support `adoptedStyleSheets`
 
-Layout elements are **native HTML primitives** dressed with CSS. They are not components — no `.html` file needed. They are declared in the pseudo-HTML `<template>` with `element="*"` and no props.
+### prefers-reduced-motion
+
+All components that define transitions or animations include a `prefers-reduced-motion` guard:
 
 ```css
-.row, row                  { display: flex; flex-direction: row; }
-.column, column            { display: flex; flex-direction: column; }
-column.full-height         { height: 100%; }
-.grid, grid                { display: grid; }
-.stack, stack              { display: grid; grid-template-areas: "stack"; }
-.stack > *, stack > *      { grid-area: stack; }
-.spacer, spacer            { flex: 1; }
-pk-slot                    { display: contents; }
-```
+@scope (carousel) {
+  :scope .track { transition: transform 300ms var(--easing-default); }
 
-Dual selectors (`.row, row`) allow the pseudo-HTML file to render directly in the browser as a wireframe.
-
----
-
-## File naming conventions
-
-See [Guidelines → File naming](#file-naming).
-
----
-
-## Canvas → components workflow
-
-The canvas is the single source of truth. Components are derived from it — never written from scratch without a canvas.
-
-```
-pseudo-canvas-demo.html
-  │
-  ▼
-canvas-validator (programmatic)        ← deterministic, no LLM
-  ├── validates spec conformity
-  │     props/data/on follow type grammar
-  │     layer values are valid
-  ├── checks component-registry completeness
-  │     every tag used in frames is declared
-  │     every declared component is actually used
-  └── detects inter-frame inconsistencies
-        undeclared props used on instances
-        loop="" without data declaration
-        missing role on instances
-  │
-  ▼ ValidationResult
-    ├── errors[]       ← must fix before generating
-    ├── warnings[]     ← review before generating
-    ├── manifest[]     ← structured component list (JSON)
-    └── manifestText   ← human/LLM-readable summary (Markdown)
-  │
-  ▼
-LLM generation pass
-  receives: manifest + canvas + target framework skill
-  produces: component files (chat-bubble.html, panel.html…)
-```
-
-### Running the normalizer
-
-Before validating, run the normalizer to auto-fix simple issues:
-
-```bash
-# Writes pseudo-canvas-reference.normalized.html alongside the original
-npm run normalize -- src/shared/pseudo-canvas-reference.html
-
-# Overwrites the original in place
-npm run normalize:write -- src/shared/pseudo-canvas-reference.html
-
-# Node API
-import { normalizeCanvas } from 'pseudo-kit/normalizer';
-
-const result = await normalizeCanvas('./src/shared/pseudo-canvas-reference.html');
-// or: await normalizeCanvas('./src/shared/pseudo-canvas-reference.html', { inPlace: true });
-
-console.log(result.changes);
-// → ['Renamed 2× `fields` → `data`', 'Added `component-role=""` to `<button>`', ...]
-
-console.log(result.writtenTo); // path of the output file
-```
-
-The normalizer is **idempotent** — running it twice produces no further changes.
-
-### What the normalizer fixes
-
-| Fix | Description |
-|---|---|
-| `fields` → `data` | Obsolete attribute rename |
-| `visible-when` → `when-visible` | Obsolete attribute rename |
-| `hidden-when` → `when-hidden` | Obsolete attribute rename |
-| Add `component-role=""` | Missing on registry declarations — value left empty to fill in |
-| Add `role=""` | Missing on frame instances — value left empty to fill in |
-
-### Recommended workflow
-
-```
-normalize   →   validate   →   LLM generation
-```
-
-Normalize first to fix mechanical errors, then validate to confirm the canvas is generation-ready, then pass `manifestText` to the LLM.
-
-
-
-```bash
-# Text output (Markdown manifest — pass to LLM)
-npm run validate -- src/shared/pseudo-canvas-reference.html
-
-# JSON output (structured manifest — for programmatic use)
-npm run validate:json -- src/shared/pseudo-canvas-reference.html
-
-# Node API
-import { validateCanvas } from 'pseudo-kit/validator';
-
-const result = await validateCanvas('./src/shared/pseudo-canvas-reference.html');
-
-if (!result.valid) {
-  result.errors.forEach(e => console.error('ERROR:', e));
-  process.exit(1);
-}
-
-result.warnings.forEach(w => console.warn('WARN:', w));
-
-// Pass to LLM
-console.log(result.manifestText);
-
-// Or use the structured manifest
-result.manifest.forEach(entry => {
-  console.log(entry.name, entry.instances.length, 'instances');
-});
-```
-
-### Manifest format
-
-The `manifestText` is a Markdown document designed to be injected directly into an LLM prompt. It includes for each component:
-
-- `component-role` — what the component does
-- `props`, `data`, `on` — typed contracts
-- `layer` — CSS layer
-- `instances` — where and how it's used, per frame, with roles
-
-The `manifest` JSON array follows `ManifestEntry[]`:
-
-```ts
-interface ManifestEntry {
-  name:           string
-  isLayoutElement: boolean
-  props:          string | null   // raw: "id:string; label:string?"
-  data:           string | null
-  on:             string | null
-  layer:          string | null
-  componentRole:  string | null
-  note:           string | null
-  typesReference: string | null
-  instances: Array<{
-    name:    string
-    frameId: string              // which <frame> the instance is in
-    role:    string | null
-    attrs:   Record<string, string | boolean>
-    loop:    boolean
-  }>
+  @media (prefers-reduced-motion: reduce) {
+    :scope, :scope * { transition: none; animation: none; }
+  }
 }
 ```
 
-### What the validator checks
+### focus-visible
 
-| Check | Type | Description |
-|---|---|---|
-| Type grammar | Error | `props`/`data`/`on` fields follow `name:type` format |
-| Valid layers | Error | `layer` is one of `base`, `layout`, `components`, `utils` |
-| Undeclared tags | Error | Tags used in frames but missing from `<component-registry>` |
-| Unused declarations | Warning | Declared but never used in any frame |
-| Missing `component-role` | Warning | Recommended for LLM context |
-| Missing instance `role` | Warning | Every instance should have a contextual role |
-| `loop=""` without `data` | Warning | Loop elements need a data contract |
-| Undeclared props on instances | Warning | Instance uses a prop not in the registry declaration |
-| Layout elements with props | Warning | `element="*"` components should not declare props |
+All interactive elements use `:focus-visible` instead of `:focus` to avoid showing focus rings on mouse clicks while still providing them for keyboard navigation:
 
----
-
-
-
-These guidelines apply to both **developers** using pseudo-kit and **LLMs** generating code from a canvas. They define the shared vocabulary of the system.
-
----
-
-### Taxonomy
-
-The system has three distinct file types. Never mix their roles.
-
-| Type | File | Purpose |
-|---|---|---|
-| **Canvas** | `pseudo-canvas-*.html` | Declarative source of truth. Contains `<component-registry>` + `<frame>` screens. Consumed by LLMs and developers. Never executed directly. |
-| **Component** | `components/*.html` | Single component runtime file. Contains `<template>` (markup) + `<style>` + `<script>`. Loaded and stamped by pseudo-kit at runtime. |
-| **Layout element** | CSS only | Native HTML primitives (`row`, `column`, `grid`…). No `.html` file. Declared in `<component-registry>` with `element="*"`. |
-
-**Canvas structure:**
-
-```
-pseudo-canvas-reference.html (src/shared/)
-  ├── [spec:*] header comments     ← rules, conventions, state refs
-  ├── <component-registry>         ← declares every component and layout element
-  │     <chat-bubble props="..." data="..." on="..." />
-  │     <panel props="..." />
-  │     …
-  └── <frame id="main-screen">    ← one frame per screen
-  └── <frame id="review-screen">
-
-Note: A synced copy is maintained at src/pseudo-canvas/demos/pseudo-canvas-demo.html
-```
-
-**Component file structure:**
-
-```
-components/chat-bubble.html
-  ├── <template>    ← internal markup, stamped into the DOM at runtime
-  ├── <style>       ← @layer components { @scope (chat-bubble) { … } }
-  └── <script>      ← inline or module, runs after stamp
-```
-
-**Key distinction — `<component-registry>` vs `<template>`:**
-
-- `<component-registry>` is a canvas-level declaration zone. It describes what a component *is* — its props, data contract, events. It is read by LLMs, never by the browser runtime.
-- `<template>` inside a component file is a standard `HTMLTemplateElement`. It defines what a component *renders* — its internal DOM structure. It is read and stamped by pseudo-kit at runtime.
-
-**Frames:**
-
-Each screen in a canvas is a `<frame>`. The name comes from Figma — a frame is a root-level view container. One canvas can contain multiple frames; each frame is an independent screen.
-
-```html
-<frame id="main-screen" role="Main writing screen">
-  …
-</frame>
-
-<frame id="review-screen" role="Review mode screen">
-  …
-</frame>
+```css
+@scope (button-pk) {
+  :scope .btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
 ```
 
 ---
 
-### File naming
+## pseudo-kit-assets
 
-File names use a **hierarchical prefix** as a visual namespace. Read left to right: most general → most specific. The filesystem becomes self-documenting — all `screen-*` together, all `panel-*` together.
+The `pseudo-kit-assets` package contains 61 production-ready components, a theme system, demo apps, and the canvas viewer.
+
+### Atoms
+
+23 base-level UI building blocks:
+
+| Component      | Tag              | Description                                       |
+|----------------|------------------|---------------------------------------------------|
+| Avatar         | `<avatar>`       | User image with fallback initials                 |
+| Badge          | `<badge>`        | Numeric or label indicator                        |
+| Button         | `<button-pk>`    | Push button with variants (primary/secondary/ghost/danger) |
+| Checkbox       | `<checkbox-pk>`  | Native checkbox with `:checked`/`:invalid`        |
+| Chip           | `<chip>`         | Removable label tag                               |
+| Date picker    | `<date-picker-pk>` | Native `<input type="date">` with label forwarding |
+| Divider        | `<divider>`      | Horizontal or vertical separator                  |
+| Icon           | `<icon>`         | SVG icon wrapper                                  |
+| Image          | `<image>`        | Responsive image with loading state               |
+| Input          | `<input-pk>`     | Text input with HTML5 validation + Popover hints  |
+| Label          | `<label>`        | Form label with required marker                   |
+| Loader         | `<loader>`       | Indeterminate loading indicator                   |
+| Progress bar   | `<progress-bar>` | Determinate progress (0–100)                      |
+| Progress       | `<progress-pk>`  | Native `<progress>` element wrapper               |
+| Radio          | `<radio-pk>`     | Native radio button                               |
+| Rating         | `<rating>`       | Star rating (read-only or interactive)            |
+| Select         | `<select-pk>`    | Native `<select>` with Listbox API                |
+| Skeleton       | `<skeleton>`     | Loading placeholder                               |
+| Slider         | `<slider-pk>`    | Native `<input type="range">`                     |
+| Spinner        | `<spinner>`      | Circular loading spinner                          |
+| Tag            | `<tag>`          | Non-removable status label                        |
+| Textarea       | `<textarea-pk>`  | Multiline input with auto-resize hint             |
+| Toggle         | `<toggle>`       | On/off switch                                     |
+
+### Molecules
+
+22 composite components built from atoms:
+
+| Component      | Tag                | Key features                                       |
+|----------------|--------------------|----------------------------------------------------|
+| Breadcrumb     | `<breadcrumb-pk>`  | Accessible navigation landmark                     |
+| Card           | `<card>`           | Content container with header/body/footer slots    |
+| Card media     | `<card-media>`     | Card with image header                             |
+| Carousel       | `<carousel>`       | Horizontal scroll carousel                         |
+| Color swatch   | `<color-swatch>`   | Clickable color option                             |
+| Combobox       | `<combobox-pk>`    | Listbox API combobox with keyboard navigation      |
+| Date picker    | `<date-picker-pk>` | Molecule variant with full popover calendar        |
+| Dropdown       | `<dropdown>`       | Popover API menu, `popovertarget` attribute        |
+| Form field     | `<form-field>`     | Label + input + error message wrapper              |
+| Grid           | `<grid>`           | CSS Grid Lanes + Container Queries                 |
+| List item      | `<list-item>`      | Selectable list row                                |
+| Menu item      | `<menu-item>`      | Dropdown menu option                               |
+| Modal          | `<modal-pk>`       | `<dialog>` with Invoker Commands                  |
+| Notification   | `<notification>`   | Auto-dismiss toast with Interest Invokers          |
+| Pagination     | `<pagination>`     | Page navigation controls                          |
+| Price tag      | `<price-tag>`      | Formatted price display                            |
+| Product tile   | `<product-tile>`   | Grid card with image, name, price, CTA             |
+| Search bar     | `<search-bar>`     | Input + submit button                              |
+| Tab bar        | `<tab-bar>`        | Horizontal tab navigation                          |
+| Tooltip        | `<tooltip>`        | CSS Anchor Positioning tooltip                     |
+| User info      | `<user-info>`      | Avatar + name + role                               |
+
+### Organisms
+
+16 full-section components:
+
+| Component      | Tag                | Description                                  |
+|----------------|--------------------|----------------------------------------------|
+| Accordion      | `<accordion-pk>`   | CSS `@supports` + View Transitions API       |
+| Carousel       | `<carousel>`       | Full-width hero carousel                     |
+| Cart summary   | `<cart-summary>`   | Shopping cart sidebar                        |
+| Comment thread | `<comment-thread>` | Threaded conversation                        |
+| Content row    | `<content-row>`    | Netflix-style horizontal scroll section      |
+| Feed post      | `<feed-post>`      | Social media post card                       |
+| Footer         | `<footer>`         | Site footer with link columns                |
+| Hero banner    | `<hero-banner>`    | Full-width hero with CTA                     |
+| Navbar         | `<navbar>`         | Top navigation with hamburger                |
+| Product detail | `<product-detail>` | Full product page section                    |
+| Profile card   | `<profile-card>`   | User profile with social links               |
+| Sidebar        | `<sidebar>`        | Off-canvas sidebar                           |
+| Story ring     | `<story-ring>`     | Social story avatar ring                     |
+| Tabs           | `<tabs-pk>`        | Tabbed panel component                       |
+| Thumbnail grid | `<thumbnail-grid>` | Image grid                                   |
+| Topbar         | `<topbar>`         | Secondary top bar (filters, breadcrumb)      |
+
+### pseudo-canvas-viewer
+
+`pseudo-canvas-viewer.html` is a Figma-style canvas viewer for exploring pseudo-HTML layout files visually:
+
+- Drag-and-drop or URL parameter loading
+- Zoom and pan controls
+- Component tree inspector
+- Works with any layout file via query string
 
 ```
-pseudo-canvas-demo.html        ← canvas at repo root
-
-components/                    ← reusable runtime components
-  panel.html
-  toolbar.html
-  chat-bubble.html
-  diff-view.html
-  tab-bar.html
-  tab.html
-  overlay.html
-  badge.html
-  spinner.html
-  text-zone.html
-  timeline.html
-  chart.html
-  button-theme.html
-  resize-handle.html
-
-layouts/                       ← decomposed screens and panels (optional)
-  screen-main.html
-  screen-review.html
-  panel-editor.html
-  panel-ai.html
-  panel-tab-suggestions.html
-  section-coherence-alerts.html
-  card-harden-point.html
-```
-
-| Prefix | Scope | Example |
-|---|---|---|
-| `pseudo-canvas-*` | Full app canvas | `pseudo-canvas-demo.html` |
-| `screen-*` | Full screen / root frame | `screen-main.html` |
-| `panel-*` | Major container within a screen | `panel-editor.html` |
-| `section-*` | Semantic zone within a panel | `section-coherence-alerts.html` |
-| `card-*` | Autonomous content unit | `card-harden-point.html` |
-
-Rules:
-- **kebab-case always** — no camelCase, no underscores in filenames
-- **No generic names** — `panel.html` is fine for the reusable component; `panel-editor.html` is the specific instance
-- **Prefix determines location** — `screen-*` files belong in `layouts/`, components without prefix belong in `components/`
-
----
-
-### IDs and attributes
-
-**Element IDs** — kebab-case, descriptive, unique within the canvas:
-
-```html
-<!-- ✅ -->
-<panel id="editor-panel" />
-<toolbar id="main-toolbar" />
-<panel id="tab-content-suggestions" />
-
-<!-- ❌ -->
-<panel id="panel1" />
-<panel id="editorPanel" />
-<panel id="p" />
-```
-
-**`role` attribute** — mandatory on every instance, describes purpose in context:
-
-```html
-<!-- ✅ — contextual purpose -->
-<chat-bubble role="coherence-alert" />
-<button role="Exit review mode" />
-<text role="Section header" />
-
-<!-- ❌ — too generic, same as component-role -->
-<chat-bubble role="bubble" />
-<button role="button" />
-```
-
-**`props` vs `data`** — the most important distinction in the system:
-
-| | `props` | `data` |
-|---|---|---|
-| Set by | Parent at render time | App state at runtime |
-| Changes at runtime? | No | Yes |
-| Example | `label`, `action`, `position` | `value`, `confidence`, `entity` |
-| Rule | If a parent configures it → `props` | If the app reads/writes it → `data` |
-
-**`when-*` attributes** — always on instances, never in `<component-registry>`:
-
-```html
-<!-- ✅ -->
-<panel id="ai-panel" when-hidden="focus-mode is active" />
-<spinner when-visible="ai-running" />
-
-<!-- ❌ — when-* belongs on instances, not declarations -->
-<panel props="..." when-hidden="..." />  <!-- in component-registry -->
-```
-
-**`id` on layout elements** — layout elements (`row`, `column`, `spacer`…) only get an `id` when they are a named structural zone:
-
-```html
-<!-- ✅ — named structural zone -->
-<row id="main-body" role="Main body: editor + AI panel">
-
-<!-- ✅ — anonymous layout, no id needed -->
-<row>
-  <button action="accept-all" />
-</row>
-```
-
-**Actions** — `action` values on `<button>` use kebab-case verbs:
-
-```html
-<!-- ✅ -->
-<button action="launch-review" />
-<button action="exit-review" />
-<button action="accept-all" />
-
-<!-- ❌ -->
-<button action="launchReview" />
-<button action="launch_review" />
-<button action="Launch Review" />
+pseudo-canvas-viewer.html?canvas=./layouts/home.html
+pseudo-canvas-viewer.html?assets=auto
 ```
 
 ---
 
-## Server-side rendering (SSR)
+## Server-side rendering
 
-```js
-import PseudoKitServer from 'pseudo-kit/server';
-```
+pseudo-kit supports server-side rendering via `pseudo-kit-server.js`. The server reads `.html` component files, extracts their templates, and returns rendered HTML strings.
 
-### Rendering a component
+### Server API
 
-```js
-PseudoKitServer.register({ name: 'chat-bubble', src: './components/chat-bubble.html' });
+```javascript
+import PseudoKit from 'pseudo-html-kit/server';
 
-const html = await PseudoKitServer.renderComponent(
-  'chat-bubble',                                  // component name
-  { role: 'coherence-alert' },                    // props → HTML attributes
-  '<span data-entity="Aria">Aria appears twice</span>', // children → injected into slot
-  './components'                                  // base path for resolving files
-);
-```
+// Register components server-side
+PseudoKit.register({ name: 'navbar', src: './src/components/navbar.html' });
+PseudoKit.register({ name: 'hero-banner', src: './src/components/hero-banner.html' });
 
-Output:
-
-```html
-<chat-bubble role="coherence-alert" data-pk-hydrated="true">
-  <div class="bubble-body">
-    <pk-slot style="display:contents"
-             data-slot-component="chat-bubble"
-             data-slot-name="default"
-             data-slot-props='{"data-entity":"","data-confidence":""}'>
-      <span data-entity="Aria" data-confidence="">Aria appears twice</span>
-    </pk-slot>
-  </div>
-</chat-bubble>
-```
-
-The server adds `data-pk-hydrated="true"` on every component with a template. The client detects this marker (or the `<pk-slot>` wrapper as a fallback), skips re-stamping to avoid double-rendering, and still evaluates scripts and processes loops client-side.
-
-### State hydration
-
-```js
-// Server: serialize state into the HTML response
-const stateTag = PseudoKitServer.serializeState({
-  tabCoherenceActive: true,
-  tabSuggestionsActive: false,
+// Render a component to an HTML string
+const html = await PseudoKit.renderComponent_server('navbar', {
+  siteName: 'My App',
+  logoSrc:  '/logo.svg',
 });
-
-// Inject before </body>:
-// <script id="pk-state" type="application/json">{"focusMode":false,"tabCoherenceActive":true,...}</script>
+// Returns: '<navbar sitename="My App" logosrc="/logo.svg" data-pk-ssr="navbar" data-pk-resolved>...template...</navbar>'
 ```
 
-The client reads the tag automatically on init and applies the state to `:root` before rendering:
+**renderComponent_server(name, props)**
 
-```js
-// Client automatically calls deserializeFromTag_shared() on init
-// No manual setup needed
+| Parameter | Type   | Description                                          |
+|-----------|--------|------------------------------------------------------|
+| `name`    | string | The registered component tag name                    |
+| `props`   | object | Props to serialize as attributes                     |
+
+Props are serialized as HTML attributes:
+- String values: `key="value"` (with `"` escaped)
+- Boolean `true`: bare attribute (`disabled`)
+- Boolean `false`, `null`, `undefined`: attribute omitted
+
+The output includes two hydration markers:
+- `data-pk-ssr="name"`: identifies the component type for the client
+- `data-pk-resolved`: tells the client to skip template stamping
+
+**Inline state for hydration:**
+
+```javascript
+import PseudoKit from 'pseudo-html-kit/server';
+
+const stateTag = PseudoKit.serializeStateToTag({ activeTab: 'home', userLoggedIn: true });
+// Returns: <script id="pk-state" type="application/json">{"activeTab":"home","userLoggedIn":true}</script>
+```
+
+Include this tag in the `<head>` of your HTML response. The client will hydrate the state on init.
+
+### Hydration on the client
+
+When the client receives a page with server-rendered components, it automatically detects the `data-pk-hydrated` or `data-pk-ssr` markers and skips re-stamping the template. Scripts are still evaluated so interactive behavior works immediately.
+
+```html
+<!-- Server output (in the HTML response body) -->
+<navbar data-pk-ssr="navbar" data-pk-resolved sitename="My App">
+  <pk-slot data-slot-component="navbar" data-slot-name="logo" style="display:contents">
+    <img src="/logo.svg" alt="My App">
+  </pk-slot>
+</navbar>
+```
+
+```javascript
+// Client: detects data-pk-resolved, skips stamp, runs script
+PseudoKit.register({ name: 'navbar', src: '/components/navbar.html' }).init();
+```
+
+---
+
+## React adapter
+
+Install the React adapter:
+
+```bash
+npm install pseudo-kit-react
+```
+
+The adapter wraps the pseudo-kit client for use inside React 18 applications. Component tags are used directly in JSX — they are custom elements and do not require React wrappers.
+
+### PseudoKitProvider
+
+The most convenient approach: wrap your app in a provider that registers and initializes all components at once.
+
+```jsx
+import { PseudoKitProvider } from 'pseudo-kit-react';
+
+function App() {
+  return (
+    <PseudoKitProvider
+      baseUrl="/components"
+      components={[
+        'button-pk.html',
+        'card.html',
+        'modal-pk.html',
+      ]}
+    >
+      <main>
+        <card title="Hello">
+          <p>Content goes in the default slot.</p>
+        </card>
+        <button-pk variant="primary">Open modal</button-pk>
+      </main>
+    </PseudoKitProvider>
+  );
+}
+```
+
+**Props:**
+
+| Prop         | Type       | Default | Description                                       |
+|--------------|------------|---------|---------------------------------------------------|
+| `components` | `string[]` | `[]`    | Component URL paths to register                   |
+| `baseUrl`    | `string`   | `''`    | Base URL prepended to each component path         |
+| `children`   | `ReactNode`| —       | App content                                       |
+
+### useComponent
+
+Registers and tracks a single component's ready state.
+
+```jsx
+import { useComponent } from 'pseudo-kit-react';
+
+function MyPage() {
+  const { ready } = useComponent('/components/button-pk.html');
+
+  if (!ready) return <div>Loading component...</div>;
+
+  return (
+    <div>
+      <button-pk variant="primary">Click me</button-pk>
+    </div>
+  );
+}
+```
+
+### usePseudoKit
+
+Returns the global `PseudoKit` instance. Use this for direct access to state, emit, or renderLoop.
+
+```jsx
+import { usePseudoKit } from 'pseudo-kit-react';
+
+function ThemeToggle() {
+  const pseudoKit = usePseudoKit();
+
+  return (
+    <button onClick={() => {
+      pseudoKit.state.darkMode = !pseudoKit.state.darkMode;
+    }}>
+      Toggle theme
+    </button>
+  );
+}
+```
+
+### usePseudoKitReady
+
+Returns a boolean that is `true` once the runtime has initialized.
+
+```jsx
+import { usePseudoKitReady } from 'pseudo-kit-react';
+
+function App() {
+  const ready = usePseudoKitReady();
+  return ready ? <Main /> : <Splash />;
+}
+```
+
+### useRegisterComponent
+
+Registers a component by name and URL. Returns `{ ready }`.
+
+```jsx
+import { useRegisterComponent } from 'pseudo-kit-react';
+
+function DynamicWidget({ componentUrl }) {
+  const { ready } = useRegisterComponent('dynamic-widget', componentUrl);
+  if (!ready) return null;
+  return <dynamic-widget></dynamic-widget>;
+}
+```
+
+### SSR with React
+
+For server-side rendering in a React (or Next.js) app, use the SSR utilities from `pseudo-kit-react/ssr`:
+
+```javascript
+import { renderComponent, hydrateMarker } from 'pseudo-kit-react/ssr';
+
+// Render a component to an HTML string on the server
+const navbarHtml = await renderComponent('./components/navbar-pk.html', {
+  siteName: 'My App',
+  logoSrc:  '/logo.svg',
+});
+// Returns: '<navbar-pk sitename="My App" logosrc="/logo.svg" data-pk-ssr="navbar-pk" data-pk-resolved>...template...</navbar-pk>'
+
+// Generate an HTML comment hydration marker
+const marker = hydrateMarker('navbar-pk');
+// Returns: '<!--pk-ssr:navbar-pk-->'
+```
+
+`renderComponent(filePath, props)`:
+- `filePath`: absolute path to the component `.html` file
+- `props`: object serialized as HTML attributes
+- Returns: `Promise<string>`
+
+`hydrateMarker(name)`:
+- `name`: component tag name
+- Returns: `string` — `'<!--pk-ssr:name-->'`
+
+**Use with Next.js App Router:**
+
+```jsx
+// app/page.jsx (server component)
+import { renderComponent } from 'pseudo-kit-react/ssr';
+import path from 'path';
+
+export default async function HomePage() {
+  const navHtml = await renderComponent(
+    path.resolve('./components/navbar-pk.html'),
+    { siteName: 'My App' }
+  );
+
+  return (
+    <div>
+      <div dangerouslySetInnerHTML={{ __html: navHtml }} />
+      <main>Page content</main>
+    </div>
+  );
+}
+```
+
+---
+
+## Svelte adapter
+
+Install the Svelte adapter:
+
+```bash
+npm install pseudo-kit-svelte
+```
+
+**Exports:**
+
+| Export              | Description                                        |
+|---------------------|----------------------------------------------------|
+| `pseudoKit`         | Svelte action: registers and initializes on mount  |
+| `initPseudoKit`     | Imperative init for use outside Svelte actions     |
+| `createComponent`   | Register one component                             |
+| `createComponents`  | Register multiple components                       |
+| `nameFromUrl`       | Extract tag name from a file URL                   |
+
+**Svelte 5 example:**
+
+```svelte
+<script>
+  import { pseudoKit } from 'pseudo-kit-svelte';
+
+  const components = [
+    { name: 'button-pk', src: '/components/button-pk.html' },
+    { name: 'card',      src: '/components/card.html' },
+  ];
+</script>
+
+<div use:pseudoKit={{ components }}>
+  <card>
+    <p>Hello from Svelte</p>
+  </card>
+  <button-pk variant="primary">Click</button-pk>
+</div>
+```
+
+The `pseudoKit` action registers components and calls `PseudoKit.init()` on the node it is applied to. Components are scoped to that subtree.
+
+---
+
+## CLI
+
+Initialize a new pseudo-kit project with the scaffolding CLI:
+
+```bash
+npx pseudo-kit init
+# or after install:
+pseudo-kit init
+```
+
+The CLI creates:
+- `index.html` — entry page with PseudoKit loaded
+- `components/` — directory for your component files
+- `layouts/` — directory for pseudo-HTML layout files
+
+The binary is exposed as `pseudo-kit` in `package.json` `bin`:
+
+```json
+{
+  "bin": {
+    "pseudo-kit": "./bin/pseudo-kit-init.js"
+  }
+}
+```
+
+---
+
+## Client API reference
+
+All methods are available on the default export from `pseudo-html-kit`.
+
+```javascript
+import PseudoKit from 'pseudo-html-kit';
+// or
+import PseudoKit from 'pseudo-html-kit/client';
+```
+
+### PseudoKit.register(input)
+
+Registers a component definition.
+
+```typescript
+register(input: ManualRegistration | ImportMeta): typeof PseudoKit
+```
+
+| Input form           | Description                                              |
+|----------------------|----------------------------------------------------------|
+| `{ name, src }`      | Manual registration with tag name and URL                |
+| `import.meta`        | Self-registration from inside a component module script  |
+
+Returns `PseudoKit` for chaining.
+
+```javascript
+PseudoKit.register({ name: 'my-button', src: '/components/my-button.html' });
+PseudoKit.register(import.meta); // from inside a component module
+```
+
+### PseudoKit.init([root])
+
+Starts the runtime. Begins MutationObserver on `root` and resolves all components already in the DOM.
+
+```typescript
+init(root?: Element): MutationObserver
+```
+
+| Parameter | Type      | Default         | Description                         |
+|-----------|-----------|-----------------|-------------------------------------|
+| `root`    | `Element` | `document.body` | Root element to observe             |
+
+Returns the active `MutationObserver` instance.
+
+```javascript
 PseudoKit.init();
+PseudoKit.init(document.getElementById('app-root'));
 ```
 
-### CSS generation
-
-Generates a single CSS string from all registered component style blocks:
-
-```js
-PseudoKitServer.register({ name: 'chat-bubble', src: './components/chat-bubble.html' });
-PseudoKitServer.register({ name: 'panel',       src: './components/panel.html' });
-
-const css = await PseudoKitServer.generateCSS('./components');
-await writeFile('dist/components.css', css, 'utf-8');
-```
-
-### Layout validation
-
-Validates a pseudo-HTML layout file against the registered component registry:
-
-```js
-const result = await PseudoKitServer.validate('./src/shared/pseudo-canvas-reference.html');
-
-if (!result.valid) {
-  result.errors.forEach(e => console.error('ERROR:', e));
-}
-result.warnings.forEach(w => console.warn('WARN:', w));
-```
-
-Checks:
-- Every custom tag used in the layout is registered or a known layout element
-- `loop=""` elements have a data-bound parent (warning only)
-
----
-
-## Client API
-
-### `PseudoKit.register(input)`
-
-Registers a component. Returns `PseudoKit` for chaining.
-
-```js
-// Manual
-PseudoKit.register({ name: 'panel', src: 'components/panel.html' });
-
-// Auto — from inside the component file
-PseudoKit.register(import.meta); // name derived from filename
-```
-
-### `PseudoKit.init([root])`
-
-Starts the runtime. Begins DOM observation and resolves existing components.
-
-```js
-PseudoKit.init();                                  // observe document.body
-PseudoKit.init(document.getElementById('app-root')); // observe from a specific root
-```
-
-Returns the `MutationObserver` instance.
-
-### `PseudoKit.renderLoop(containerId, data)`
+### PseudoKit.renderLoop(containerId, data)
 
 Renders a `loop=""` template with a data array.
 
-```js
-PseudoKit.renderLoop('alerts', [
-  { entity: 'Aria', confidence: '0.9' },
+```typescript
+renderLoop(containerId: string, data: object[]): void
+```
+
+| Parameter     | Type       | Description                                             |
+|---------------|------------|---------------------------------------------------------|
+| `containerId` | `string`   | `id` of the container holding the `loop=""` child       |
+| `data`        | `object[]` | Array of objects; keys become `data-*` on each clone    |
+
+```javascript
+PseudoKit.renderLoop('results-list', [
+  { id: '1', name: 'Alice', role: 'admin' },
+  { id: '2', name: 'Bob',   role: 'user'  },
 ]);
 ```
 
-### `PseudoKit.emit(el, eventName, [detail])`
+### PseudoKit.emit(el, name, detail)
 
 Dispatches a `CustomEvent` from an element.
 
-```js
-PseudoKit.emit(el, 'accept', { id: '42' });
+```typescript
+emit(el: Element, name: string, detail?: any): void
 ```
 
-### `PseudoKit.state`
-
-Reactive state proxy. See [Reactive state](#reactive-state).
-
----
-
-## Server API
-
-### `PseudoKitServer.register(input)`
-
-Same as client. Returns `PseudoKitServer` for chaining.
-
-### `PseudoKitServer.resolvePath(src, [base])`
-
-Resolves a `file://` URL or relative path to an absolute filesystem path.
-
-```js
-PseudoKitServer.resolvePath('file:///project/components/panel.html');
-// → '/project/components/panel.html'
-
-PseudoKitServer.resolvePath('components/panel.html', '/project');
-// → '/project/components/panel.html'
+```javascript
+PseudoKit.emit(el, 'user:selected', { id: '42' });
 ```
 
-### `PseudoKitServer.renderComponent(name, props, children, [base])`
+### PseudoKit.state
 
-Renders a component to an HTML string. See [Rendering a component](#rendering-a-component).
+Reactive state proxy. Keys map to `data-*` attributes on `:root`.
 
-### `PseudoKitServer.serializeState([state])`
-
-Returns a `<script id="pk-state" type="application/json">` tag. See [State hydration](#state-hydration).
-
-### `PseudoKitServer.generateCSS([base])`
-
-Generates concatenated CSS from all registered components. See [CSS generation](#css-generation).
-
-### `PseudoKitServer.validate(layoutPath)`
-
-Validates a pseudo-HTML layout file. See [Layout validation](#layout-validation).
-
----
-
-## Shared API
-
-```js
-import { register_shared, lookup_shared, all_shared, isRegistered_shared, reset_shared } from 'pseudo-kit/shared';
-import { serialize_shared, serializeToTag_shared, deserialize_shared, deserializeFromTag_shared, merge_shared, defaultState_shared } from 'pseudo-kit/shared';
+```typescript
+state: Record<string, any>
 ```
 
-### Registry
-
-| Function | Description |
-|---|---|
-| `register_shared(input)` | Register a component (manual or `import.meta`) |
-| `lookup_shared(name)` | Get a component definition by name |
-| `all_shared()` | Get all registered definitions |
-| `isRegistered_shared(name)` | Check if a component is registered |
-| `reset_shared()` | Clear the registry (tests only) |
-
-### State
-
-| Function | Description |
-|---|---|
-| `serialize_shared(state)` | Serialize state to JSON string |
-| `serializeToTag_shared(state)` | Serialize state to `<script>` tag HTML |
-| `deserialize_shared(json)` | Parse JSON to AppState |
-| `deserializeFromTag_shared()` | Read state from `<script id="pk-state">` in DOM |
-| `merge_shared(current, patch)` | Merge a partial patch into a state object |
-| `defaultState_shared()` | Return a fresh copy of the default state |
-
----
-
-## Project structure
-
-```
-pseudo-kit/
-  src/
-    shared/
-      registry-shared.js           ← component registry (client + server)
-      state-shared.js              ← state model + serialization
-      index.js                     ← shared exports
-    client/
-      pseudo-kit-client.js         ← browser runtime
-    server/
-      pseudo-kit-server.js         ← Node.js SSR runtime
-      canvas-validator.js          ← canvas parser + manifest generator
-      canvas-normalize.js          ← canvas auto-corrector
-    pseudo-html/
-      SPEC.md                      ← pseudo-HTML full specification
-    shared/
-      pseudo-canvas-reference.html   ← canonical source (the "Bible")
-    pseudo-canvas/
-      viewer/                        ← Figma-style component viewer
-      demos/
-        pseudo-canvas-demo.html      ← synced copy of reference
-        amazon/                      ← demo apps
-        facebook/
-        netflix/
-    pseudo-assets/
-      components/                    ← atoms, molecules, organisms
-      frames/                        ← page skeleton templates
-    pseudo-skills/
-      SKILL.md                     ← LLM skill entry point
-      PSEUDO-KIT.md                ← component system reference
-      REACT.md                     ← pseudo-HTML → React mapping
-      SVELTE.md                    ← pseudo-HTML → Svelte 5 mapping
-      pseudo-svelte-5-reference.md ← Svelte 5 non-regression log
-  tests/
-    registry-shared.test.js        ← node:test
-    state-shared.test.js           ← node:test
-    pseudo-kit-server.test.js      ← node:test
-    pseudo-kit-client.client.test.js  ← vitest + happy-dom
-  bmad/                            ← project artefacts (PRD, sprints...)
-  vitest.config.js
-  package.json
-  README.md
-  .gitignore
+```javascript
+PseudoKit.state.darkMode   = true;      // sets data-dark-mode=""
+PseudoKit.state.activeUser = 'alice';   // sets data-active-user="alice"
+PseudoKit.state.darkMode   = false;     // removes data-dark-mode
 ```
 
 ---
 
-## Development
+## Server API reference
+
+```javascript
+import PseudoKit from 'pseudo-html-kit/server';
+```
+
+### PseudoKit.register(input)
+
+Same signature as the client. Registers a component for server-side rendering.
+
+### PseudoKit.renderComponent_server(name, props)
+
+Renders a component to an HTML string.
+
+```typescript
+renderComponent_server(name: string, props?: object): Promise<string>
+```
+
+### PseudoKit.serializeStateToTag(state)
+
+Returns a `<script id="pk-state" type="application/json">` tag string for embedding in the HTML response.
+
+```typescript
+serializeStateToTag(state: object): string
+```
+
+### PseudoKit.validateLayout_server(filePath)
+
+Validates a pseudo-HTML layout file against the registered component registry. Returns a list of unknown tags.
+
+```typescript
+validateLayout_server(filePath: string): Promise<ValidationResult>
+```
+
+### PseudoKit.generateBaseCSS_server()
+
+Generates a base CSS string from all registered component style blocks. Useful for embedding critical CSS in the HTML response.
+
+```typescript
+generateBaseCSS_server(): Promise<string>
+```
+
+---
+
+## Data attributes reference
+
+These attributes are written and read by the runtime. You can also use them in CSS selectors.
+
+| Attribute              | Written by    | Description                                      |
+|------------------------|---------------|--------------------------------------------------|
+| `data-pk-resolved`     | Client        | Added to an element after it has been stamped    |
+| `data-pk-hydrated`     | Client        | Added when SSR element is detected; stamp skipped|
+| `data-pk-ssr`          | Server        | Component name, written during SSR               |
+| `data-pk-loop-template`| Client        | Marks a loop="" element as a pending template    |
+| `data-slot-component`  | Client        | On `<pk-slot>`: parent component name            |
+| `data-slot-name`       | Client        | On `<pk-slot>`: slot name ("default" or named)   |
+| `data-slot-props`      | Client        | On `<pk-slot>`: JSON of forwarded data-* props   |
+
+---
+
+## Accessibility
+
+pseudo-kit is WCAG 2.2 AA compliant (verified by axe-core and manual audit).
+
+**What is included:**
+
+- All 61 components pass axe-core with `wcag2a` and `wcag2aa` tag rules
+- Zero color-contrast violations (WCAG 1.4.3 AA)
+- All interactive elements use `:focus-visible` for keyboard focus rings
+- All animations respect `prefers-reduced-motion: reduce`
+- Full ARIA landmark and keyboard navigation coverage
+- Interactive APIs use native HTML elements (`<dialog>`, `<input>`, `<select>`, popover) wherever possible
+
+**Running the a11y audit:**
+
+```bash
+pnpm test:a11y
+```
+
+The audit uses `@axe-core/playwright` and runs against all 61 components in a real browser.
+
+**Audit output:** `bmad/artifacts/color-contrast-audit-{date}.md`
+
+---
+
+## Performance
+
+| Artifact                  | Gzipped size | Budget  |
+|---------------------------|--------------|---------|
+| `pseudo-kit-client.js`    | 7.7 KB       | 12 KB   |
+| `pseudo-kit-server.js`    | 4.4 KB       | 6 KB    |
+| Average component file    | ~2.1 KB      | 4 KB    |
+
+The runtime has no dependencies. Component CSS is managed via `adoptedStyleSheets` without DOM injection. Components are fetched on demand and cached — a component used 100 times is fetched once.
+
+**Check bundle size:**
+
+```bash
+pnpm check:bundle
+```
+
+---
+
+## Testing
+
+### Test suites
+
+| Suite                  | Runner         | Count | Command                          |
+|------------------------|----------------|-------|----------------------------------|
+| Registry + state (node)| `node:test`    | 226   | `pnpm test`                      |
+| Client (vitest/jsdom)  | vitest         | 345   | `pnpm test:client`               |
+| React adapter          | vitest         | 29    | `cd src/pseudo-kit-react && pnpm test` |
+| Svelte adapter         | vitest         | 18    | `cd src/pseudo-kit-svelte && pnpm test`|
+| Components (vitest)    | vitest         | ~47   | `pnpm test:components`           |
+| E2E                    | Playwright     | 38    | `pnpm test:e2e`                  |
+| A11y (axe-core)        | Playwright     | 5     | `pnpm test:a11y`                 |
+| **Total**              |                | **661+**|                                |
+
+### Running all tests
+
+```bash
+pnpm test:all
+```
+
+### Running individual suites
+
+```bash
+pnpm test             # Node.js test runner (server + registry + state)
+pnpm test:client      # Vitest browser simulation (client runtime)
+pnpm test:components  # Vitest component rendering
+pnpm test:viewer      # Vitest canvas viewer
+pnpm test:e2e         # Playwright E2E (Chromium by default)
+pnpm test:a11y        # Playwright + axe-core accessibility
+pnpm test:coverage    # Vitest with coverage report
+```
+
+### E2E browser matrix
+
+E2E tests target Chromium as the primary browser. Firefox and WebKit are included in the playwright config. WebKit tests for the migration components (popover, anchor positioning) are deferred pending browser parity.
+
+```bash
+pnpm test:e2e:ui      # Playwright UI mode (interactive)
+pnpm test:e2e:debug   # Playwright debug mode (step-through)
+```
+
+---
+
+## Scripts reference
+
+All scripts are available via `pnpm run`:
+
+| Script              | Description                                                  |
+|---------------------|--------------------------------------------------------------|
+| `lint`              | Run oxlint on all source files                               |
+| `lint:fix`          | Run oxlint with auto-fix                                     |
+| `validate`          | Validate a layout file against registered components         |
+| `validate:json`     | Same, with JSON output                                       |
+| `normalize`         | Normalize a pseudo-HTML layout file (dry-run)                |
+| `normalize:write`   | Normalize in-place                                           |
+| `test`              | Run Node.js test suite                                       |
+| `test:client`       | Run vitest browser tests                                     |
+| `test:components`   | Run vitest component tests                                   |
+| `test:viewer`       | Run vitest canvas viewer tests                               |
+| `test:e2e`          | Run Playwright E2E tests                                     |
+| `test:e2e:ui`       | Playwright UI mode                                           |
+| `test:e2e:debug`    | Playwright debug mode                                        |
+| `test:a11y`         | Run axe-core accessibility audit                             |
+| `test:all`          | Run all test suites in sequence                              |
+| `test:coverage`     | Run vitest with coverage report                              |
+| `check:bundle`      | Check gzip sizes against budgets                             |
+| `generate:context`  | Generate `pseudo-kit-context.json` from JSDoc comments       |
+| `generate:docs`     | Generate `docs/index.html` from context JSON                 |
+| `serve:src`         | Serve the `src/` directory on port 3001                      |
+| `add-knowledge`     | CLI to add knowledge entries for the LLM context pack        |
+
+---
+
+## Contributing
+
+### Prerequisites
+
+- Node.js 22+
+- pnpm
 
 ### Setup
 
 ```bash
-# Install dependencies
-npm install
-
-# or with pnpm (workspace support)
+git clone https://github.com/your-org/pseudo-html-kit.git
+cd pseudo-html-kit
 pnpm install
+pnpm test
 ```
 
-No build step required anywhere in the project — everything runs as vanilla ESM.
+### Project structure
 
-### Project Commands
-
-```bash
-# Run all tests (node:test + vitest)
-npm run test:all
-
-# Run tests in watch mode (useful during development)
-npm run test:watch
-
-# Generate documentation
-npm run generate:manifest  # produce manifest text from pseudo-canvas
-
-# Validate and normalize layouts
-npm run validate -- path/to/layout.html
-npm run normalize:write -- path/to/layout.html
+```
+pseudo-html-kit/
+├── src/
+│   ├── client/               # Browser runtime (pseudo-kit-client.js)
+│   ├── server/               # Node.js runtime (pseudo-kit-server.js, canvas-validator.js, canvas-normalize.js)
+│   ├── shared/               # Shared registry and state modules
+│   ├── pseudo-html/          # Pseudo-HTML parser utilities
+│   ├── pseudo-assets/        # Component library
+│   │   ├── components/
+│   │   │   ├── atoms/        # 23 atom components
+│   │   │   ├── molecules/    # 22 molecule components
+│   │   │   └── organisms/    # 16 organism components
+│   │   ├── theme/            # theme.css, utils.css
+│   │   ├── skins/            # netflix.css, amazon.css, facebook.css
+│   │   ├── frames/           # Empty layout skeletons
+│   │   └── demos/            # Netflix, Amazon, Facebook demo apps
+│   ├── pseudo-kit-react/     # React adapter package
+│   └── pseudo-kit-svelte/    # Svelte adapter package
+├── tests/                    # All test files
+├── scripts/                  # Build, generation, and check scripts
+├── docs/                     # Generated documentation site
+├── bin/                      # CLI entry point
+├── pseudo-kit-context.json   # Machine-readable component registry (LLM context pack)
+└── bmad/                     # Project management artifacts
 ```
 
-### Key Files
+### Writing a new component
 
-- **Entry points**: `src/client/pseudo-kit-client.js`, `src/server/pseudo-kit-server.js`, `src/shared/index.js`
-- **Tests**: `tests/*.test.js` (node:test), `tests/*.client.test.js` (vitest)
-- **Spec**: `src/pseudo-html/SPEC.md` (full attribute model and type grammar)
-- **Skills**: `src/pseudo-skills/` (LLM code generation references)
+1. Create `src/pseudo-assets/components/{layer}/my-component.html`
+2. Add a JSDoc header with `@component`, `@layer`, `@prop`, `@slot` annotations:
 
----
-
-## Tests
-
-### Running Tests
-
-```bash
-# Node.js tests — shared + server (no external dependencies)
-npm test
-
-# Client tests — requires vitest + happy-dom
-npm run test:client
-
-# All tests (Node + vitest)
-npm run test:all
-
-# Coverage report (client only — enforces 100%)
-npm run test:coverage
+```html
+<!--
+ * @component MyComponent
+ * @layer molecules
+ * @prop {string} title - Card title
+ * @prop {string} [variant=default] - Visual variant: "default" | "outlined" | "elevated"
+ * @slot header - Optional header content
+ * @slot - Default content slot
+-->
+<template>
+  ...
+</template>
 ```
 
-### Validation & Normalization
+3. Add a test in `tests/`
+4. Run `pnpm generate:context` to update `pseudo-kit-context.json`
+5. Run `pnpm generate:docs` to update `docs/index.html`
+6. Run `pnpm test:all` to verify
 
-Validate pseudo-HTML canvas files against the spec:
+### Code standards
 
-```bash
-# Check spec conformity + registry completeness
-npm run validate -- path/to/canvas.html
-
-# JSON output for programmatic consumption
-npm run validate:json -- path/to/canvas.html
-
-# Auto-fix obsolete attributes and missing component-role/role
-npm run normalize -- path/to/canvas.html        # writes canvas.normalized.html
-npm run normalize:write -- path/to/canvas.html  # in-place
-```
-
-### Test Coverage
-
-| Suite | Runner | Tests |
-|---|---|---|
-| Server (registry, state, server, validator, normalizer) | `node:test` | 226 |
-| Client (pseudo-kit-client, hydration) | Vitest + happy-dom | ~100 |
-| Components (atoms, molecules, organisms) | Vitest + happy-dom | 245 |
-| React adapter (`pseudo-kit-react`) | Vitest + jsdom | 29 |
-| Svelte adapter (`pseudo-kit-svelte`) | Vitest + happy-dom | 18 |
-| E2E — migration + forms + viewer | Playwright Chromium | 38 |
-| A11y — axe-core WCAG 2.2 AA | Playwright Chromium | 5 |
-| **Total** | — | **661+** |
-
-**v1.0.0 Status:** All tests passing (0 failures) · WCAG 2.2 AA · bundle 7.7 KB gzip.
-
-### Additional scripts
-
-```bash
-# Generate LLM context pack
-pnpm generate:context   # → pseudo-kit-context.json
-
-# Generate documentation site
-pnpm generate:docs      # → docs/index.html
-
-# Check bundle size budget
-pnpm check:bundle       # client ≤ 12 KB, server ≤ 6 KB
-
-# Accessibility audit (axe-core Playwright)
-pnpm test:a11y
-```
-
----
-
-## Browser support
-
-| Browser | Minimum version | Key features required |
-|---|---|---|
-| Chrome | 118+ | `@scope`, `CSSStyleSheet`, `:has()` |
-| Firefox | 128+ | `@scope`, `CSSStyleSheet`, `:has()` |
-| Safari | 17.4+ | `@scope`, `CSSStyleSheet`, `:has()` |
-
----
-
-## Asset Library — Pre-built Components
-
-The **pseudo-stack-assets** npm package includes 52 production-ready components, 20 page frame templates, and 3 complete demo apps (Netflix, Amazon, Facebook) — all built with pseudo-kit, zero external dependencies.
-
-### Installation
-
-```bash
-npm install pseudo-stack-assets
-```
-
-### Usage
-
-```js
-import { components, componentNames, frames, componentsMeta } from 'pseudo-stack-assets';
-
-// Register one component
-PseudoKit.register({ name: componentNames.card, src: components.card }); // → 'card-pk'
-
-// Or register all at once
-Object.entries(components).forEach(([key, src]) =>
-  PseudoKit.register({ name: componentNames[key], src })
-);
-PseudoKit.init();
-```
-
-### Component Catalog
-
-| Type | Count | Examples |
-|---|---|---|
-| **Atoms** | 20 | `button-pk`, `input-pk`, `select-pk`, `textarea-pk`, `badge-pk` |
-| **Molecules** | 18 | `card-pk`, `combobox-pk`, `tooltip-pk`, `modal-pk`, `grid-pk` |
-| **Organisms** | 14 | `navbar-pk`, `accordion-pk`, `sidebar-pk`, `feed-post-pk`, `cart-summary-pk` |
-| **Frames** | 20 | Page skeleton templates (empty slots for content) |
-| **Demo Apps** | 3 | Netflix, Amazon, Facebook reference implementations |
-
-### Tokens & Theming
-
-Each demo app includes a `tokens.css` stylesheet with color/spacing variables for quick customization. Frame your components with your own token values.
-
----
-
-## Framework references
-
-The `src/pseudo-skills/` directory contains mapping references for generating real code from pseudo-HTML:
-
-- `src/pseudo-html/SPEC.md` — Full pseudo-HTML attribute model, type grammar, conventions
-- `src/pseudo-skills/PSEUDO-KIT.md` — pseudo-kit component system reference
-- `src/pseudo-skills/REACT.md` — pseudo-HTML → React mapping
-- `src/pseudo-skills/SVELTE.md` — pseudo-HTML → Svelte 5 mapping
-- `src/pseudo-skills/pseudo-svelte-5-reference.md` — Svelte 5 non-regression guide (LLMs regress often)
-
----
-
-## Release & Versioning
-
-### Version Policy
-
-pseudo-kit follows **Semantic Versioning (SemVer)**.
-
-- **Major** (breaking): Changes to component registration, slot API, state serialization, or browser support
-- **Minor** (feature): New components, CSS layers, or validation features
-- **Patch** (fix): Bug fixes, test improvements, documentation updates
-
-### Current Version
-
-**v0.4.0** — Production release (March 2026)
-
-- 432 tests passing (0 failures)
-- 52 pre-built components (pseudo-stack-assets)
-- Full SSR support with hydration
-- CSS `@scope` isolation on all components
-- 2026 Web Platform APIs: `<dialog>`, Popover, Anchor Positioning, View Transitions, Listbox API, Constraint Validation, Interest Invokers
-
-See [CHANGELOG.md](CHANGELOG.md) for release history.
-
-### Publishing
-
-Publishing is handled exclusively by CI/CD. Do **not** run `npm publish` manually.
-
-- Releases are tagged in git (e.g., `v0.2.0`)
-- Packages are published to npm registry automatically
-- GitHub Actions validates tests, coverage, and builds before publishing
+- All code comments in English
+- No `!important` in component CSS
+- All interactive elements must have `:focus-visible` styles
+- All transitions/animations must include `prefers-reduced-motion` guard
+- Components must pass `pnpm test:a11y` before merging
 
 ---
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).
+
+---
+
+*pseudo-kit — 21 sprints · 61 components · WCAG 2.2 AA · 7.7 KB.*
