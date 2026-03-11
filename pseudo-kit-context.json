@@ -1,0 +1,2805 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-03-11",
+  "description": "pseudo-html-kit component API reference — props, slots, layers. Use this file to configure AI autocomplete or validate component usage.",
+  "total": 61,
+  "components": [
+    {
+      "name": "avatar-pk",
+      "layer": "atoms",
+      "file": "atoms/avatar.html",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": false,
+          "description": "Image URL; omit to show initials or default placeholder"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": false,
+          "description": "Alt text for the avatar image",
+          "default": ""
+        },
+        {
+          "name": "initials",
+          "type": "string",
+          "required": false,
+          "description": "Fallback text shown when no image is provided"
+        },
+        {
+          "name": "size",
+          "type": "xs | sm | md | lg | xl",
+          "required": false,
+          "description": "Avatar diameter size preset",
+          "default": "md",
+          "values": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Slotted `<img>` element for the avatar image"
+        }
+      ],
+      "example": "<span class=\"avatar\" aria-label=\"avatar\">\r\n    <slot>\r\n      <img class=\"avatar__img\" src=\"\" alt=\"\" />\r\n    </slot>\r\n    <span class=\"avatar__initials\" aria-hidden=\"true\"></span>\r\n  </span>"
+    },
+    {
+      "name": "badge-pk",
+      "layer": "atoms",
+      "file": "atoms/badge.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Badge text content (slotted or via default slot)"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary | success | warning | danger",
+          "required": false,
+          "description": "Colour variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        {
+          "name": "dot",
+          "type": "boolean",
+          "required": false,
+          "description": "Show a coloured dot indicator before the label"
+        },
+        {
+          "name": "size",
+          "type": "sm | md",
+          "required": false,
+          "description": "Badge size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md"
+          ]
+        }
+      ],
+      "slots": [],
+      "example": "<span class=\"badge\" role=\"status\">\r\n    <span class=\"badge__dot\" aria-hidden=\"true\"></span>\r\n    <span class=\"badge__label\"></span>\r\n  </span>"
+    },
+    {
+      "name": "button-pk",
+      "layer": "atoms",
+      "file": "atoms/button-pk.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Button text; can also be provided via default slot"
+        },
+        {
+          "name": "variant",
+          "type": "primary | secondary | ghost | danger",
+          "required": false,
+          "description": "Visual style variant",
+          "default": "secondary",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "danger"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Button size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the button and prevents interaction"
+        },
+        {
+          "name": "type",
+          "type": "button | submit | reset",
+          "required": false,
+          "description": "Native button type attribute",
+          "default": "button",
+          "values": [
+            "button",
+            "submit",
+            "reset"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Button label text or mixed content"
+        },
+        {
+          "name": "icon-left",
+          "description": "Icon placed to the left of the label"
+        },
+        {
+          "name": "icon-right",
+          "description": "Icon placed to the right of the label"
+        }
+      ],
+      "example": "<button class=\"button\" type=\"button\">\r\n    <span class=\"button__icon-left\" aria-hidden=\"true\">\r\n      <slot name=\"icon-left\"></slot>\r\n    </span>\r\n    <span class=\"button__label\">\r\n      <slot>Button</slot>\r\n    </span>\r\n    <span class=\"button__icon-right\" aria-hidden=\"true\">\r\n      <slot name=\"icon-right\"></slot>\r\n    </span>\r\n  </button>"
+    },
+    {
+      "name": "checkbox-pk",
+      "layer": "atoms",
+      "file": "atoms/checkbox-pk.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name forwarded to the inner `<input type=\"checkbox\">`"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "Field id forwarded to the inner checkbox"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "Value submitted when checkbox is checked",
+          "default": "on"
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": false,
+          "description": "Initial checked state"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the checkbox"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the checkbox as required for form validation"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Label text shown beside the checkbox"
+        }
+      ],
+      "example": "<label class=\"checkbox\">\r\n    <input class=\"checkbox__input\" type=\"checkbox\" />\r\n    <span class=\"checkbox__box\" aria-hidden=\"true\">\r\n      <svg class=\"checkbox__check-icon\" viewBox=\"0 0 16 16\" width=\"12\" height=\"12\">\r\n        <path d=\"M13.5 2.5L6 10l-3.5-3.5\" stroke=\"currentColor\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\" stroke-linejoin=\"round\" />\r\n      </svg>\r\n    </span>\r\n    <span class=\"checkbox__label\">\r\n      <slot></slot>\r\n    </span>\r\n  </label>"
+    },
+    {
+      "name": "chip-pk",
+      "layer": "atoms",
+      "file": "atoms/chip.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Chip label text (forwarded to inner span)"
+        },
+        {
+          "name": "removable",
+          "type": "boolean",
+          "required": false,
+          "description": "Show a remove/close button inside the chip"
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "required": false,
+          "description": "Apply selected (filled primary) visual state"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary",
+          "required": false,
+          "description": "Colour variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon",
+          "description": "Optional icon placed before the label"
+        }
+      ],
+      "example": "<span class=\"chip\">\r\n    <span class=\"chip__icon\" aria-hidden=\"true\">\r\n      <slot name=\"icon\"></slot>\r\n    </span>\r\n    <span class=\"chip__label\"></span>\r\n    <button class=\"chip__remove\" type=\"button\" aria-label=\"Remove\" tabindex=\"0\">\r\n      <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" fill=\"none\" aria-hidden=\"true\">\r\n        <path d=\"M9 3L3 9M3 3l6 6\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\"/>\r\n      </svg>\r\n    </button>\r\n  </span>"
+    },
+    {
+      "name": "date-picker-pk",
+      "layer": "atoms",
+      "file": "atoms/date-picker-pk.html",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "optional input markup"
+        }
+      ],
+      "example": "<div class=\"date-picker\">\r\n    <input type=\"date\" class=\"date-picker__input\" aria-label=\"Choose a date\" />\r\n    <button type=\"button\" class=\"date-picker__toggle\" aria-haspopup=\"dialog\" aria-expanded=\"false\">Open calendar</button>\r\n    <div class=\"date-picker__popover\" role=\"dialog\" aria-hidden=\"true\" hidden>\r\n      <!-- lightweight fallback calendar placeholder (JS will implement full picker later) -->\r\n      <div class=\"date-picker__calendar\">Calendar fallback</div>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "divider-pk",
+      "layer": "atoms",
+      "file": "atoms/divider.html",
+      "props": [
+        {
+          "name": "orientation",
+          "type": "horizontal | vertical",
+          "required": false,
+          "description": "Divider direction",
+          "default": "horizontal",
+          "values": [
+            "horizontal",
+            "vertical"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Optional centred label text displayed over the divider line"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Label content; overrides the `label` prop when slotted"
+        }
+      ],
+      "example": "<div class=\"divider\" role=\"separator\" aria-orientation=\"horizontal\">\r\n    <span class=\"divider__label\">\r\n      <slot></slot>\r\n    </span>\r\n  </div>"
+    },
+    {
+      "name": "icon-pk",
+      "layer": "atoms",
+      "file": "atoms/icon.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Icon identifier (reserved for icon-font / sprite usage)"
+        },
+        {
+          "name": "size",
+          "type": "xs | sm | md | lg | xl",
+          "required": false,
+          "description": "Icon box size preset",
+          "default": "md",
+          "values": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Accessible label; also accepted as `aria-label`. When set the icon is"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "SVG or img element to render as the icon"
+        }
+      ],
+      "example": "<span class=\"icon\" role=\"img\" aria-hidden=\"true\">\r\n    <slot></slot>\r\n  </span>"
+    },
+    {
+      "name": "image-pk",
+      "layer": "atoms",
+      "file": "atoms/image.html",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true,
+          "description": "Image source URL"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true,
+          "description": "Alt text for the image (required for accessibility)"
+        },
+        {
+          "name": "ratio",
+          "type": "square | 16x9 | 4x3 | 3x2 | auto",
+          "required": false,
+          "description": "Aspect-ratio constraint applied via padding-top trick",
+          "default": "auto",
+          "values": [
+            "square",
+            "16x9",
+            "4x3",
+            "3x2",
+            "auto"
+          ]
+        },
+        {
+          "name": "loading",
+          "type": "lazy | eager",
+          "required": false,
+          "description": "Native loading attribute forwarded to the inner `<img>`",
+          "default": "lazy",
+          "values": [
+            "lazy",
+            "eager"
+          ]
+        },
+        {
+          "name": "fit",
+          "type": "cover | contain | fill",
+          "required": false,
+          "description": "CSS object-fit for the image",
+          "default": "cover",
+          "values": [
+            "cover",
+            "contain",
+            "fill"
+          ]
+        },
+        {
+          "name": "rounded",
+          "type": "boolean",
+          "required": false,
+          "description": "Apply full border-radius to create a rounded rectangle"
+        }
+      ],
+      "slots": [
+        {
+          "name": "fallback",
+          "description": "Content shown when the image fails to load"
+        }
+      ],
+      "example": "<figure class=\"image\">\r\n    <img class=\"image__img\" src=\"\" alt=\"\" loading=\"lazy\" />\r\n    <span class=\"image__fallback\" aria-hidden=\"true\">\r\n      <slot name=\"fallback\">\r\n        <svg width=\"32\" height=\"32\" viewBox=\"0 0 32 32\" fill=\"none\" aria-hidden=\"true\">\r\n          <rect width=\"32\" height=\"32\" rx=\"4\" fill=\"currentColor\" opacity=\".1\"/>\r\n          <path d=\"M8 22l6-8 4 5 3-3 5 6H8z\" fill=\"currentColor\" opacity=\".3\"/>\r\n          <circle cx=\"22\" cy=\"11\" r=\"3\" fill=\"currentColor\" opacity=\".3\"/>\r\n        </svg>\r\n      </slot>\r\n    </span>\r\n  </figure>"
+    },
+    {
+      "name": "input-pk",
+      "layer": "atoms",
+      "file": "atoms/input-pk.html",
+      "props": [
+        {
+          "name": "type",
+          "type": "text | email | password | number | search | tel | url",
+          "required": false,
+          "description": "Native input type",
+          "default": "text",
+          "values": [
+            "text",
+            "email",
+            "password",
+            "number",
+            "search",
+            "tel",
+            "url"
+          ]
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name (forwarded to inner `<input>`)"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "Field id; forwarded to inner `<input>` and removed from host"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "Placeholder text shown when field is empty"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "Initial field value"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the field"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the field as required for form validation"
+        },
+        {
+          "name": "pattern",
+          "type": "string",
+          "required": false,
+          "description": "Regex pattern for validation (forwarded to inner `<input>`)"
+        },
+        {
+          "name": "min",
+          "type": "string | number",
+          "required": false,
+          "description": "Minimum value (forwarded to inner `<input>`)",
+          "values": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "max",
+          "type": "string | number",
+          "required": false,
+          "description": "Maximum value (forwarded to inner `<input>`)",
+          "values": [
+            "string",
+            "number"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Field size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "prefix",
+          "description": "Icon or text rendered before (to the left of) the input field"
+        },
+        {
+          "name": "suffix",
+          "description": "Icon or text rendered after (to the right of) the input field"
+        }
+      ],
+      "example": "<div class=\"input\">\r\n    <span class=\"input__prefix\" aria-hidden=\"true\">\r\n      <slot name=\"prefix\"></slot>\r\n    </span>\r\n    <input class=\"input__field\" type=\"text\" />\r\n    <span class=\"input__suffix\" aria-hidden=\"true\">\r\n      <slot name=\"suffix\"></slot>\r\n    </span>\r\n    <div class=\"input__error-popover\" popover=\"auto\" role=\"alert\" aria-live=\"polite\" aria-atomic=\"true\"></div>\r\n    <span class=\"input__error-fallback\" role=\"alert\" aria-live=\"polite\" aria-atomic=\"true\"></span>\r\n  </div>"
+    },
+    {
+      "name": "label-pk",
+      "layer": "atoms",
+      "file": "atoms/label-pk.html",
+      "props": [
+        {
+          "name": "for",
+          "type": "string",
+          "required": false,
+          "description": "id of the associated form control (forwarded as `for` on the inner `<label>`)"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Show the required asterisk indicator"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": false,
+          "description": "Label text; can also be provided via default slot"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Label text content; overrides the `text` prop when slotted"
+        }
+      ],
+      "example": "<label class=\"label\">\r\n    <slot>Label</slot>\r\n    <span class=\"label__required\" aria-hidden=\"true\"> *</span>\r\n  </label>"
+    },
+    {
+      "name": "loader-pk",
+      "layer": "atoms",
+      "file": "atoms/loader.html",
+      "props": [
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Loader bar size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Screen-reader accessible description of the loading state"
+        },
+        {
+          "name": "overlay",
+          "type": "boolean",
+          "required": false,
+          "description": "Render as a full-viewport overlay with backdrop"
+        }
+      ],
+      "slots": [],
+      "example": "<div class=\"loader\" role=\"status\" aria-live=\"polite\" aria-label=\"Loading\">\r\n    <span class=\"loader__bar\"></span>\r\n    <span class=\"loader__bar\"></span>\r\n    <span class=\"loader__bar\"></span>\r\n    <span class=\"loader__text sr-only\"></span>\r\n  </div>"
+    },
+    {
+      "name": "progress-bar-pk",
+      "layer": "atoms",
+      "file": "atoms/progress-bar.html",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": true,
+          "description": "Current progress value"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": "Maximum progress value",
+          "default": "100"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Visible label displayed above the bar; also used as accessible name"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary | success | warning | danger",
+          "required": false,
+          "description": "Fill colour variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Track height size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "required": false,
+          "description": "Add a shimmer animation to the fill"
+        }
+      ],
+      "slots": [],
+      "example": "<div class=\"progress-bar\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\">\r\n    <span class=\"progress-bar__label\"></span>\r\n    <div class=\"progress-bar__track\">\r\n      <div class=\"progress-bar__fill\"></div>\r\n    </div>\r\n    <span class=\"progress-bar__value\" aria-hidden=\"true\"></span>\r\n  </div>"
+    },
+    {
+      "name": "progress-pk",
+      "layer": "atoms",
+      "file": "atoms/progress-pk.html",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": false,
+          "description": "Current progress value (0–max). Omit for indeterminate state."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": "Maximum value",
+          "default": "100"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary | success | warning | danger",
+          "required": false,
+          "description": "Colour variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Track height preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Accessible label text (aria-label). Defaults to \"Progress\"."
+        }
+      ],
+      "slots": [],
+      "example": "<div class=\"progress\" role=\"presentation\">\r\n    <progress class=\"progress__track\"></progress>\r\n  </div>"
+    },
+    {
+      "name": "radio-pk",
+      "layer": "atoms",
+      "file": "atoms/radio-pk.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name (shared across radio group)"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": true,
+          "description": "Field id (required for accessibility)"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "description": "Value submitted when this radio is selected (required)"
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": false,
+          "description": "Initial checked state"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the radio button"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the radio group as required for form validation"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Label text shown beside the radio button"
+        }
+      ],
+      "example": "<label class=\"radio\">\r\n    <input class=\"radio__input\" type=\"radio\" />\r\n    <span class=\"radio__circle\" aria-hidden=\"true\">\r\n      <span class=\"radio__dot\"></span>\r\n    </span>\r\n    <span class=\"radio__label\">\r\n      <slot></slot>\r\n    </span>\r\n  </label>"
+    },
+    {
+      "name": "rating-pk",
+      "layer": "atoms",
+      "file": "atoms/rating.html",
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "required": true,
+          "description": "Current rating value (e.g. 3.5)"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": "Total number of stars",
+          "default": "5"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "required": false,
+          "description": "Prevent user interaction (display-only mode)"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Star size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Accessible label (e.g. \"Rating: 4 out of 5 stars\")"
+        }
+      ],
+      "slots": [],
+      "example": "<div class=\"rating\" role=\"img\" aria-label=\"Rating\">\r\n    <span class=\"rating__star\" aria-hidden=\"true\">★</span>\r\n    <span class=\"rating__star\" aria-hidden=\"true\">★</span>\r\n    <span class=\"rating__star\" aria-hidden=\"true\">★</span>\r\n    <span class=\"rating__star\" aria-hidden=\"true\">★</span>\r\n    <span class=\"rating__star\" aria-hidden=\"true\">★</span>\r\n    <span class=\"rating__value sr-only\"></span>\r\n  </div>"
+    },
+    {
+      "name": "select-pk",
+      "layer": "atoms",
+      "file": "atoms/select-pk.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name (forwarded to inner `<select>`)"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "Field id; forwarded to inner `<select>`"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the select"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the field as required for form validation"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Field size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "multiple",
+          "type": "boolean",
+          "required": false,
+          "description": "Enable multi-select mode"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "`<option>` and `<optgroup>` elements; rendered as native options"
+        }
+      ],
+      "example": "<div class=\"select\">\r\n    <select class=\"select__field\">\r\n      <slot></slot>\r\n    </select>\r\n    <span class=\"select__arrow\" aria-hidden=\"true\">▾</span>\r\n  </div>"
+    },
+    {
+      "name": "skeleton-pk",
+      "layer": "atoms",
+      "file": "atoms/skeleton.html",
+      "props": [
+        {
+          "name": "width",
+          "type": "string",
+          "required": false,
+          "description": "Explicit CSS width override (e.g. \"120px\", \"60%\")"
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "required": false,
+          "description": "Explicit CSS height override (e.g. \"1rem\", \"40px\")"
+        },
+        {
+          "name": "variant",
+          "type": "text | circle | rect",
+          "required": false,
+          "description": "Shape preset: text (narrow bar), circle, or rectangle",
+          "default": "rect",
+          "values": [
+            "text",
+            "circle",
+            "rect"
+          ]
+        },
+        {
+          "name": "lines",
+          "type": "number",
+          "required": false,
+          "description": "Number of stacked text-variant skeleton lines to render",
+          "default": "1"
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "required": false,
+          "description": "Enable the shimmer/pulse loading animation",
+          "default": "true"
+        }
+      ],
+      "slots": [],
+      "example": "<span class=\"skeleton\" aria-hidden=\"true\" aria-busy=\"true\"></span>"
+    },
+    {
+      "name": "slider-pk",
+      "layer": "atoms",
+      "file": "atoms/slider-pk.html",
+      "props": [
+        {
+          "name": "min",
+          "type": "number",
+          "required": false,
+          "description": "Minimum value",
+          "default": "0"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "required": false,
+          "description": "Maximum value",
+          "default": "100"
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "required": false,
+          "description": "Step increment",
+          "default": "1"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "required": false,
+          "description": "Current value (defaults to midpoint)"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Form field name"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disable the control"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Accessible label text (aria-label)"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary",
+          "required": false,
+          "description": "Track/thumb color variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary"
+          ]
+        }
+      ],
+      "slots": [],
+      "example": "<div class=\"slider\">\r\n    <input class=\"slider__input\" type=\"range\">\r\n  </div>"
+    },
+    {
+      "name": "spinner-pk",
+      "layer": "atoms",
+      "file": "atoms/spinner.html",
+      "props": [
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Spinner diameter size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Screen-reader text placed in a `.sr-only` span; also accepted as `aria-label`",
+          "default": "Loading"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary | white",
+          "required": false,
+          "description": "Arc colour variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary",
+            "white"
+          ]
+        }
+      ],
+      "slots": [],
+      "example": "<span class=\"spinner\" role=\"status\" aria-live=\"polite\">\r\n    <svg class=\"spinner__svg\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\r\n      <circle class=\"spinner__track\" cx=\"12\" cy=\"12\" r=\"10\" stroke-width=\"3\" />\r\n      <path class=\"spinner__arc\"  d=\"M12 2a10 10 0 0 1 10 10\" stroke-width=\"3\" stroke-linecap=\"round\" />\r\n    </svg>\r\n    <span class=\"sr-only\"></span>\r\n  </span>"
+    },
+    {
+      "name": "tag-pk",
+      "layer": "atoms",
+      "file": "atoms/tag.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Tag text content (slotted or via default slot)"
+        },
+        {
+          "name": "variant",
+          "type": "default | primary | success | warning | danger | info",
+          "required": false,
+          "description": "Colour variant",
+          "default": "default",
+          "values": [
+            "default",
+            "primary",
+            "success",
+            "warning",
+            "danger",
+            "info"
+          ]
+        },
+        {
+          "name": "size",
+          "type": "sm | md",
+          "required": false,
+          "description": "Tag size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md"
+          ]
+        },
+        {
+          "name": "outline",
+          "type": "boolean",
+          "required": false,
+          "description": "Use outline (border-only) visual style"
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon",
+          "description": "Optional icon placed before the tag label"
+        }
+      ],
+      "example": "<span class=\"tag\">\r\n    <span class=\"tag__icon\" aria-hidden=\"true\">\r\n      <slot name=\"icon\"></slot>\r\n    </span>\r\n    <span class=\"tag__label\"></span>\r\n  </span>"
+    },
+    {
+      "name": "textarea-pk",
+      "layer": "atoms",
+      "file": "atoms/textarea-pk.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name (forwarded to inner `<textarea>`)"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "Field id; forwarded to inner `<textarea>` and removed from host"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "Placeholder text shown when field is empty"
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "required": false,
+          "description": "Visible number of text rows",
+          "default": "4"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the field"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the field as required for form validation"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "Error message; activates error visual state when set"
+        },
+        {
+          "name": "resize",
+          "type": "none | vertical | horizontal | both",
+          "required": false,
+          "description": "CSS resize behaviour",
+          "default": "vertical",
+          "values": [
+            "none",
+            "vertical",
+            "horizontal",
+            "both"
+          ]
+        },
+        {
+          "name": "maxlength",
+          "type": "number",
+          "required": false,
+          "description": "Maximum character count; enables the hint badge when set"
+        }
+      ],
+      "slots": [],
+      "example": "<div class=\"textarea\">\r\n    <textarea class=\"textarea__field\" rows=\"4\"></textarea>\r\n    <span class=\"textarea__hint\" aria-live=\"polite\"></span>\r\n    <span class=\"textarea__error\" role=\"alert\" aria-live=\"polite\"></span>\r\n  </div>"
+    },
+    {
+      "name": "toggle-pk",
+      "layer": "atoms",
+      "file": "atoms/toggle.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name forwarded to the inner `<input type=\"checkbox\">`"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "Field id forwarded to the inner checkbox"
+        },
+        {
+          "name": "checked",
+          "type": "boolean",
+          "required": false,
+          "description": "Initial checked state"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the toggle"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Toggle track size preset",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "label",
+          "description": "Text label shown beside the toggle track"
+        }
+      ],
+      "example": "<label class=\"toggle\">\r\n    <input class=\"toggle__input sr-only\" type=\"checkbox\" role=\"switch\" />\r\n    <span class=\"toggle__track\" aria-hidden=\"true\">\r\n      <span class=\"toggle__thumb\"></span>\r\n    </span>\r\n    <span class=\"toggle__label\">\r\n      <slot name=\"label\"></slot>\r\n    </span>\r\n  </label>"
+    },
+    {
+      "name": "breadcrumb-pk",
+      "layer": "molecules",
+      "file": "molecules/breadcrumb-pk.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "aria-label for the nav landmark",
+          "default": "Breadcrumb"
+        },
+        {
+          "name": "separator",
+          "type": "string",
+          "required": false,
+          "description": "CSS content value for the separator (e.g. '›', '/')",
+          "default": "/"
+        }
+      ],
+      "slots": [
+        {
+          "name": "items",
+          "description": "`<a href=\"...\">Label</a>` or `<span>Label</span>` crumb items;"
+        }
+      ],
+      "example": "<nav class=\"breadcrumb\" aria-label=\"Breadcrumb\">\r\n    <ol class=\"breadcrumb__list\">\r\n      <slot name=\"items\"></slot>\r\n    </ol>\r\n  </nav>"
+    },
+    {
+      "name": "breadcrumb-pk",
+      "layer": "molecules",
+      "file": "molecules/breadcrumb.html",
+      "props": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Slotted `<li>` elements as an alternative to the `items` prop"
+        }
+      ],
+      "example": "<nav class=\"breadcrumb\" aria-label=\"Breadcrumb\">\r\n    <ol class=\"breadcrumb__list\">\r\n      <li class=\"breadcrumb__item breadcrumb__item--active\">\r\n        <slot>Home</slot>\r\n      </li>\r\n    </ol>\r\n  </nav>"
+    },
+    {
+      "name": "card-media-pk",
+      "layer": "molecules",
+      "file": "molecules/card-media.html",
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "required": true,
+          "description": "Image source URL"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": true,
+          "description": "Alt text for the image"
+        },
+        {
+          "name": "ratio",
+          "type": "square | 16x9 | 4x3 | 3x2 | auto",
+          "required": false,
+          "description": "Aspect ratio of the media container",
+          "default": "16x9",
+          "values": [
+            "square",
+            "16x9",
+            "4x3",
+            "3x2",
+            "auto"
+          ]
+        },
+        {
+          "name": "fit",
+          "type": "cover | contain",
+          "required": false,
+          "description": "CSS object-fit strategy for the image",
+          "default": "cover",
+          "values": [
+            "cover",
+            "contain"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "overlay",
+          "description": "Overlaid content (badges, play buttons, etc.) positioned above the image"
+        }
+      ],
+      "example": "<figure class=\"card-media\">\r\n    <div class=\"card-media__wrap\">\r\n      <img class=\"card-media__img\" src=\"\" alt=\"\" loading=\"lazy\" />\r\n      <div class=\"card-media__overlay\">\r\n        <slot name=\"overlay\"></slot>\r\n      </div>\r\n    </div>\r\n  </figure>"
+    },
+    {
+      "name": "card-pk",
+      "layer": "molecules",
+      "file": "molecules/card.html",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Card title rendered in the header area when no `header` slot is provided"
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "Secondary text below the title"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Makes the entire card a clickable link when set"
+        },
+        {
+          "name": "elevated",
+          "type": "boolean",
+          "required": false,
+          "description": "Adds a drop shadow to lift the card visually"
+        },
+        {
+          "name": "padding",
+          "type": "none | sm | md | lg",
+          "required": false,
+          "description": "Internal padding preset for the card body",
+          "default": "md",
+          "values": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "description": "Visual media area at the top of the card (use `<card-media-pk>`)"
+        },
+        {
+          "name": "header",
+          "description": "Custom header content; replaces title/subtitle when provided"
+        },
+        {
+          "name": "default",
+          "description": "Main body content of the card"
+        },
+        {
+          "name": "actions",
+          "description": "Footer action area (buttons, links)"
+        }
+      ],
+      "example": "<article class=\"card\">\r\n    <div class=\"card__media\">\r\n      <slot name=\"media\"></slot>\r\n    </div>\r\n    <div class=\"card__header\">\r\n      <slot name=\"header\"></slot>\r\n    </div>\r\n    <div class=\"card__body\">\r\n      <slot>Card content</slot>\r\n    </div>\r\n    <div class=\"card__actions\">\r\n      <slot name=\"actions\"></slot>\r\n    </div>\r\n  </article>"
+    },
+    {
+      "name": "carousel-pk",
+      "layer": "molecules",
+      "file": "molecules/carousel-pk.html",
+      "props": [],
+      "slots": [
+        {
+          "name": "default",
+          "description": "slides (any element)"
+        }
+      ],
+      "example": "<div class=\"carousel\" role=\"group\" aria-roledescription=\"carousel\">\r\n    <div class=\"carousel__viewport\">\r\n      <div class=\"carousel__track\">\r\n        <slot></slot>\r\n      </div>\r\n    </div>\r\n    <div class=\"carousel__controls\">\r\n      <button class=\"carousel__prev\" aria-label=\"Previous slide\">‹</button>\r\n      <button class=\"carousel__next\" aria-label=\"Next slide\">›</button>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "color-swatch-pk",
+      "layer": "molecules",
+      "file": "molecules/color-swatch-pk.html",
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": ""
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "swatch items"
+        }
+      ],
+      "example": "<div class=\"color-swatch\" role=\"listbox\" tabindex=\"0\" aria-label=\"Color swatches\">\r\n    <slot></slot>\r\n  </div>"
+    },
+    {
+      "name": "combobox-pk",
+      "layer": "molecules",
+      "file": "molecules/combobox-pk.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name (written to hidden input on selection)"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "Placeholder text for the filter input",
+          "default": "Search…"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "Pre-selected option value"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the combobox"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the field as required"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "`<option>` elements; each needs `value` and text content"
+        }
+      ],
+      "example": "<div class=\"combobox\">\r\n    <div class=\"combobox__trigger\">\r\n      <input\r\n        class=\"combobox__input\"\r\n        type=\"text\"\r\n        role=\"combobox\"\r\n        aria-autocomplete=\"list\"\r\n        aria-haspopup=\"listbox\"\r\n        aria-expanded=\"false\"\r\n        autocomplete=\"off\"\r\n        placeholder=\"Search…\"\r\n      />\r\n      <button class=\"combobox__toggle\" type=\"button\" aria-label=\"Toggle options\" tabindex=\"-1\">▾</button>\r\n    </div>\r\n    <div\r\n      class=\"combobox__listbox\"\r\n      role=\"listbox\"\r\n      popover=\"auto\"\r\n      id=\"\"\r\n      style=\"display:none\"\r\n      aria-hidden=\"true\"\r\n    ><\n  …"
+    },
+    {
+      "name": "date-picker-pk",
+      "layer": "molecules",
+      "file": "molecules/date-picker-pk.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Accessible label forwarded to the date input via aria-label"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "Form field name forwarded to the inner input"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "optional calendar content"
+        }
+      ],
+      "example": "<div class=\"date-picker\">\r\n    <input class=\"date-picker__input\" type=\"date\" />\r\n    <div class=\"date-picker__popover\" role=\"dialog\" aria-modal=\"false\" style=\"display:none\" aria-hidden=\"true\">\r\n      <div class=\"date-picker__calendar\" role=\"grid\"></div>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "dropdown-pk",
+      "layer": "molecules",
+      "file": "molecules/dropdown.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Default trigger button label when no `trigger` slot is provided"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "description": "Controls the open/closed state of the dropdown menu"
+        },
+        {
+          "name": "align",
+          "type": "left | right",
+          "required": false,
+          "description": "Menu alignment relative to the trigger",
+          "default": "left",
+          "values": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Disables the trigger button and prevents opening"
+        }
+      ],
+      "slots": [
+        {
+          "name": "trigger",
+          "description": "Custom trigger element (replaces the default button)"
+        },
+        {
+          "name": "items",
+          "description": "Menu items; use `<menu-item-pk>` or `<li>` elements"
+        }
+      ],
+      "example": "<div class=\"dropdown\">\r\n    <button class=\"dropdown__trigger\" type=\"button\" aria-haspopup=\"listbox\" aria-expanded=\"false\">\r\n      <slot name=\"trigger\">Options</slot>\r\n      <span class=\"dropdown__arrow\" aria-hidden=\"true\">▾</span>\r\n    </button>\r\n    <ul class=\"dropdown__menu\" role=\"listbox\">\r\n      <slot name=\"items\"></slot>\r\n    </ul>\r\n  </div>"
+    },
+    {
+      "name": "form-field-pk",
+      "layer": "molecules",
+      "file": "molecules/form-field.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Visible label text above the input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Form field name forwarded to the slotted control"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks the field as required and appends a visual indicator"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "Error message shown below the field; also sets aria-invalid on the wrapper"
+        },
+        {
+          "name": "hint",
+          "type": "string",
+          "required": false,
+          "description": "Helper text shown below the label"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "The form control (`<input-pk>`, `<textarea-pk>`, `<select>`, etc.)"
+        }
+      ],
+      "example": "<div class=\"form-field\">\r\n    <label class=\"form-field__label\">\r\n      <span class=\"form-field__label-text\">\r\n        <slot name=\"label\">Label</slot>\r\n        <span class=\"form-field__required\" aria-hidden=\"true\">*</span>\r\n      </span>\r\n    </label>\r\n    <div class=\"form-field__control\">\r\n      <slot></slot>\r\n    </div>\r\n    <p class=\"form-field__hint\">\r\n      <slot name=\"hint\"></slot>\r\n    </p>\r\n    <p class=\"form-field__error\" role=\"alert\">\r\n      <slot name=\"error\"></slot>\r\n    </p>\r\n  </div>"
+    },
+    {
+      "name": "grid-pk",
+      "layer": "molecules",
+      "file": "molecules/grid-pk.html",
+      "props": [
+        {
+          "name": "display",
+          "type": "auto | lanes | masonry",
+          "required": false,
+          "description": "Grid display mode",
+          "default": "auto",
+          "values": [
+            "auto",
+            "lanes",
+            "masonry"
+          ]
+        },
+        {
+          "name": "cols",
+          "type": "number | auto",
+          "required": false,
+          "description": "Number of columns (or 'auto' for responsive)",
+          "default": "3",
+          "values": [
+            "number",
+            "auto"
+          ]
+        },
+        {
+          "name": "gap",
+          "type": "string",
+          "required": false,
+          "description": "Gap between grid items",
+          "default": "1rem"
+        },
+        {
+          "name": "minItemWidth",
+          "type": "string",
+          "required": false,
+          "description": "Minimum width for auto-fit columns",
+          "default": "200px"
+        },
+        {
+          "name": "containerQueries",
+          "type": "boolean",
+          "required": false,
+          "description": "Enable container queries for responsive behavior",
+          "default": "true"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Grid items (direct children are grid items)"
+        }
+      ],
+      "example": "<div class=\"grid\" role=\"region\" aria-label=\"Grid layout\">\r\n    <slot></slot>\r\n  </div>"
+    },
+    {
+      "name": "list-item-pk",
+      "layer": "molecules",
+      "file": "molecules/list-item.html",
+      "props": [
+        {
+          "name": "primary",
+          "type": "string",
+          "required": true,
+          "description": "Primary text line of the list item"
+        },
+        {
+          "name": "secondary",
+          "type": "string",
+          "required": false,
+          "description": "Secondary/supporting text line below the primary text"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Makes the item a link when set"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "description": "Highlights the item as the currently selected entry"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Greys out the item and disables interaction"
+        },
+        {
+          "name": "divider",
+          "type": "boolean",
+          "required": false,
+          "description": "Adds a bottom border separator after the item"
+        }
+      ],
+      "slots": [
+        {
+          "name": "leading",
+          "description": "Leading content (icon, avatar, checkbox) placed before the text"
+        },
+        {
+          "name": "trailing",
+          "description": "Trailing content (badge, toggle, chevron) placed after the text"
+        }
+      ],
+      "example": "<div class=\"list-item\">\r\n    <div class=\"list-item__leading\">\r\n      <slot name=\"leading\"></slot>\r\n    </div>\r\n    <div class=\"list-item__content\">\r\n      <span class=\"list-item__primary\">\r\n        <slot>Item</slot>\r\n      </span>\r\n      <span class=\"list-item__secondary\">\r\n        <slot name=\"secondary\"></slot>\r\n      </span>\r\n    </div>\r\n    <div class=\"list-item__trailing\">\r\n      <slot name=\"trailing\"></slot>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "menu-item-pk",
+      "layer": "molecules",
+      "file": "molecules/menu-item.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Menu item label text"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Navigation target; renders the item as an `<a>` when set"
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "required": false,
+          "description": "Icon glyph or emoji rendered before the label"
+        },
+        {
+          "name": "active",
+          "type": "boolean",
+          "required": false,
+          "description": "Marks this item as the currently active/selected entry"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Greys out the item and disables pointer events"
+        },
+        {
+          "name": "danger",
+          "type": "boolean",
+          "required": false,
+          "description": "Applies destructive/danger colour styling to the item"
+        }
+      ],
+      "slots": [
+        {
+          "name": "icon",
+          "description": "Custom icon content placed before the label (overrides `icon` prop)"
+        }
+      ],
+      "example": "<li class=\"menu-item\" role=\"none\">\r\n    <a class=\"menu-item__link\" role=\"menuitem\" tabindex=\"0\">\r\n      <span class=\"menu-item__icon\" aria-hidden=\"true\">\r\n        <slot name=\"icon\"></slot>\r\n      </span>\r\n      <span class=\"menu-item__label\">\r\n        <slot>Menu item</slot>\r\n      </span>\r\n    </a>\r\n  </li>"
+    },
+    {
+      "name": "modal-pk",
+      "layer": "molecules",
+      "file": "molecules/modal.html",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Modal title shown in the header when no `header` slot is provided"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "description": "Controls whether the modal is visible"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg | fullscreen",
+          "required": false,
+          "description": "Width preset of the modal container",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "fullscreen"
+          ]
+        },
+        {
+          "name": "closeable",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows the × close button in the header",
+          "default": "true"
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "description": "Custom header content; replaces the default title bar"
+        },
+        {
+          "name": "default",
+          "description": "Main modal body content"
+        },
+        {
+          "name": "footer",
+          "description": "Footer area for action buttons"
+        }
+      ],
+      "example": "<dialog class=\"modal\" aria-labelledby=\"modal-title\">\r\n    <div class=\"modal__container\">\r\n      <div class=\"modal__header\">\r\n        <slot name=\"header\">\r\n          <span class=\"modal__title\" id=\"modal-title\">Modal</span>\r\n        </slot>\r\n        <button class=\"modal__close\" type=\"button\" aria-label=\"Close\">✕</button>\r\n      </div>\r\n      <div class=\"modal__body\">\r\n        <slot>Modal content</slot>\r\n      </div>\r\n      <div class=\"modal__footer\">\r\n        <slot name=\"footer\"></slot>\r\n      </div>\r\n    </div>\r\n  </dialog>"
+    },
+    {
+      "name": "notification-pk",
+      "layer": "molecules",
+      "file": "molecules/notification.html",
+      "props": [
+        {
+          "name": "message",
+          "type": "string",
+          "required": false,
+          "description": "Notification text when no default slot is provided"
+        },
+        {
+          "name": "variant",
+          "type": "info | success | warning | danger",
+          "required": false,
+          "description": "Colour/icon preset for the notification type",
+          "default": "info",
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a × button to dismiss the notification"
+        },
+        {
+          "name": "icon",
+          "type": "boolean",
+          "required": false,
+          "description": "Displays the variant icon on the left side"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Custom notification body content (overrides `message` prop)"
+        },
+        {
+          "name": "action",
+          "description": "Inline action link or button placed after the message text"
+        }
+      ],
+      "example": "<div class=\"notification\" role=\"alert\">\r\n    <span class=\"notification__icon\" aria-hidden=\"true\"></span>\r\n    <div class=\"notification__content\">\r\n      <slot>Notification message</slot>\r\n    </div>\r\n    <div class=\"notification__action\">\r\n      <slot name=\"action\"></slot>\r\n    </div>\r\n    <button class=\"notification__dismiss\" type=\"button\" aria-label=\"Dismiss\">✕</button>\r\n  </div>"
+    },
+    {
+      "name": "pagination-pk",
+      "layer": "molecules",
+      "file": "molecules/pagination.html",
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "required": true,
+          "description": "Current active page (1-based)"
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "required": true,
+          "description": "Total number of items (used with `perPage` to compute page count)"
+        },
+        {
+          "name": "perPage",
+          "type": "number",
+          "required": false,
+          "description": "Number of items per page",
+          "default": "10"
+        },
+        {
+          "name": "siblings",
+          "type": "number",
+          "required": false,
+          "description": "Number of sibling page buttons visible on each side of the active page",
+          "default": "1"
+        }
+      ],
+      "slots": [],
+      "example": "<nav class=\"pagination\" aria-label=\"Pagination\">\r\n    <button class=\"pagination__btn pagination__btn--prev\" type=\"button\" aria-label=\"Previous page\">‹</button>\r\n    <ul class=\"pagination__list\">\r\n      <li class=\"pagination__item pagination__item--active\">\r\n        <button class=\"pagination__page\" type=\"button\" aria-current=\"page\">1</button>\r\n      </li>\r\n      <li class=\"pagination__item\">\r\n        <button class=\"pagination__page\" type=\"button\">2</button>\r\n      </li>\r\n      <li class=\"pagination__item\">\r\n        <button class=\"pagination__page\" type=\"button\">3</button>\r\n      </li>\r\n    </ul\n  …"
+    },
+    {
+      "name": "price-tag-pk",
+      "layer": "molecules",
+      "file": "molecules/price-tag.html",
+      "props": [
+        {
+          "name": "price",
+          "type": "number",
+          "required": true,
+          "description": "Current (possibly discounted) price value"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": false,
+          "description": "Currency symbol displayed before the price",
+          "default": "$"
+        },
+        {
+          "name": "original",
+          "type": "number",
+          "required": false,
+          "description": "Original price shown struck-through when a discount applies"
+        },
+        {
+          "name": "discount",
+          "type": "boolean",
+          "required": false,
+          "description": "Highlights the price with a discount/sale colour treatment"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Font size preset for the price display",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "original",
+          "description": "Custom struck-through original price content"
+        }
+      ],
+      "example": "<div class=\"price-tag\">\r\n    <span class=\"price-tag__original\">\r\n      <slot name=\"original\"></slot>\r\n    </span>\r\n    <span class=\"price-tag__current\">\r\n      <slot>$0.00</slot>\r\n    </span>\r\n    <span class=\"price-tag__badge\">\r\n      <slot name=\"badge\"></slot>\r\n    </span>\r\n  </div>"
+    },
+    {
+      "name": "product-tile-pk",
+      "layer": "molecules",
+      "file": "molecules/product-tile.html",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "description": "Product name displayed below the media area"
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "required": true,
+          "description": "Product price value"
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "required": false,
+          "description": "Product image URL"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "required": false,
+          "description": "Alt text for the product image",
+          "default": ""
+        },
+        {
+          "name": "rating",
+          "type": "number",
+          "required": false,
+          "description": "Star rating value (0–5); omit to hide the rating row"
+        },
+        {
+          "name": "badge",
+          "type": "string",
+          "required": false,
+          "description": "Short badge text (e.g. \"Sale\", \"New\") overlaid on the image"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Link target; wraps the entire tile in an anchor when set"
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "description": "Custom media content replacing the default `<img>`"
+        },
+        {
+          "name": "badge",
+          "description": "Custom badge content overlaid on the media area"
+        },
+        {
+          "name": "actions",
+          "description": "Add-to-cart or other action buttons shown below the price"
+        }
+      ],
+      "example": "<article class=\"product-tile\">\r\n    <div class=\"product-tile__badge\">\r\n      <slot name=\"badge\"></slot>\r\n    </div>\r\n    <a class=\"product-tile__media\" tabindex=\"-1\">\r\n      <slot name=\"media\">\r\n        <img class=\"product-tile__img\" src=\"\" alt=\"\" loading=\"lazy\" />\r\n      </slot>\r\n    </a>\r\n    <div class=\"product-tile__body\">\r\n      <a class=\"product-tile__title\">\r\n        <slot>Product name</slot>\r\n      </a>\r\n      <div class=\"product-tile__rating\">\r\n        <slot name=\"rating\"></slot>\r\n      </div>\r\n      <div class=\"product-tile__price\">\r\n        <slot name=\"price\">$0.00</slot>\r\n      </d\n  …"
+    },
+    {
+      "name": "search-bar-pk",
+      "layer": "molecules",
+      "file": "molecules/search-bar.html",
+      "props": [
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "Placeholder text for the search input",
+          "default": "Search…"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": false,
+          "description": "Pre-filled search input value"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a loading spinner inside the field"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Height and font-size preset of the search field",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "prefix",
+          "description": "Icon or element placed at the start of the input (default: magnifier icon)"
+        },
+        {
+          "name": "suffix",
+          "description": "Icon or element placed at the end of the input (clear button, filter, etc.)"
+        }
+      ],
+      "example": "<div class=\"search-bar\" role=\"search\">\r\n    <span class=\"search-bar__icon\" aria-hidden=\"true\">\r\n      <slot name=\"prefix\">\r\n        <svg class=\"search-bar__svg\" viewBox=\"0 0 20 20\" fill=\"none\" aria-hidden=\"true\">\r\n          <circle cx=\"8.5\" cy=\"8.5\" r=\"5.5\" stroke=\"currentColor\" stroke-width=\"1.6\"/>\r\n          <path d=\"M13 13l3.5 3.5\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\"/>\r\n        </svg>\r\n      </slot>\r\n    </span>\r\n    <input\r\n      class=\"search-bar__input\"\r\n      type=\"search\"\r\n      placeholder=\"Search…\"\r\n      aria-label=\"Search\"\r\n      autocomplete=\"off\"\r\n    \n  …"
+    },
+    {
+      "name": "tab-bar-pk",
+      "layer": "molecules",
+      "file": "molecules/tab-bar.html",
+      "props": [
+        {
+          "name": "active",
+          "type": "string",
+          "required": false,
+          "description": "Name of the currently active tab (matches the slot name)"
+        },
+        {
+          "name": "variant",
+          "type": "line | pill | boxed",
+          "required": false,
+          "description": "Visual style variant for the tab strip",
+          "default": "line",
+          "values": [
+            "line",
+            "pill",
+            "boxed"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "tab-1",
+          "description": "Label for the first tab button"
+        },
+        {
+          "name": "tab-2",
+          "description": "Label for the second tab button"
+        },
+        {
+          "name": "tab-3",
+          "description": "Label for the third tab button"
+        }
+      ],
+      "example": "<div class=\"tab-bar\" role=\"tablist\">\r\n    <button class=\"tab-bar__tab tab-bar__tab--active\" role=\"tab\" aria-selected=\"true\" type=\"button\">\r\n      <slot name=\"tab-1\">Tab 1</slot>\r\n    </button>\r\n    <button class=\"tab-bar__tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">\r\n      <slot name=\"tab-2\">Tab 2</slot>\r\n    </button>\r\n    <button class=\"tab-bar__tab\" role=\"tab\" aria-selected=\"false\" type=\"button\">\r\n      <slot name=\"tab-3\">Tab 3</slot>\r\n    </button>\r\n  </div>"
+    },
+    {
+      "name": "tooltip-pk",
+      "layer": "molecules",
+      "file": "molecules/tooltip.html",
+      "props": [
+        {
+          "name": "content",
+          "type": "string",
+          "required": true,
+          "description": "Tooltip text shown on hover/focus"
+        },
+        {
+          "name": "position",
+          "type": "top | bottom | left | right",
+          "required": false,
+          "description": "Preferred placement of the tooltip bubble",
+          "default": "top",
+          "values": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "name": "delay",
+          "type": "number",
+          "required": false,
+          "description": "Delay in milliseconds before the tooltip appears",
+          "default": "200"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "The trigger element that activates the tooltip on hover/focus"
+        }
+      ],
+      "example": "<span class=\"tooltip\" role=\"tooltip\">\r\n    <span class=\"tooltip__trigger\">\r\n      <slot>Hover me</slot>\r\n    </span>\r\n    <span class=\"tooltip__content\" aria-live=\"polite\">\r\n      <slot name=\"content\">Tooltip text</slot>\r\n    </span>\r\n  </span>"
+    },
+    {
+      "name": "user-info-pk",
+      "layer": "molecules",
+      "file": "molecules/user-info.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "User's display name"
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "required": false,
+          "description": "User's role or subtitle shown below the name"
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "required": false,
+          "description": "Avatar image URL passed to the default `<avatar-pk>`"
+        },
+        {
+          "name": "size",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Overall size preset of the user-info block",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "avatar",
+          "description": "Custom avatar content replacing the default `<avatar-pk>`"
+        },
+        {
+          "name": "actions",
+          "description": "Action buttons or links placed to the right of the user details"
+        }
+      ],
+      "example": "<div class=\"user-info\">\r\n    <div class=\"user-info__avatar\">\r\n      <slot name=\"avatar\">\r\n        <span class=\"user-info__initials\" aria-hidden=\"true\"></span>\r\n      </slot>\r\n    </div>\r\n    <div class=\"user-info__text\">\r\n      <span class=\"user-info__name\">\r\n        <slot>User Name</slot>\r\n      </span>\r\n      <span class=\"user-info__role\">\r\n        <slot name=\"role\"></slot>\r\n      </span>\r\n    </div>\r\n    <div class=\"user-info__actions\">\r\n      <slot name=\"actions\"></slot>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "accordion-pk",
+      "layer": "organisms",
+      "file": "organisms/accordion-pk.html",
+      "props": [
+        {
+          "name": "exclusive",
+          "type": "boolean",
+          "required": false,
+          "description": "Only one panel can be open at a time (accordion mode)"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "`<details>/<summary>` panel elements; each panel is a native <details>"
+        }
+      ],
+      "example": "<div class=\"accordion\">\r\n    <slot></slot>\r\n  </div>"
+    },
+    {
+      "name": "carousel-pk",
+      "layer": "organisms",
+      "file": "organisms/carousel-pk.html",
+      "props": [
+        {
+          "name": "autoplay",
+          "type": "boolean",
+          "required": false,
+          "description": ""
+        },
+        {
+          "name": "interval",
+          "type": "number",
+          "required": false,
+          "description": ""
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "slide items (each slide should be a block element)"
+        }
+      ],
+      "example": "<div class=\"carousel\" role=\"region\" aria-roledescription=\"carousel\">\r\n    <div class=\"carousel__track\" tabindex=\"0\">\r\n      <slot></slot>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "cart-summary-pk",
+      "layer": "organisms",
+      "file": "organisms/cart-summary.html",
+      "props": [
+        {
+          "name": "count",
+          "type": "number",
+          "required": false,
+          "description": "Total number of items in the cart shown in the header"
+        },
+        {
+          "name": "total",
+          "type": "number",
+          "required": false,
+          "description": "Subtotal price value"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "required": false,
+          "description": "Currency symbol displayed with the total",
+          "default": "$"
+        }
+      ],
+      "slots": [
+        {
+          "name": "items",
+          "description": "List of cart line items (use `<list-item-pk>` or custom rows)"
+        },
+        {
+          "name": "promo",
+          "description": "Promo code input area"
+        },
+        {
+          "name": "actions",
+          "description": "Checkout/continue shopping buttons"
+        }
+      ],
+      "example": "<aside class=\"cart-summary\">\r\n    <header class=\"cart-summary__header\">\r\n      <h2 class=\"cart-summary__title\">\r\n        <slot name=\"title\">Order Summary</slot>\r\n      </h2>\r\n      <span class=\"cart-summary__count\">\r\n        <slot name=\"count\"></slot>\r\n      </span>\r\n    </header>\r\n    <div class=\"cart-summary__items\">\r\n      <slot name=\"items\"></slot>\r\n    </div>\r\n    <div class=\"cart-summary__promo\">\r\n      <slot name=\"promo\"></slot>\r\n    </div>\r\n    <div class=\"cart-summary__totals\">\r\n      <slot name=\"totals\">\r\n        <div class=\"cart-summary__row\">\r\n          <span>Subtotal</span><span>—\n  …"
+    },
+    {
+      "name": "comment-thread-pk",
+      "layer": "organisms",
+      "file": "organisms/comment-thread.html",
+      "props": [
+        {
+          "name": "count",
+          "type": "number",
+          "required": false,
+          "description": "Total comment count displayed in the section header"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a skeleton/spinner state while comments are loading"
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "description": "Custom thread header (title, sort controls, etc.)"
+        },
+        {
+          "name": "default",
+          "description": "Comment items (use `<feed-post-pk>` or custom comment cards)"
+        },
+        {
+          "name": "composer",
+          "description": "Reply/new comment input area placed at the bottom of the thread"
+        }
+      ],
+      "example": "<section class=\"comment-thread\">\r\n    <header class=\"comment-thread__header\">\r\n      <slot name=\"header\">\r\n        <h3 class=\"comment-thread__title\">Comments</h3>\r\n      </slot>\r\n    </header>\r\n    <div class=\"comment-thread__list\">\r\n      <slot>\r\n        <!-- comment items go here -->\r\n      </slot>\r\n    </div>\r\n    <div class=\"comment-thread__composer\">\r\n      <slot name=\"composer\"></slot>\r\n    </div>\r\n  </section>"
+    },
+    {
+      "name": "content-row-pk",
+      "layer": "organisms",
+      "file": "organisms/content-row.html",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Section heading shown above the content row"
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "required": false,
+          "description": "Link target for the \"See all\" button"
+        },
+        {
+          "name": "seeAll",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows a \"See all →\" link in the section header"
+        },
+        {
+          "name": "cols",
+          "type": "2 | 3 | 4 | 5 | 6",
+          "required": false,
+          "description": "Number of columns in the horizontal grid",
+          "default": "4",
+          "values": [
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "description": "Custom section header replacing the default title/see-all row"
+        },
+        {
+          "name": "default",
+          "description": "Card or tile items to display in the row"
+        }
+      ],
+      "example": "<section class=\"content-row\">\r\n    <div class=\"content-row__header\">\r\n      <slot name=\"header\">\r\n        <h2 class=\"content-row__title\">\r\n          <slot name=\"title\">Section</slot>\r\n        </h2>\r\n        <a class=\"content-row__see-all\" href=\"#\">See all</a>\r\n      </slot>\r\n    </div>\r\n    <div class=\"content-row__track\">\r\n      <slot></slot>\r\n    </div>\r\n  </section>"
+    },
+    {
+      "name": "feed-post-pk",
+      "layer": "organisms",
+      "file": "organisms/feed-post.html",
+      "props": [
+        {
+          "name": "author",
+          "type": "string",
+          "required": false,
+          "description": "Author's display name shown in the post header"
+        },
+        {
+          "name": "time",
+          "type": "string",
+          "required": false,
+          "description": "Relative or formatted timestamp string"
+        },
+        {
+          "name": "liked",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether the current user has liked this post"
+        },
+        {
+          "name": "bookmarked",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether the current user has bookmarked this post"
+        }
+      ],
+      "slots": [
+        {
+          "name": "avatar",
+          "description": "Author avatar element (use `<avatar-pk>`)"
+        },
+        {
+          "name": "header",
+          "description": "Custom post header replacing the default author/time row"
+        },
+        {
+          "name": "media",
+          "description": "Post media content (image, video embed, link card)"
+        },
+        {
+          "name": "body",
+          "description": "Main post text content"
+        },
+        {
+          "name": "actions",
+          "description": "Reaction/action buttons (like, comment, share)"
+        }
+      ],
+      "example": "<article class=\"feed-post\">\r\n    <header class=\"feed-post__header\">\r\n      <div class=\"feed-post__avatar\">\r\n        <slot name=\"avatar\"></slot>\r\n      </div>\r\n      <div class=\"feed-post__meta\">\r\n        <slot name=\"header\">\r\n          <span class=\"feed-post__author\">Author</span>\r\n          <span class=\"feed-post__time\">just now</span>\r\n        </slot>\r\n      </div>\r\n      <div class=\"feed-post__menu\">\r\n        <slot name=\"menu\"></slot>\r\n      </div>\r\n    </header>\r\n    <div class=\"feed-post__body\">\r\n      <slot name=\"body\">Post content goes here.</slot>\r\n    </div>\r\n    <div class=\"feed-post\n  …"
+    },
+    {
+      "name": "footer-pk",
+      "layer": "organisms",
+      "file": "organisms/footer-pk.html",
+      "props": [
+        {
+          "name": "variant",
+          "type": "simple | full",
+          "required": false,
+          "description": "Layout variant: `simple` is a single-row bar; `full` has multi-column links",
+          "default": "full",
+          "values": [
+            "simple",
+            "full"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "brand",
+          "description": "Logo and tagline area on the left / top"
+        },
+        {
+          "name": "links",
+          "description": "Navigation link columns (use `<ul>` groups)"
+        },
+        {
+          "name": "social",
+          "description": "Social media icon links"
+        },
+        {
+          "name": "legal",
+          "description": "Copyright text and legal links at the very bottom"
+        }
+      ],
+      "example": "<footer class=\"footer\">\r\n    <div class=\"footer__inner\">\r\n      <div class=\"footer__brand\">\r\n        <slot name=\"brand\">Brand</slot>\r\n      </div>\r\n      <nav class=\"footer__links\" aria-label=\"Footer navigation\">\r\n        <slot name=\"links\"></slot>\r\n      </nav>\r\n      <div class=\"footer__social\">\r\n        <slot name=\"social\"></slot>\r\n      </div>\r\n    </div>\r\n    <div class=\"footer__legal\">\r\n      <slot name=\"legal\">© 2025 Company. All rights reserved.</slot>\r\n    </div>\r\n  </footer>"
+    },
+    {
+      "name": "hero-banner-pk",
+      "layer": "organisms",
+      "file": "organisms/hero-banner.html",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Hero heading text when no `headline` slot is provided"
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "Supporting text below the heading"
+        },
+        {
+          "name": "align",
+          "type": "left | center | right",
+          "required": false,
+          "description": "Horizontal alignment of the hero content",
+          "default": "center",
+          "values": [
+            "left",
+            "center",
+            "right"
+          ]
+        },
+        {
+          "name": "overlay",
+          "type": "boolean",
+          "required": false,
+          "description": "Adds a dark gradient overlay on top of the background media"
+        },
+        {
+          "name": "fullHeight",
+          "type": "boolean",
+          "required": false,
+          "description": "Makes the banner fill the full viewport height"
+        }
+      ],
+      "slots": [
+        {
+          "name": "media",
+          "description": "Background image or video element"
+        },
+        {
+          "name": "badge",
+          "description": "Small label or eyebrow text above the heading"
+        },
+        {
+          "name": "headline",
+          "description": "Custom heading content (overrides `title`/`subtitle` props)"
+        },
+        {
+          "name": "cta",
+          "description": "Call-to-action buttons placed below the heading"
+        }
+      ],
+      "example": "<section class=\"hero-banner\">\r\n    <div class=\"hero-banner__media\">\r\n      <slot name=\"media\"></slot>\r\n    </div>\r\n    <div class=\"hero-banner__content\">\r\n      <div class=\"hero-banner__badge\">\r\n        <slot name=\"badge\"></slot>\r\n      </div>\r\n      <div class=\"hero-banner__headline\">\r\n        <slot name=\"headline\">\r\n          <h1 class=\"hero-banner__title\">Hero Title</h1>\r\n          <p class=\"hero-banner__subtitle\">Subtitle or tagline here.</p>\r\n        </slot>\r\n      </div>\r\n      <div class=\"hero-banner__cta\">\r\n        <slot name=\"cta\"></slot>\r\n      </div>\r\n    </div>\r\n  </section>"
+    },
+    {
+      "name": "navbar-pk",
+      "layer": "organisms",
+      "file": "organisms/navbar.html",
+      "props": [
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "required": false,
+          "description": "Pins the navbar to the top of the viewport while scrolling"
+        },
+        {
+          "name": "transparent",
+          "type": "boolean",
+          "required": false,
+          "description": "Removes the background colour (for hero overlay navbars)"
+        },
+        {
+          "name": "elevated",
+          "type": "boolean",
+          "required": false,
+          "description": "Adds a bottom shadow to separate the navbar from content"
+        }
+      ],
+      "slots": [
+        {
+          "name": "logo",
+          "description": "Brand logo or wordmark on the left side"
+        },
+        {
+          "name": "links",
+          "description": "Primary navigation links in the centre"
+        },
+        {
+          "name": "actions",
+          "description": "Right-side action buttons (search, cart, user menu)"
+        },
+        {
+          "name": "mobile-menu",
+          "description": "Full mobile navigation panel revealed by the hamburger button"
+        }
+      ],
+      "example": "<header class=\"navbar\">\r\n    <div class=\"navbar__inner\">\r\n      <div class=\"navbar__logo\">\r\n        <slot name=\"logo\">Logo</slot>\r\n      </div>\r\n      <nav class=\"navbar__links\" aria-label=\"Main navigation\">\r\n        <slot name=\"links\"></slot>\r\n      </nav>\r\n      <div class=\"navbar__actions\">\r\n        <slot name=\"actions\"></slot>\r\n      </div>\r\n      <button class=\"navbar__hamburger\" type=\"button\" aria-label=\"Toggle menu\" aria-expanded=\"false\">\r\n        <span></span><span></span><span></span>\r\n      </button>\r\n    </div>\r\n    <div class=\"navbar__mobile-menu\" hidden>\r\n      <slot name=\"mobile-\n  …"
+    },
+    {
+      "name": "product-detail-pk",
+      "layer": "organisms",
+      "file": "organisms/product-detail.html",
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Product name shown in the info column"
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "required": false,
+          "description": "Current price value"
+        },
+        {
+          "name": "sku",
+          "type": "string",
+          "required": false,
+          "description": "Stock-keeping unit identifier displayed below the title"
+        }
+      ],
+      "slots": [
+        {
+          "name": "breadcrumb",
+          "description": "Breadcrumb navigation above the product layout"
+        },
+        {
+          "name": "media",
+          "description": "Product image gallery or carousel"
+        },
+        {
+          "name": "info",
+          "description": "Product metadata (title, rating, description, etc.)"
+        },
+        {
+          "name": "actions",
+          "description": "Add-to-cart, wishlist, and quantity controls"
+        },
+        {
+          "name": "tabs",
+          "description": "Product details / specs / reviews tab panel"
+        },
+        {
+          "name": "reviews",
+          "description": "Customer review section below the main layout"
+        }
+      ],
+      "example": "<div class=\"product-detail\">\r\n    <div class=\"product-detail__breadcrumb\">\r\n      <slot name=\"breadcrumb\"></slot>\r\n    </div>\r\n    <div class=\"product-detail__layout\">\r\n      <div class=\"product-detail__gallery\">\r\n        <slot name=\"media\">\r\n          <div class=\"product-detail__media-placeholder\"></div>\r\n        </slot>\r\n      </div>\r\n      <div class=\"product-detail__panel\">\r\n        <div class=\"product-detail__info\">\r\n          <slot name=\"info\">\r\n            <h1 class=\"product-detail__title\">Product Title</h1>\r\n          </slot>\r\n        </div>\r\n        <div class=\"product-detail__actions\n  …"
+    },
+    {
+      "name": "profile-card-pk",
+      "layer": "organisms",
+      "file": "organisms/profile-card.html",
+      "props": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": false,
+          "description": "User's display name"
+        },
+        {
+          "name": "bio",
+          "type": "string",
+          "required": false,
+          "description": "Short bio or tagline text"
+        },
+        {
+          "name": "variant",
+          "type": "compact | full",
+          "required": false,
+          "description": "`compact` shows only avatar + name; `full` adds bio, stats, and cover",
+          "default": "full",
+          "values": [
+            "compact",
+            "full"
+          ]
+        }
+      ],
+      "slots": [
+        {
+          "name": "cover",
+          "description": "Cover/banner image displayed at the top of the card"
+        },
+        {
+          "name": "avatar",
+          "description": "Profile picture element (use `<avatar-pk>`)"
+        },
+        {
+          "name": "stats",
+          "description": "Follower/following/post count stats row"
+        },
+        {
+          "name": "actions",
+          "description": "Follow, message, and other CTA buttons"
+        }
+      ],
+      "example": "<article class=\"profile-card\">\r\n    <div class=\"profile-card__cover\">\r\n      <slot name=\"cover\"></slot>\r\n    </div>\r\n    <div class=\"profile-card__body\">\r\n      <div class=\"profile-card__avatar\">\r\n        <slot name=\"avatar\">\r\n          <span class=\"profile-card__initials\" aria-hidden=\"true\">U</span>\r\n        </slot>\r\n      </div>\r\n      <div class=\"profile-card__info\">\r\n        <h2 class=\"profile-card__name\">\r\n          <slot>User Name</slot>\r\n        </h2>\r\n        <p class=\"profile-card__bio\">\r\n          <slot name=\"bio\"></slot>\r\n        </p>\r\n      </div>\r\n      <div class=\"profile-card__s\n  …"
+    },
+    {
+      "name": "sidebar-pk",
+      "layer": "organisms",
+      "file": "organisms/sidebar.html",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "required": false,
+          "description": "Controls whether the sidebar panel is visible (relevant in overlay mode)"
+        },
+        {
+          "name": "position",
+          "type": "left | right",
+          "required": false,
+          "description": "Side of the viewport where the sidebar is anchored",
+          "default": "left",
+          "values": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "required": false,
+          "description": "CSS width value of the sidebar panel",
+          "default": "260px"
+        },
+        {
+          "name": "overlay",
+          "type": "boolean",
+          "required": false,
+          "description": "Renders the sidebar as a modal drawer with a backdrop overlay"
+        }
+      ],
+      "slots": [
+        {
+          "name": "header",
+          "description": "Top area of the sidebar (logo, close button, etc.)"
+        },
+        {
+          "name": "default",
+          "description": "Main navigation or content area"
+        },
+        {
+          "name": "footer",
+          "description": "Bottom area of the sidebar (user info, settings link)"
+        }
+      ],
+      "example": "<aside class=\"sidebar\">\r\n    <div class=\"sidebar__backdrop\"></div>\r\n    <div class=\"sidebar__panel\">\r\n      <div class=\"sidebar__header\">\r\n        <slot name=\"header\"></slot>\r\n      </div>\r\n      <nav class=\"sidebar__body\" aria-label=\"Sidebar navigation\">\r\n        <slot>Navigation items</slot>\r\n      </nav>\r\n      <div class=\"sidebar__footer\">\r\n        <slot name=\"footer\"></slot>\r\n      </div>\r\n    </div>\r\n  </aside>"
+    },
+    {
+      "name": "story-ring-pk",
+      "layer": "organisms",
+      "file": "organisms/story-ring.html",
+      "props": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "description": "Name label displayed below the story ring avatar"
+        },
+        {
+          "name": "seen",
+          "type": "boolean",
+          "required": false,
+          "description": "Shows the ring in a muted/seen colour state"
+        },
+        {
+          "name": "add",
+          "type": "boolean",
+          "required": false,
+          "description": "Renders a \"+\" add-story variant with a blue indicator"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Avatar image or custom thumbnail inside the ring"
+        },
+        {
+          "name": "add-icon",
+          "description": "Icon for the add-story button (defaults to `+`)"
+        }
+      ],
+      "example": "<div class=\"story-ring\">\r\n    <div class=\"story-ring__track\">\r\n      <!-- story items supplied via slot -->\r\n      <slot>\r\n        <div class=\"story-ring__item\">\r\n          <div class=\"story-ring__avatar\">\r\n            <span class=\"story-ring__add-icon\" aria-hidden=\"true\">+</span>\r\n          </div>\r\n          <span class=\"story-ring__label\">Add Story</span>\r\n        </div>\r\n      </slot>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "tabs-pk",
+      "layer": "organisms",
+      "file": "organisms/tabs-pk.html",
+      "props": [
+        {
+          "name": "variant",
+          "type": "line | pill | boxed",
+          "required": false,
+          "description": "Visual style of the tab strip",
+          "default": "line",
+          "values": [
+            "line",
+            "pill",
+            "boxed"
+          ]
+        },
+        {
+          "name": "active",
+          "type": "string",
+          "required": false,
+          "description": "id of the panel to show on init (defaults to first panel)"
+        }
+      ],
+      "slots": [
+        {
+          "name": "tabs",
+          "description": "`<button data-panel=\"id\">Label</button>` triggers; one per tab"
+        },
+        {
+          "name": "panels",
+          "description": "`<div id=\"id\">Content</div>` panels; id must match button data-panel"
+        }
+      ],
+      "example": "<div class=\"tabs\">\r\n    <div class=\"tabs__nav\" role=\"tablist\">\r\n      <slot name=\"tabs\"></slot>\r\n    </div>\r\n    <div class=\"tabs__body\">\r\n      <slot name=\"panels\"></slot>\r\n    </div>\r\n  </div>"
+    },
+    {
+      "name": "thumbnail-grid-pk",
+      "layer": "organisms",
+      "file": "organisms/thumbnail-grid.html",
+      "props": [
+        {
+          "name": "columns",
+          "type": "number",
+          "required": false,
+          "description": "Number of columns in the CSS grid",
+          "default": "3"
+        },
+        {
+          "name": "gap",
+          "type": "sm | md | lg",
+          "required": false,
+          "description": "Gap size between grid cells",
+          "default": "md",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "masonry",
+          "type": "boolean",
+          "required": false,
+          "description": "Enables CSS masonry-style layout (column-count fallback)"
+        }
+      ],
+      "slots": [
+        {
+          "name": "default",
+          "description": "Thumbnail items to display in the grid (use `<card-media-pk>` or `<img>` elements)"
+        }
+      ],
+      "example": "<div class=\"thumbnail-grid\">\r\n    <slot>\r\n      <!-- thumbnail items -->\r\n    </slot>\r\n  </div>"
+    },
+    {
+      "name": "topbar-pk",
+      "layer": "organisms",
+      "file": "organisms/topbar.html",
+      "props": [
+        {
+          "name": "elevated",
+          "type": "boolean",
+          "required": false,
+          "description": "Adds a bottom shadow to the topbar"
+        },
+        {
+          "name": "transparent",
+          "type": "boolean",
+          "required": false,
+          "description": "Removes the background colour for overlay usage"
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "required": false,
+          "description": "Pins the topbar to the top of the viewport"
+        }
+      ],
+      "slots": [
+        {
+          "name": "leading",
+          "description": "Left-side content (back button, hamburger menu, logo)"
+        },
+        {
+          "name": "title",
+          "description": "Centre title or search bar"
+        },
+        {
+          "name": "actions",
+          "description": "Right-side icon buttons (notifications, avatar, settings)"
+        }
+      ],
+      "example": "<div class=\"topbar\">\r\n    <div class=\"topbar__leading\">\r\n      <slot name=\"leading\"></slot>\r\n    </div>\r\n    <div class=\"topbar__title\">\r\n      <slot name=\"title\"></slot>\r\n    </div>\r\n    <div class=\"topbar__actions\">\r\n      <slot name=\"actions\"></slot>\r\n    </div>\r\n  </div>"
+    }
+  ]
+}

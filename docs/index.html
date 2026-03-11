@@ -1,0 +1,4191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pseudo-html-kit v1.0.0 — Documentation</title>
+  <style>
+    :root {
+      --color-primary: #1d4ed8;
+      --color-primary-contrast: #ffffff;
+      --color-primary-hover: #2563eb;
+      --color-surface-1: #ffffff;
+      --color-surface-2: #f1f5f9;
+      --color-surface-3: #e2e8f0;
+      --color-text: #1a202c;
+      --color-text-muted: #4a5568;
+      --color-border: #cbd5e0;
+      --color-danger: #ef4444;
+      --color-danger-hover: #dc2626;
+      --color-success: #10b981;
+      --color-info: #3b82f6;
+      --color-info-light: #eff6ff;
+      --color-info-dark: #1e40af;
+      --color-success-light: #f0fdf4;
+      --color-success-dark: #15803d;
+      --color-warning: #f59e0b;
+      --color-warning-light: #fffbeb;
+      --color-warning-dark: #92400e;
+      --color-danger-light: #fef2f2;
+      --color-danger-dark: #991b1b;
+      --font-sans: system-ui, -apple-system, sans-serif;
+      --font-mono: 'Fira Code', 'Cascadia Code', monospace;
+      --radius-sm: .25rem;
+      --radius-md: .375rem;
+      --radius-full: 9999px;
+      --text-xs: .75rem;
+      --text-sm: .875rem;
+      --text-base: 1rem;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.1);
+      --z-modal: 500;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      background: var(--color-surface-2);
+      color: var(--color-text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar nav ──────────────────────────────────────────────────────── */
+    .doc-sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .doc-sidebar-brand {
+      padding: 0 1.25rem 1.25rem;
+      border-bottom: 1px solid #1e293b;
+      margin-bottom: 1rem;
+    }
+    .doc-sidebar-brand h1 {
+      color: #f8fafc;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -.01em;
+    }
+    .doc-sidebar-brand .version {
+      font-size: .7rem;
+      color: #475569;
+      margin-top: .125rem;
+    }
+    .doc-sidebar-section { padding: .5rem 1.25rem .25rem; }
+    .doc-sidebar-section h2 {
+      font-size: .625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #475569;
+      margin-bottom: .375rem;
+    }
+    .doc-sidebar ul { list-style: none; }
+    .nav-link {
+      display: block;
+      font-size: .75rem;
+      color: #94a3b8;
+      padding: .2rem .5rem;
+      border-radius: .25rem;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nav-link:hover { color: #f8fafc; background: #1e293b; }
+    .nav-link-section {
+      display: block;
+      font-size: .8125rem;
+      color: #94a3b8;
+      padding: .3rem .5rem;
+      border-radius: .25rem;
+      text-decoration: none;
+    }
+    .nav-link-section:hover { color: #f8fafc; background: #1e293b; }
+
+    /* ── Main content ─────────────────────────────────────────────────────── */
+    .doc-main {
+      flex: 1;
+      padding: 2rem 2.5rem;
+      max-width: 960px;
+    }
+
+    .doc-hero {
+      background: linear-gradient(135deg, #1d4ed8 0%, #4f46e5 100%);
+      color: #fff;
+      border-radius: .75rem;
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .doc-hero h1 { font-size: 1.875rem; font-weight: 800; margin-bottom: .5rem; }
+    .doc-hero p  { opacity: .85; font-size: 1.0625rem; max-width: 56ch; }
+    .doc-hero .badge-row { margin-top: 1.25rem; display: flex; gap: .5rem; flex-wrap: wrap; }
+    .doc-badge {
+      background: rgba(255,255,255,.15);
+      border-radius: 99px;
+      padding: .25rem .75rem;
+      font-size: .75rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    section { margin-bottom: 3rem; }
+    section > h2 {
+      font-size: 1.375rem;
+      font-weight: 700;
+      color: var(--color-text);
+      padding-bottom: .625rem;
+      border-bottom: 2px solid var(--color-border);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Code blocks ──────────────────────────────────────────────────────── */
+    .doc-pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: .5rem;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: .8125rem;
+      line-height: 1.7;
+    }
+    code { font-family: var(--font-mono); font-size: .875em; }
+    :not(.doc-pre) > code {
+      background: var(--color-surface-3);
+      border-radius: .2rem;
+      padding: .1rem .35rem;
+      color: #7c3aed;
+    }
+
+    /* ── Component sections ───────────────────────────────────────────────── */
+    .doc-component {
+      background: var(--color-surface-1);
+      border: 1px solid var(--color-border);
+      border-radius: .5rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .doc-component h3 {
+      font-size: .9375rem;
+      font-weight: 600;
+      margin-bottom: .75rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── Mini tabs (props / slots / template) ─────────────────────────────── */
+    .doc-tabs { display: flex; gap: .25rem; margin-bottom: .75rem; }
+    .doc-tab {
+      padding: .25rem .75rem;
+      border-radius: .25rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface-2);
+      color: var(--color-text-muted);
+      font-size: .75rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .doc-tab--active, .doc-tab:hover { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+    .doc-tab-panel[hidden] { display: none; }
+
+    /* ── Tables ───────────────────────────────────────────────────────────── */
+    .doc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .8125rem;
+    }
+    .doc-table th {
+      text-align: left;
+      padding: .375rem .625rem;
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      font-size: .75rem;
+    }
+    .doc-table td {
+      padding: .375rem .625rem;
+      border: 1px solid var(--color-border);
+      vertical-align: top;
+    }
+    .doc-table tr:nth-child(even) td { background: var(--color-surface-2); }
+
+    /* ── Getting started highlight boxes ─────────────────────────────────── */
+    .doc-box {
+      background: var(--color-surface-1);
+      border: 1px solid var(--color-border);
+      border-radius: .5rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .doc-box h3 { font-size: 1rem; font-weight: 600; margin-bottom: .75rem; }
+    .doc-box p, .doc-box li { font-size: .9375rem; line-height: 1.65; color: #374151; margin-bottom: .5rem; }
+    .doc-box ul { padding-left: 1.25rem; }
+
+    .doc-callout {
+      border-left: 4px solid var(--color-primary);
+      background: var(--color-info-light);
+      color: var(--color-info-dark);
+      border-radius: 0 .375rem .375rem 0;
+      padding: .875rem 1rem;
+      font-size: .875rem;
+      margin: 1rem 0;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────────────── */
+    .doc-footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--color-border);
+      color: var(--color-text-muted);
+      font-size: .8125rem;
+      text-align: center;
+    }
+    .doc-footer a { color: var(--color-primary); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      body { flex-direction: column; }
+      .doc-sidebar { width: 100%; min-height: auto; position: static; }
+      .doc-main { padding: 1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Sidebar ──────────────────────────────────────────────────────────────── -->
+<nav class="doc-sidebar" aria-label="Documentation navigation">
+  <div class="doc-sidebar-brand">
+    <h1>pseudo-html-kit</h1>
+    <div class="version">v1.0.0 — Documentation</div>
+  </div>
+
+  <div class="doc-sidebar-section">
+    <h2>Guide</h2>
+    <ul>
+      <li><a href="#getting-started" class="nav-link-section">Getting Started</a></li>
+      <li><a href="#framework-adapters" class="nav-link-section">Framework Adapters</a></li>
+      <li><a href="#cli" class="nav-link-section">CLI</a></li>
+      <li><a href="#accessibility" class="nav-link-section">Accessibility</a></li>
+    </ul>
+  </div>
+
+  <div class="doc-sidebar-section">
+    <h2>Atoms <span style="color:#3b82f6">23</span></h2>
+    <ul>
+      <li><a href="#avatar-pk" class="nav-link">&lt;avatar-pk&gt;</a></li>
+        <li><a href="#badge-pk" class="nav-link">&lt;badge-pk&gt;</a></li>
+        <li><a href="#button-pk" class="nav-link">&lt;button-pk&gt;</a></li>
+        <li><a href="#checkbox-pk" class="nav-link">&lt;checkbox-pk&gt;</a></li>
+        <li><a href="#chip-pk" class="nav-link">&lt;chip-pk&gt;</a></li>
+        <li><a href="#date-picker-pk" class="nav-link">&lt;date-picker-pk&gt;</a></li>
+        <li><a href="#divider-pk" class="nav-link">&lt;divider-pk&gt;</a></li>
+        <li><a href="#icon-pk" class="nav-link">&lt;icon-pk&gt;</a></li>
+        <li><a href="#image-pk" class="nav-link">&lt;image-pk&gt;</a></li>
+        <li><a href="#input-pk" class="nav-link">&lt;input-pk&gt;</a></li>
+        <li><a href="#label-pk" class="nav-link">&lt;label-pk&gt;</a></li>
+        <li><a href="#loader-pk" class="nav-link">&lt;loader-pk&gt;</a></li>
+        <li><a href="#progress-bar-pk" class="nav-link">&lt;progress-bar-pk&gt;</a></li>
+        <li><a href="#progress-pk" class="nav-link">&lt;progress-pk&gt;</a></li>
+        <li><a href="#radio-pk" class="nav-link">&lt;radio-pk&gt;</a></li>
+        <li><a href="#rating-pk" class="nav-link">&lt;rating-pk&gt;</a></li>
+        <li><a href="#select-pk" class="nav-link">&lt;select-pk&gt;</a></li>
+        <li><a href="#skeleton-pk" class="nav-link">&lt;skeleton-pk&gt;</a></li>
+        <li><a href="#slider-pk" class="nav-link">&lt;slider-pk&gt;</a></li>
+        <li><a href="#spinner-pk" class="nav-link">&lt;spinner-pk&gt;</a></li>
+        <li><a href="#tag-pk" class="nav-link">&lt;tag-pk&gt;</a></li>
+        <li><a href="#textarea-pk" class="nav-link">&lt;textarea-pk&gt;</a></li>
+        <li><a href="#toggle-pk" class="nav-link">&lt;toggle-pk&gt;</a></li>
+    </ul>
+  </div>
+
+  <div class="doc-sidebar-section">
+    <h2>Molecules <span style="color:#8b5cf6">21</span></h2>
+    <ul>
+      <li><a href="#breadcrumb-pk" class="nav-link">&lt;breadcrumb-pk&gt;</a></li>
+        <li><a href="#card-media-pk" class="nav-link">&lt;card-media-pk&gt;</a></li>
+        <li><a href="#card-pk" class="nav-link">&lt;card-pk&gt;</a></li>
+        <li><a href="#carousel-pk" class="nav-link">&lt;carousel-pk&gt;</a></li>
+        <li><a href="#color-swatch-pk" class="nav-link">&lt;color-swatch-pk&gt;</a></li>
+        <li><a href="#combobox-pk" class="nav-link">&lt;combobox-pk&gt;</a></li>
+        <li><a href="#date-picker-pk" class="nav-link">&lt;date-picker-pk&gt;</a></li>
+        <li><a href="#dropdown-pk" class="nav-link">&lt;dropdown-pk&gt;</a></li>
+        <li><a href="#form-field-pk" class="nav-link">&lt;form-field-pk&gt;</a></li>
+        <li><a href="#grid-pk" class="nav-link">&lt;grid-pk&gt;</a></li>
+        <li><a href="#list-item-pk" class="nav-link">&lt;list-item-pk&gt;</a></li>
+        <li><a href="#menu-item-pk" class="nav-link">&lt;menu-item-pk&gt;</a></li>
+        <li><a href="#modal-pk" class="nav-link">&lt;modal-pk&gt;</a></li>
+        <li><a href="#notification-pk" class="nav-link">&lt;notification-pk&gt;</a></li>
+        <li><a href="#pagination-pk" class="nav-link">&lt;pagination-pk&gt;</a></li>
+        <li><a href="#price-tag-pk" class="nav-link">&lt;price-tag-pk&gt;</a></li>
+        <li><a href="#product-tile-pk" class="nav-link">&lt;product-tile-pk&gt;</a></li>
+        <li><a href="#search-bar-pk" class="nav-link">&lt;search-bar-pk&gt;</a></li>
+        <li><a href="#tab-bar-pk" class="nav-link">&lt;tab-bar-pk&gt;</a></li>
+        <li><a href="#tooltip-pk" class="nav-link">&lt;tooltip-pk&gt;</a></li>
+        <li><a href="#user-info-pk" class="nav-link">&lt;user-info-pk&gt;</a></li>
+    </ul>
+  </div>
+
+  <div class="doc-sidebar-section">
+    <h2>Organisms <span style="color:#10b981">16</span></h2>
+    <ul>
+      <li><a href="#accordion-pk" class="nav-link">&lt;accordion-pk&gt;</a></li>
+        <li><a href="#carousel-pk" class="nav-link">&lt;carousel-pk&gt;</a></li>
+        <li><a href="#cart-summary-pk" class="nav-link">&lt;cart-summary-pk&gt;</a></li>
+        <li><a href="#comment-thread-pk" class="nav-link">&lt;comment-thread-pk&gt;</a></li>
+        <li><a href="#content-row-pk" class="nav-link">&lt;content-row-pk&gt;</a></li>
+        <li><a href="#feed-post-pk" class="nav-link">&lt;feed-post-pk&gt;</a></li>
+        <li><a href="#footer-pk" class="nav-link">&lt;footer-pk&gt;</a></li>
+        <li><a href="#hero-banner-pk" class="nav-link">&lt;hero-banner-pk&gt;</a></li>
+        <li><a href="#navbar-pk" class="nav-link">&lt;navbar-pk&gt;</a></li>
+        <li><a href="#product-detail-pk" class="nav-link">&lt;product-detail-pk&gt;</a></li>
+        <li><a href="#profile-card-pk" class="nav-link">&lt;profile-card-pk&gt;</a></li>
+        <li><a href="#sidebar-pk" class="nav-link">&lt;sidebar-pk&gt;</a></li>
+        <li><a href="#story-ring-pk" class="nav-link">&lt;story-ring-pk&gt;</a></li>
+        <li><a href="#tabs-pk" class="nav-link">&lt;tabs-pk&gt;</a></li>
+        <li><a href="#thumbnail-grid-pk" class="nav-link">&lt;thumbnail-grid-pk&gt;</a></li>
+        <li><a href="#topbar-pk" class="nav-link">&lt;topbar-pk&gt;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── Main ─────────────────────────────────────────────────────────────────── -->
+<main class="doc-main">
+
+  <div class="doc-hero">
+    <h1>pseudo-html-kit</h1>
+    <p>Vanilla HTML component system — no build step, no framework. Drop-in custom elements with scoped CSS and progressive enhancement.</p>
+    <div class="badge-row">
+      <span class="doc-badge">v1.0.0</span>
+      <span class="doc-badge">WCAG 2.2 AA ✓</span>
+      <span class="doc-badge">61 Components</span>
+      <span class="doc-badge">7.7 KB gzip</span>
+      <span class="doc-badge">Zero dependencies</span>
+    </div>
+  </div>
+
+  <!-- ── Getting Started ────────────────────────────────────────────────────── -->
+  <section id="getting-started">
+    <h2>Getting Started</h2>
+
+    <div class="doc-box">
+      <h3>Option 1 — CDN (recommended for prototyping)</h3>
+      <p>Add the client script and register your components:</p>
+      <pre class="doc-pre"><code>&lt;!-- 1. Load the runtime --&gt;
+&lt;script type="module"&gt;
+  import PseudoKit from 'https://cdn.jsdelivr.net/npm/pseudo-html-kit/src/client/pseudo-kit-client.js';
+
+  // 2. Register components
+  PseudoKit.register({ name: 'button-pk', src: '/components/button-pk.html' });
+  PseudoKit.register({ name: 'input-pk',  src: '/components/input-pk.html' });
+
+  // 3. Stamp the page
+  await PseudoKit.init();
+&lt;/script&gt;
+
+&lt;!-- 4. Use them --&gt;
+&lt;button-pk variant="primary"&gt;Save&lt;/button-pk&gt;
+&lt;input-pk name="email" type="email" placeholder="Email"&gt;&lt;/input-pk&gt;</code></pre>
+    </div>
+
+    <div class="doc-box">
+      <h3>Option 2 — npm</h3>
+      <pre class="doc-pre"><code>npm install pseudo-html-kit
+# or
+pnpm add pseudo-html-kit</code></pre>
+      <pre class="doc-pre"><code>import PseudoKit from 'pseudo-html-kit';
+
+PseudoKit.register({ name: 'button-pk', src: new URL('./button-pk.html', import.meta.url).href });
+await PseudoKit.init();</code></pre>
+    </div>
+
+    <div class="doc-box">
+      <h3>How it works</h3>
+      <ul>
+        <li>Each component is a plain <code>.html</code> file with <code>&lt;template&gt;</code>, <code>&lt;style&gt;</code>, and optional <code>&lt;script&gt;</code> sections.</li>
+        <li><code>PseudoKit.register()</code> fetches and caches the component definition.</li>
+        <li><code>PseudoKit.init()</code> scans the DOM, stamps matching elements, and runs scripts — no Shadow DOM.</li>
+        <li>Props are HTML attributes on the host element. Slots are named <code>slot=""</code> children.</li>
+        <li>CSS uses <code>@scope</code> for isolation — no class name collisions.</li>
+      </ul>
+      <div class="doc-callout">
+        <strong>Progressive enhancement:</strong> host elements render as plain custom elements before PseudoKit resolves, so they don't block render. The <code>data-pk-resolved</code> attribute signals when stamping is complete.
+      </div>
+    </div>
+
+    <div class="doc-box">
+      <h3>Design tokens</h3>
+      <p>All components consume CSS custom properties for theming. Override at <code>:root</code> or on any ancestor:</p>
+      <pre class="doc-pre"><code>:root {
+  --color-primary: #6d28d9;
+  --color-primary-contrast: #fff;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --radius-md: .5rem;
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- ── Atoms ──────────────────────────────────────────────────────────────── -->
+  
+  <section id="atoms">
+    <h2>Atoms <span style="color:#a0aec0;font-size:.875rem">(23)</span></h2>
+    
+    <section class="doc-component" id="avatar-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;avatar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="avatar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="avatar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="avatar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="avatar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="avatar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>src</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Image URL; omit to show initials or default placeholder</td>
+        </tr>
+        <tr>
+          <td><code>alt</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096"></em></td>
+          <td>Alt text for the avatar image</td>
+        </tr>
+        <tr>
+          <td><code>initials</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Fallback text shown when no image is provided</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">xs | sm | md | lg | xl</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Avatar diameter size preset</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="avatar-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Slotted `&lt;img&gt;` element for the avatar image</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="avatar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;avatar-pk&gt;
+  …
+&lt;/avatar-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="badge-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;badge-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="badge-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="badge-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="badge-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="badge-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="badge-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Badge text content (slotted or via default slot)</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary | success | warning | danger</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Colour variant</td>
+        </tr>
+        <tr>
+          <td><code>dot</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Show a coloured dot indicator before the label</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Badge size preset</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="badge-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="badge-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;badge-pk&gt;
+  …
+&lt;/badge-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="button-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;button-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="button-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="button-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="button-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="button-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="button-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Button text; can also be provided via default slot</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">primary | secondary | ghost | danger</td>
+          <td><em style="color:#718096">secondary</em></td>
+          <td>Visual style variant</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Button size preset</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the button and prevents interaction</td>
+        </tr>
+        <tr>
+          <td><code>type</code></td>
+          <td style="color:#7c3aed">button | submit | reset</td>
+          <td><em style="color:#718096">button</em></td>
+          <td>Native button type attribute</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="button-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Button label text or mixed content</td>
+        </tr>
+        <tr>
+          <td><code>icon-left</code></td>
+          <td>Icon placed to the left of the label</td>
+        </tr>
+        <tr>
+          <td><code>icon-right</code></td>
+          <td>Icon placed to the right of the label</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="button-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;button-pk&gt;
+  …
+&lt;/button-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="checkbox-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;checkbox-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="checkbox-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="checkbox-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="checkbox-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="checkbox-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="checkbox-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name forwarded to the inner `&lt;input type=&quot;checkbox&quot;&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Field id forwarded to the inner checkbox</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">on</em></td>
+          <td>Value submitted when checkbox is checked</td>
+        </tr>
+        <tr>
+          <td><code>checked</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Initial checked state</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the checkbox</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the checkbox as required for form validation</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="checkbox-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Label text shown beside the checkbox</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="checkbox-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;checkbox-pk&gt;
+  …
+&lt;/checkbox-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="chip-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;chip-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="chip-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="chip-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="chip-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="chip-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="chip-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Chip label text (forwarded to inner span)</td>
+        </tr>
+        <tr>
+          <td><code>removable</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Show a remove/close button inside the chip</td>
+        </tr>
+        <tr>
+          <td><code>selected</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Apply selected (filled primary) visual state</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Colour variant</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="chip-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>icon</code></td>
+          <td>Optional icon placed before the label</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="chip-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;chip-pk&gt;
+  …
+&lt;/chip-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="date-picker-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;date-picker-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="date-picker-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="date-picker-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="date-picker-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="date-picker-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="date-picker-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="date-picker-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>optional input markup</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="date-picker-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;date-picker-pk&gt;
+  …
+&lt;/date-picker-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="divider-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;divider-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="divider-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="divider-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="divider-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="divider-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="divider-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>orientation</code></td>
+          <td style="color:#7c3aed">horizontal | vertical</td>
+          <td><em style="color:#718096">horizontal</em></td>
+          <td>Divider direction</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Optional centred label text displayed over the divider line</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="divider-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Label content; overrides the `label` prop when slotted</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="divider-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;divider-pk&gt;
+  …
+&lt;/divider-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="icon-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;icon-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="icon-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="icon-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="icon-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="icon-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="icon-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Icon identifier (reserved for icon-font / sprite usage)</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">xs | sm | md | lg | xl</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Icon box size preset</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Accessible label; also accepted as `aria-label`. When set the icon is</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="icon-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>SVG or img element to render as the icon</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="icon-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;icon-pk&gt;
+  …
+&lt;/icon-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="image-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;image-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="image-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="image-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="image-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="image-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="image-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>src</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Image source URL</td>
+        </tr>
+        <tr>
+          <td><code>alt</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Alt text for the image (required for accessibility)</td>
+        </tr>
+        <tr>
+          <td><code>ratio</code></td>
+          <td style="color:#7c3aed">square | 16x9 | 4x3 | 3x2 | auto</td>
+          <td><em style="color:#718096">auto</em></td>
+          <td>Aspect-ratio constraint applied via padding-top trick</td>
+        </tr>
+        <tr>
+          <td><code>loading</code></td>
+          <td style="color:#7c3aed">lazy | eager</td>
+          <td><em style="color:#718096">lazy</em></td>
+          <td>Native loading attribute forwarded to the inner `&lt;img&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>fit</code></td>
+          <td style="color:#7c3aed">cover | contain | fill</td>
+          <td><em style="color:#718096">cover</em></td>
+          <td>CSS object-fit for the image</td>
+        </tr>
+        <tr>
+          <td><code>rounded</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Apply full border-radius to create a rounded rectangle</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="image-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>fallback</code></td>
+          <td>Content shown when the image fails to load</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="image-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;image-pk&gt;
+  …
+&lt;/image-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="input-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;input-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="input-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="input-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="input-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="input-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="input-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>type</code></td>
+          <td style="color:#7c3aed">text | email | password | number | search | tel | url</td>
+          <td><em style="color:#718096">text</em></td>
+          <td>Native input type</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name (forwarded to inner `&lt;input&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Field id; forwarded to inner `&lt;input&gt;` and removed from host</td>
+        </tr>
+        <tr>
+          <td><code>placeholder</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Placeholder text shown when field is empty</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Initial field value</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the field</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the field as required for form validation</td>
+        </tr>
+        <tr>
+          <td><code>pattern</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Regex pattern for validation (forwarded to inner `&lt;input&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>min</code></td>
+          <td style="color:#7c3aed">string | number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Minimum value (forwarded to inner `&lt;input&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>max</code></td>
+          <td style="color:#7c3aed">string | number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Maximum value (forwarded to inner `&lt;input&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Field size preset</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="input-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>prefix</code></td>
+          <td>Icon or text rendered before (to the left of) the input field</td>
+        </tr>
+        <tr>
+          <td><code>suffix</code></td>
+          <td>Icon or text rendered after (to the right of) the input field</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="input-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;input-pk&gt;
+  …
+&lt;/input-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="label-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;label-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="label-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="label-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="label-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="label-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="label-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>for</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>id of the associated form control (forwarded as `for` on the inner `&lt;label&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Show the required asterisk indicator</td>
+        </tr>
+        <tr>
+          <td><code>text</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Label text; can also be provided via default slot</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="label-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Label text content; overrides the `text` prop when slotted</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="label-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;label-pk&gt;
+  …
+&lt;/label-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="loader-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;loader-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="loader-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="loader-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="loader-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="loader-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="loader-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Loader bar size preset</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Screen-reader accessible description of the loading state</td>
+        </tr>
+        <tr>
+          <td><code>overlay</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Render as a full-viewport overlay with backdrop</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="loader-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="loader-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;loader-pk&gt;
+  …
+&lt;/loader-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="progress-bar-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;progress-bar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="progress-bar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="progress-bar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="progress-bar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="progress-bar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="progress-bar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Current progress value</td>
+        </tr>
+        <tr>
+          <td><code>max</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">100</em></td>
+          <td>Maximum progress value</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Visible label displayed above the bar; also used as accessible name</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary | success | warning | danger</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Fill colour variant</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Track height size preset</td>
+        </tr>
+        <tr>
+          <td><code>animated</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Add a shimmer animation to the fill</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="progress-bar-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="progress-bar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;progress-bar-pk&gt;
+  …
+&lt;/progress-bar-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="progress-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;progress-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="progress-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="progress-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="progress-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="progress-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="progress-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Current progress value (0–max). Omit for indeterminate state.</td>
+        </tr>
+        <tr>
+          <td><code>max</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">100</em></td>
+          <td>Maximum value</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary | success | warning | danger</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Colour variant</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Track height preset</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Accessible label text (aria-label). Defaults to &quot;Progress&quot;.</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="progress-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="progress-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;progress-pk&gt;
+  …
+&lt;/progress-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="radio-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;radio-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="radio-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="radio-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="radio-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="radio-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="radio-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name (shared across radio group)</td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Field id (required for accessibility)</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Value submitted when this radio is selected (required)</td>
+        </tr>
+        <tr>
+          <td><code>checked</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Initial checked state</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the radio button</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the radio group as required for form validation</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="radio-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Label text shown beside the radio button</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="radio-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;radio-pk&gt;
+  …
+&lt;/radio-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="rating-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;rating-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="rating-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="rating-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="rating-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="rating-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="rating-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Current rating value (e.g. 3.5)</td>
+        </tr>
+        <tr>
+          <td><code>max</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">5</em></td>
+          <td>Total number of stars</td>
+        </tr>
+        <tr>
+          <td><code>readonly</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Prevent user interaction (display-only mode)</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Star size preset</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Accessible label (e.g. &quot;Rating: 4 out of 5 stars&quot;)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="rating-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="rating-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;rating-pk&gt;
+  …
+&lt;/rating-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="select-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;select-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="select-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="select-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="select-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="select-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="select-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name (forwarded to inner `&lt;select&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Field id; forwarded to inner `&lt;select&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the select</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the field as required for form validation</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Field size preset</td>
+        </tr>
+        <tr>
+          <td><code>multiple</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Enable multi-select mode</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="select-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>`&lt;option&gt;` and `&lt;optgroup&gt;` elements; rendered as native options</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="select-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;select-pk&gt;
+  …
+&lt;/select-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="skeleton-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;skeleton-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="skeleton-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="skeleton-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="skeleton-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="skeleton-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="skeleton-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>width</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Explicit CSS width override (e.g. &quot;120px&quot;, &quot;60%&quot;)</td>
+        </tr>
+        <tr>
+          <td><code>height</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Explicit CSS height override (e.g. &quot;1rem&quot;, &quot;40px&quot;)</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">text | circle | rect</td>
+          <td><em style="color:#718096">rect</em></td>
+          <td>Shape preset: text (narrow bar), circle, or rectangle</td>
+        </tr>
+        <tr>
+          <td><code>lines</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">1</em></td>
+          <td>Number of stacked text-variant skeleton lines to render</td>
+        </tr>
+        <tr>
+          <td><code>animated</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">true</em></td>
+          <td>Enable the shimmer/pulse loading animation</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="skeleton-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="skeleton-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;skeleton-pk&gt;
+  …
+&lt;/skeleton-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="slider-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;slider-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="slider-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="slider-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="slider-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="slider-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="slider-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>min</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">0</em></td>
+          <td>Minimum value</td>
+        </tr>
+        <tr>
+          <td><code>max</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">100</em></td>
+          <td>Maximum value</td>
+        </tr>
+        <tr>
+          <td><code>step</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">1</em></td>
+          <td>Step increment</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Current value (defaults to midpoint)</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Form field name</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disable the control</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Accessible label text (aria-label)</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Track/thumb color variant</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="slider-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="slider-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;slider-pk&gt;
+  …
+&lt;/slider-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="spinner-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;spinner-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="spinner-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="spinner-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="spinner-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="spinner-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="spinner-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Spinner diameter size preset</td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">Loading</em></td>
+          <td>Screen-reader text placed in a `.sr-only` span; also accepted as `aria-label`</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary | white</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Arc colour variant</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="spinner-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="spinner-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;spinner-pk&gt;
+  …
+&lt;/spinner-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="tag-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;tag-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="tag-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="tag-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="tag-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="tag-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="tag-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Tag text content (slotted or via default slot)</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">default | primary | success | warning | danger | info</td>
+          <td><em style="color:#718096">default</em></td>
+          <td>Colour variant</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Tag size preset</td>
+        </tr>
+        <tr>
+          <td><code>outline</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Use outline (border-only) visual style</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tag-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>icon</code></td>
+          <td>Optional icon placed before the tag label</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tag-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;tag-pk&gt;
+  …
+&lt;/tag-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="textarea-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;textarea-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="textarea-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="textarea-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="textarea-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="textarea-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="textarea-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name (forwarded to inner `&lt;textarea&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Field id; forwarded to inner `&lt;textarea&gt;` and removed from host</td>
+        </tr>
+        <tr>
+          <td><code>placeholder</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Placeholder text shown when field is empty</td>
+        </tr>
+        <tr>
+          <td><code>rows</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">4</em></td>
+          <td>Visible number of text rows</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the field</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the field as required for form validation</td>
+        </tr>
+        <tr>
+          <td><code>error</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Error message; activates error visual state when set</td>
+        </tr>
+        <tr>
+          <td><code>resize</code></td>
+          <td style="color:#7c3aed">none | vertical | horizontal | both</td>
+          <td><em style="color:#718096">vertical</em></td>
+          <td>CSS resize behaviour</td>
+        </tr>
+        <tr>
+          <td><code>maxlength</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Maximum character count; enables the hint badge when set</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="textarea-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="textarea-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;textarea-pk&gt;
+  …
+&lt;/textarea-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="toggle-pk">
+      <h3><span style="background:#3b82f6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">atoms</span> <code>&lt;toggle-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="toggle-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="toggle-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="toggle-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="toggle-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="toggle-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name forwarded to the inner `&lt;input type=&quot;checkbox&quot;&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Field id forwarded to the inner checkbox</td>
+        </tr>
+        <tr>
+          <td><code>checked</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Initial checked state</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the toggle</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Toggle track size preset</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="toggle-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td>Text label shown beside the toggle track</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="toggle-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;toggle-pk&gt;
+  …
+&lt;/toggle-pk&gt;</code></pre>
+      </div>
+    </section>
+  </section>
+
+  <!-- ── Molecules ──────────────────────────────────────────────────────────── -->
+  
+  <section id="molecules">
+    <h2>Molecules <span style="color:#a0aec0;font-size:.875rem">(21)</span></h2>
+    
+    <section class="doc-component" id="breadcrumb-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;breadcrumb-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="breadcrumb-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="breadcrumb-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="breadcrumb-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="breadcrumb-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="breadcrumb-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">Breadcrumb</em></td>
+          <td>aria-label for the nav landmark</td>
+        </tr>
+        <tr>
+          <td><code>separator</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">/</em></td>
+          <td>CSS content value for the separator (e.g. '›', '/')</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="breadcrumb-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>items</code></td>
+          <td>`&lt;a href=&quot;...&quot;&gt;Label&lt;/a&gt;` or `&lt;span&gt;Label&lt;/span&gt;` crumb items;</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="breadcrumb-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;breadcrumb-pk&gt;
+  …
+&lt;/breadcrumb-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="card-media-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;card-media-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="card-media-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="card-media-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="card-media-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="card-media-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="card-media-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>src</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Image source URL</td>
+        </tr>
+        <tr>
+          <td><code>alt</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Alt text for the image</td>
+        </tr>
+        <tr>
+          <td><code>ratio</code></td>
+          <td style="color:#7c3aed">square | 16x9 | 4x3 | 3x2 | auto</td>
+          <td><em style="color:#718096">16x9</em></td>
+          <td>Aspect ratio of the media container</td>
+        </tr>
+        <tr>
+          <td><code>fit</code></td>
+          <td style="color:#7c3aed">cover | contain</td>
+          <td><em style="color:#718096">cover</em></td>
+          <td>CSS object-fit strategy for the image</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="card-media-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>overlay</code></td>
+          <td>Overlaid content (badges, play buttons, etc.) positioned above the image</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="card-media-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;card-media-pk&gt;
+  …
+&lt;/card-media-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="card-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;card-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="card-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="card-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="card-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="card-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="card-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Card title rendered in the header area when no `header` slot is provided</td>
+        </tr>
+        <tr>
+          <td><code>subtitle</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Secondary text below the title</td>
+        </tr>
+        <tr>
+          <td><code>href</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Makes the entire card a clickable link when set</td>
+        </tr>
+        <tr>
+          <td><code>elevated</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Adds a drop shadow to lift the card visually</td>
+        </tr>
+        <tr>
+          <td><code>padding</code></td>
+          <td style="color:#7c3aed">none | sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Internal padding preset for the card body</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="card-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>media</code></td>
+          <td>Visual media area at the top of the card (use `&lt;card-media-pk&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>header</code></td>
+          <td>Custom header content; replaces title/subtitle when provided</td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>Main body content of the card</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Footer action area (buttons, links)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="card-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;card-pk&gt;
+  …
+&lt;/card-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="carousel-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;carousel-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="carousel-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="carousel-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="carousel-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="carousel-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="carousel-pk-props" class="doc-tab-panel">
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No props.</p>
+      </div>
+      <div id="carousel-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>slides (any element)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="carousel-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;carousel-pk&gt;
+  …
+&lt;/carousel-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="color-swatch-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;color-swatch-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="color-swatch-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="color-swatch-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="color-swatch-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="color-swatch-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="color-swatch-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="color-swatch-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>swatch items</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="color-swatch-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;color-swatch-pk&gt;
+  …
+&lt;/color-swatch-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="combobox-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;combobox-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="combobox-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="combobox-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="combobox-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="combobox-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="combobox-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name (written to hidden input on selection)</td>
+        </tr>
+        <tr>
+          <td><code>placeholder</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">Search…</em></td>
+          <td>Placeholder text for the filter input</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Pre-selected option value</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the combobox</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the field as required</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="combobox-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>`&lt;option&gt;` elements; each needs `value` and text content</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="combobox-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;combobox-pk&gt;
+  …
+&lt;/combobox-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="date-picker-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;date-picker-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="date-picker-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="date-picker-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="date-picker-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="date-picker-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="date-picker-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Accessible label forwarded to the date input via aria-label</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Form field name forwarded to the inner input</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="date-picker-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>optional calendar content</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="date-picker-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;date-picker-pk&gt;
+  …
+&lt;/date-picker-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="dropdown-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;dropdown-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="dropdown-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="dropdown-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="dropdown-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="dropdown-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="dropdown-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Default trigger button label when no `trigger` slot is provided</td>
+        </tr>
+        <tr>
+          <td><code>open</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Controls the open/closed state of the dropdown menu</td>
+        </tr>
+        <tr>
+          <td><code>align</code></td>
+          <td style="color:#7c3aed">left | right</td>
+          <td><em style="color:#718096">left</em></td>
+          <td>Menu alignment relative to the trigger</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Disables the trigger button and prevents opening</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="dropdown-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>trigger</code></td>
+          <td>Custom trigger element (replaces the default button)</td>
+        </tr>
+        <tr>
+          <td><code>items</code></td>
+          <td>Menu items; use `&lt;menu-item-pk&gt;` or `&lt;li&gt;` elements</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="dropdown-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;dropdown-pk&gt;
+  …
+&lt;/dropdown-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="form-field-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;form-field-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="form-field-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="form-field-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="form-field-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="form-field-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="form-field-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Visible label text above the input</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Form field name forwarded to the slotted control</td>
+        </tr>
+        <tr>
+          <td><code>required</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks the field as required and appends a visual indicator</td>
+        </tr>
+        <tr>
+          <td><code>error</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Error message shown below the field; also sets aria-invalid on the wrapper</td>
+        </tr>
+        <tr>
+          <td><code>hint</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Helper text shown below the label</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="form-field-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>The form control (`&lt;input-pk&gt;`, `&lt;textarea-pk&gt;`, `&lt;select&gt;`, etc.)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="form-field-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;form-field-pk&gt;
+  …
+&lt;/form-field-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="grid-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;grid-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="grid-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="grid-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="grid-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="grid-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="grid-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>display</code></td>
+          <td style="color:#7c3aed">auto | lanes | masonry</td>
+          <td><em style="color:#718096">auto</em></td>
+          <td>Grid display mode</td>
+        </tr>
+        <tr>
+          <td><code>cols</code></td>
+          <td style="color:#7c3aed">number | auto</td>
+          <td><em style="color:#718096">3</em></td>
+          <td>Number of columns (or 'auto' for responsive)</td>
+        </tr>
+        <tr>
+          <td><code>gap</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">1rem</em></td>
+          <td>Gap between grid items</td>
+        </tr>
+        <tr>
+          <td><code>minItemWidth</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">200px</em></td>
+          <td>Minimum width for auto-fit columns</td>
+        </tr>
+        <tr>
+          <td><code>containerQueries</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">true</em></td>
+          <td>Enable container queries for responsive behavior</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="grid-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Grid items (direct children are grid items)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="grid-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;grid-pk&gt;
+  …
+&lt;/grid-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="list-item-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;list-item-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="list-item-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="list-item-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="list-item-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="list-item-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="list-item-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>primary</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Primary text line of the list item</td>
+        </tr>
+        <tr>
+          <td><code>secondary</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Secondary/supporting text line below the primary text</td>
+        </tr>
+        <tr>
+          <td><code>href</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Makes the item a link when set</td>
+        </tr>
+        <tr>
+          <td><code>active</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Highlights the item as the currently selected entry</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Greys out the item and disables interaction</td>
+        </tr>
+        <tr>
+          <td><code>divider</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Adds a bottom border separator after the item</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="list-item-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>leading</code></td>
+          <td>Leading content (icon, avatar, checkbox) placed before the text</td>
+        </tr>
+        <tr>
+          <td><code>trailing</code></td>
+          <td>Trailing content (badge, toggle, chevron) placed after the text</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="list-item-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;list-item-pk&gt;
+  …
+&lt;/list-item-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="menu-item-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;menu-item-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="menu-item-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="menu-item-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="menu-item-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="menu-item-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="menu-item-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Menu item label text</td>
+        </tr>
+        <tr>
+          <td><code>href</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Navigation target; renders the item as an `&lt;a&gt;` when set</td>
+        </tr>
+        <tr>
+          <td><code>icon</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Icon glyph or emoji rendered before the label</td>
+        </tr>
+        <tr>
+          <td><code>active</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Marks this item as the currently active/selected entry</td>
+        </tr>
+        <tr>
+          <td><code>disabled</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Greys out the item and disables pointer events</td>
+        </tr>
+        <tr>
+          <td><code>danger</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Applies destructive/danger colour styling to the item</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="menu-item-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>icon</code></td>
+          <td>Custom icon content placed before the label (overrides `icon` prop)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="menu-item-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;menu-item-pk&gt;
+  …
+&lt;/menu-item-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="modal-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;modal-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="modal-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="modal-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="modal-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="modal-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="modal-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Modal title shown in the header when no `header` slot is provided</td>
+        </tr>
+        <tr>
+          <td><code>open</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Controls whether the modal is visible</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg | fullscreen</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Width preset of the modal container</td>
+        </tr>
+        <tr>
+          <td><code>closeable</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">true</em></td>
+          <td>Shows the × close button in the header</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="modal-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>header</code></td>
+          <td>Custom header content; replaces the default title bar</td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>Main modal body content</td>
+        </tr>
+        <tr>
+          <td><code>footer</code></td>
+          <td>Footer area for action buttons</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="modal-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;modal-pk&gt;
+  …
+&lt;/modal-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="notification-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;notification-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="notification-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="notification-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="notification-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="notification-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="notification-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>message</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Notification text when no default slot is provided</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">info | success | warning | danger</td>
+          <td><em style="color:#718096">info</em></td>
+          <td>Colour/icon preset for the notification type</td>
+        </tr>
+        <tr>
+          <td><code>dismissible</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Shows a × button to dismiss the notification</td>
+        </tr>
+        <tr>
+          <td><code>icon</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Displays the variant icon on the left side</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="notification-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Custom notification body content (overrides `message` prop)</td>
+        </tr>
+        <tr>
+          <td><code>action</code></td>
+          <td>Inline action link or button placed after the message text</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="notification-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;notification-pk&gt;
+  …
+&lt;/notification-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="pagination-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;pagination-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="pagination-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="pagination-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="pagination-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="pagination-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="pagination-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>page</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Current active page (1-based)</td>
+        </tr>
+        <tr>
+          <td><code>total</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Total number of items (used with `perPage` to compute page count)</td>
+        </tr>
+        <tr>
+          <td><code>perPage</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">10</em></td>
+          <td>Number of items per page</td>
+        </tr>
+        <tr>
+          <td><code>siblings</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">1</em></td>
+          <td>Number of sibling page buttons visible on each side of the active page</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="pagination-pk-slots" class="doc-tab-panel" hidden>
+        <p style="color:#718096;font-size:.8rem;font-style:italic">No slots.</p>
+      </div>
+      <div id="pagination-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;pagination-pk&gt;
+  …
+&lt;/pagination-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="price-tag-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;price-tag-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="price-tag-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="price-tag-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="price-tag-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="price-tag-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="price-tag-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>price</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Current (possibly discounted) price value</td>
+        </tr>
+        <tr>
+          <td><code>currency</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">$</em></td>
+          <td>Currency symbol displayed before the price</td>
+        </tr>
+        <tr>
+          <td><code>original</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Original price shown struck-through when a discount applies</td>
+        </tr>
+        <tr>
+          <td><code>discount</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Highlights the price with a discount/sale colour treatment</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Font size preset for the price display</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="price-tag-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>original</code></td>
+          <td>Custom struck-through original price content</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="price-tag-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;price-tag-pk&gt;
+  …
+&lt;/price-tag-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="product-tile-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;product-tile-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="product-tile-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="product-tile-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="product-tile-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="product-tile-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="product-tile-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Product name displayed below the media area</td>
+        </tr>
+        <tr>
+          <td><code>price</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Product price value</td>
+        </tr>
+        <tr>
+          <td><code>src</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Product image URL</td>
+        </tr>
+        <tr>
+          <td><code>alt</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096"></em></td>
+          <td>Alt text for the product image</td>
+        </tr>
+        <tr>
+          <td><code>rating</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Star rating value (0–5); omit to hide the rating row</td>
+        </tr>
+        <tr>
+          <td><code>badge</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Short badge text (e.g. &quot;Sale&quot;, &quot;New&quot;) overlaid on the image</td>
+        </tr>
+        <tr>
+          <td><code>href</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Link target; wraps the entire tile in an anchor when set</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="product-tile-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>media</code></td>
+          <td>Custom media content replacing the default `&lt;img&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>badge</code></td>
+          <td>Custom badge content overlaid on the media area</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Add-to-cart or other action buttons shown below the price</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="product-tile-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;product-tile-pk&gt;
+  …
+&lt;/product-tile-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="search-bar-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;search-bar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="search-bar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="search-bar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="search-bar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="search-bar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="search-bar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>placeholder</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">Search…</em></td>
+          <td>Placeholder text for the search input</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Pre-filled search input value</td>
+        </tr>
+        <tr>
+          <td><code>loading</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Shows a loading spinner inside the field</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Height and font-size preset of the search field</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="search-bar-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>prefix</code></td>
+          <td>Icon or element placed at the start of the input (default: magnifier icon)</td>
+        </tr>
+        <tr>
+          <td><code>suffix</code></td>
+          <td>Icon or element placed at the end of the input (clear button, filter, etc.)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="search-bar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;search-bar-pk&gt;
+  …
+&lt;/search-bar-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="tab-bar-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;tab-bar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="tab-bar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="tab-bar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="tab-bar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="tab-bar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="tab-bar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>active</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Name of the currently active tab (matches the slot name)</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">line | pill | boxed</td>
+          <td><em style="color:#718096">line</em></td>
+          <td>Visual style variant for the tab strip</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tab-bar-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>tab-1</code></td>
+          <td>Label for the first tab button</td>
+        </tr>
+        <tr>
+          <td><code>tab-2</code></td>
+          <td>Label for the second tab button</td>
+        </tr>
+        <tr>
+          <td><code>tab-3</code></td>
+          <td>Label for the third tab button</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tab-bar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;tab-bar-pk&gt;
+  …
+&lt;/tab-bar-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="tooltip-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;tooltip-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="tooltip-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="tooltip-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="tooltip-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="tooltip-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="tooltip-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>content</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>Tooltip text shown on hover/focus</td>
+        </tr>
+        <tr>
+          <td><code>position</code></td>
+          <td style="color:#7c3aed">top | bottom | left | right</td>
+          <td><em style="color:#718096">top</em></td>
+          <td>Preferred placement of the tooltip bubble</td>
+        </tr>
+        <tr>
+          <td><code>delay</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">200</em></td>
+          <td>Delay in milliseconds before the tooltip appears</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tooltip-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>The trigger element that activates the tooltip on hover/focus</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tooltip-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;tooltip-pk&gt;
+  …
+&lt;/tooltip-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="user-info-pk">
+      <h3><span style="background:#8b5cf6;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">molecules</span> <code>&lt;user-info-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="user-info-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="user-info-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="user-info-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="user-info-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="user-info-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><span style="color:#ef4444;font-weight:600">required</span></td>
+          <td>User's display name</td>
+        </tr>
+        <tr>
+          <td><code>role</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>User's role or subtitle shown below the name</td>
+        </tr>
+        <tr>
+          <td><code>src</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Avatar image URL passed to the default `&lt;avatar-pk&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Overall size preset of the user-info block</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="user-info-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>avatar</code></td>
+          <td>Custom avatar content replacing the default `&lt;avatar-pk&gt;`</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Action buttons or links placed to the right of the user details</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="user-info-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;user-info-pk&gt;
+  …
+&lt;/user-info-pk&gt;</code></pre>
+      </div>
+    </section>
+  </section>
+
+  <!-- ── Organisms ──────────────────────────────────────────────────────────── -->
+  
+  <section id="organisms">
+    <h2>Organisms <span style="color:#a0aec0;font-size:.875rem">(16)</span></h2>
+    
+    <section class="doc-component" id="accordion-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;accordion-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="accordion-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="accordion-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="accordion-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="accordion-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="accordion-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>exclusive</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Only one panel can be open at a time (accordion mode)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="accordion-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>`&lt;details&gt;/&lt;summary&gt;` panel elements; each panel is a native &lt;details&gt;</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="accordion-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;accordion-pk&gt;
+  …
+&lt;/accordion-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="carousel-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;carousel-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="carousel-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="carousel-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="carousel-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="carousel-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="carousel-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>autoplay</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>interval</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="carousel-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>slide items (each slide should be a block element)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="carousel-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;carousel-pk&gt;
+  …
+&lt;/carousel-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="cart-summary-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;cart-summary-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="cart-summary-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="cart-summary-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="cart-summary-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="cart-summary-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="cart-summary-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>count</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Total number of items in the cart shown in the header</td>
+        </tr>
+        <tr>
+          <td><code>total</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Subtotal price value</td>
+        </tr>
+        <tr>
+          <td><code>currency</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">$</em></td>
+          <td>Currency symbol displayed with the total</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="cart-summary-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>items</code></td>
+          <td>List of cart line items (use `&lt;list-item-pk&gt;` or custom rows)</td>
+        </tr>
+        <tr>
+          <td><code>promo</code></td>
+          <td>Promo code input area</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Checkout/continue shopping buttons</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="cart-summary-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;cart-summary-pk&gt;
+  …
+&lt;/cart-summary-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="comment-thread-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;comment-thread-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="comment-thread-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="comment-thread-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="comment-thread-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="comment-thread-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="comment-thread-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>count</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Total comment count displayed in the section header</td>
+        </tr>
+        <tr>
+          <td><code>loading</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Shows a skeleton/spinner state while comments are loading</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="comment-thread-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>header</code></td>
+          <td>Custom thread header (title, sort controls, etc.)</td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>Comment items (use `&lt;feed-post-pk&gt;` or custom comment cards)</td>
+        </tr>
+        <tr>
+          <td><code>composer</code></td>
+          <td>Reply/new comment input area placed at the bottom of the thread</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="comment-thread-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;comment-thread-pk&gt;
+  …
+&lt;/comment-thread-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="content-row-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;content-row-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="content-row-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="content-row-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="content-row-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="content-row-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="content-row-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Section heading shown above the content row</td>
+        </tr>
+        <tr>
+          <td><code>href</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Link target for the &quot;See all&quot; button</td>
+        </tr>
+        <tr>
+          <td><code>seeAll</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Shows a &quot;See all →&quot; link in the section header</td>
+        </tr>
+        <tr>
+          <td><code>cols</code></td>
+          <td style="color:#7c3aed">2 | 3 | 4 | 5 | 6</td>
+          <td><em style="color:#718096">4</em></td>
+          <td>Number of columns in the horizontal grid</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="content-row-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>header</code></td>
+          <td>Custom section header replacing the default title/see-all row</td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>Card or tile items to display in the row</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="content-row-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;content-row-pk&gt;
+  …
+&lt;/content-row-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="feed-post-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;feed-post-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="feed-post-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="feed-post-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="feed-post-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="feed-post-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="feed-post-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>author</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Author's display name shown in the post header</td>
+        </tr>
+        <tr>
+          <td><code>time</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Relative or formatted timestamp string</td>
+        </tr>
+        <tr>
+          <td><code>liked</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Whether the current user has liked this post</td>
+        </tr>
+        <tr>
+          <td><code>bookmarked</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Whether the current user has bookmarked this post</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="feed-post-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>avatar</code></td>
+          <td>Author avatar element (use `&lt;avatar-pk&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>header</code></td>
+          <td>Custom post header replacing the default author/time row</td>
+        </tr>
+        <tr>
+          <td><code>media</code></td>
+          <td>Post media content (image, video embed, link card)</td>
+        </tr>
+        <tr>
+          <td><code>body</code></td>
+          <td>Main post text content</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Reaction/action buttons (like, comment, share)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="feed-post-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;feed-post-pk&gt;
+  …
+&lt;/feed-post-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="footer-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;footer-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="footer-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="footer-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="footer-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="footer-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="footer-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">simple | full</td>
+          <td><em style="color:#718096">full</em></td>
+          <td>Layout variant: `simple` is a single-row bar; `full` has multi-column links</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="footer-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>brand</code></td>
+          <td>Logo and tagline area on the left / top</td>
+        </tr>
+        <tr>
+          <td><code>links</code></td>
+          <td>Navigation link columns (use `&lt;ul&gt;` groups)</td>
+        </tr>
+        <tr>
+          <td><code>social</code></td>
+          <td>Social media icon links</td>
+        </tr>
+        <tr>
+          <td><code>legal</code></td>
+          <td>Copyright text and legal links at the very bottom</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="footer-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;footer-pk&gt;
+  …
+&lt;/footer-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="hero-banner-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;hero-banner-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="hero-banner-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="hero-banner-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="hero-banner-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="hero-banner-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="hero-banner-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Hero heading text when no `headline` slot is provided</td>
+        </tr>
+        <tr>
+          <td><code>subtitle</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Supporting text below the heading</td>
+        </tr>
+        <tr>
+          <td><code>align</code></td>
+          <td style="color:#7c3aed">left | center | right</td>
+          <td><em style="color:#718096">center</em></td>
+          <td>Horizontal alignment of the hero content</td>
+        </tr>
+        <tr>
+          <td><code>overlay</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Adds a dark gradient overlay on top of the background media</td>
+        </tr>
+        <tr>
+          <td><code>fullHeight</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Makes the banner fill the full viewport height</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="hero-banner-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>media</code></td>
+          <td>Background image or video element</td>
+        </tr>
+        <tr>
+          <td><code>badge</code></td>
+          <td>Small label or eyebrow text above the heading</td>
+        </tr>
+        <tr>
+          <td><code>headline</code></td>
+          <td>Custom heading content (overrides `title`/`subtitle` props)</td>
+        </tr>
+        <tr>
+          <td><code>cta</code></td>
+          <td>Call-to-action buttons placed below the heading</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="hero-banner-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;hero-banner-pk&gt;
+  …
+&lt;/hero-banner-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="navbar-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;navbar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="navbar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="navbar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="navbar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="navbar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="navbar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>sticky</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Pins the navbar to the top of the viewport while scrolling</td>
+        </tr>
+        <tr>
+          <td><code>transparent</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Removes the background colour (for hero overlay navbars)</td>
+        </tr>
+        <tr>
+          <td><code>elevated</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Adds a bottom shadow to separate the navbar from content</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="navbar-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>logo</code></td>
+          <td>Brand logo or wordmark on the left side</td>
+        </tr>
+        <tr>
+          <td><code>links</code></td>
+          <td>Primary navigation links in the centre</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Right-side action buttons (search, cart, user menu)</td>
+        </tr>
+        <tr>
+          <td><code>mobile-menu</code></td>
+          <td>Full mobile navigation panel revealed by the hamburger button</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="navbar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;navbar-pk&gt;
+  …
+&lt;/navbar-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="product-detail-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;product-detail-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="product-detail-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="product-detail-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="product-detail-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="product-detail-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="product-detail-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>title</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Product name shown in the info column</td>
+        </tr>
+        <tr>
+          <td><code>price</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Current price value</td>
+        </tr>
+        <tr>
+          <td><code>sku</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Stock-keeping unit identifier displayed below the title</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="product-detail-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>breadcrumb</code></td>
+          <td>Breadcrumb navigation above the product layout</td>
+        </tr>
+        <tr>
+          <td><code>media</code></td>
+          <td>Product image gallery or carousel</td>
+        </tr>
+        <tr>
+          <td><code>info</code></td>
+          <td>Product metadata (title, rating, description, etc.)</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Add-to-cart, wishlist, and quantity controls</td>
+        </tr>
+        <tr>
+          <td><code>tabs</code></td>
+          <td>Product details / specs / reviews tab panel</td>
+        </tr>
+        <tr>
+          <td><code>reviews</code></td>
+          <td>Customer review section below the main layout</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="product-detail-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;product-detail-pk&gt;
+  …
+&lt;/product-detail-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="profile-card-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;profile-card-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="profile-card-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="profile-card-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="profile-card-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="profile-card-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="profile-card-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>User's display name</td>
+        </tr>
+        <tr>
+          <td><code>bio</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Short bio or tagline text</td>
+        </tr>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">compact | full</td>
+          <td><em style="color:#718096">full</em></td>
+          <td>`compact` shows only avatar + name; `full` adds bio, stats, and cover</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="profile-card-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>cover</code></td>
+          <td>Cover/banner image displayed at the top of the card</td>
+        </tr>
+        <tr>
+          <td><code>avatar</code></td>
+          <td>Profile picture element (use `&lt;avatar-pk&gt;`)</td>
+        </tr>
+        <tr>
+          <td><code>stats</code></td>
+          <td>Follower/following/post count stats row</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Follow, message, and other CTA buttons</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="profile-card-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;profile-card-pk&gt;
+  …
+&lt;/profile-card-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="sidebar-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;sidebar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="sidebar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="sidebar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="sidebar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="sidebar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="sidebar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>open</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Controls whether the sidebar panel is visible (relevant in overlay mode)</td>
+        </tr>
+        <tr>
+          <td><code>position</code></td>
+          <td style="color:#7c3aed">left | right</td>
+          <td><em style="color:#718096">left</em></td>
+          <td>Side of the viewport where the sidebar is anchored</td>
+        </tr>
+        <tr>
+          <td><code>width</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">260px</em></td>
+          <td>CSS width value of the sidebar panel</td>
+        </tr>
+        <tr>
+          <td><code>overlay</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Renders the sidebar as a modal drawer with a backdrop overlay</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="sidebar-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>header</code></td>
+          <td>Top area of the sidebar (logo, close button, etc.)</td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>Main navigation or content area</td>
+        </tr>
+        <tr>
+          <td><code>footer</code></td>
+          <td>Bottom area of the sidebar (user info, settings link)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="sidebar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;sidebar-pk&gt;
+  …
+&lt;/sidebar-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="story-ring-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;story-ring-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="story-ring-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="story-ring-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="story-ring-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="story-ring-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="story-ring-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>label</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Name label displayed below the story ring avatar</td>
+        </tr>
+        <tr>
+          <td><code>seen</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Shows the ring in a muted/seen colour state</td>
+        </tr>
+        <tr>
+          <td><code>add</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Renders a &quot;+&quot; add-story variant with a blue indicator</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="story-ring-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Avatar image or custom thumbnail inside the ring</td>
+        </tr>
+        <tr>
+          <td><code>add-icon</code></td>
+          <td>Icon for the add-story button (defaults to `+`)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="story-ring-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;story-ring-pk&gt;
+  …
+&lt;/story-ring-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="tabs-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;tabs-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="tabs-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="tabs-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="tabs-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="tabs-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="tabs-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>variant</code></td>
+          <td style="color:#7c3aed">line | pill | boxed</td>
+          <td><em style="color:#718096">line</em></td>
+          <td>Visual style of the tab strip</td>
+        </tr>
+        <tr>
+          <td><code>active</code></td>
+          <td style="color:#7c3aed">string</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>id of the panel to show on init (defaults to first panel)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tabs-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>tabs</code></td>
+          <td>`&lt;button data-panel=&quot;id&quot;&gt;Label&lt;/button&gt;` triggers; one per tab</td>
+        </tr>
+        <tr>
+          <td><code>panels</code></td>
+          <td>`&lt;div id=&quot;id&quot;&gt;Content&lt;/div&gt;` panels; id must match button data-panel</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="tabs-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;tabs-pk&gt;
+  …
+&lt;/tabs-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="thumbnail-grid-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;thumbnail-grid-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="thumbnail-grid-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="thumbnail-grid-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="thumbnail-grid-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="thumbnail-grid-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="thumbnail-grid-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>columns</code></td>
+          <td style="color:#7c3aed">number</td>
+          <td><em style="color:#718096">3</em></td>
+          <td>Number of columns in the CSS grid</td>
+        </tr>
+        <tr>
+          <td><code>gap</code></td>
+          <td style="color:#7c3aed">sm | md | lg</td>
+          <td><em style="color:#718096">md</em></td>
+          <td>Gap size between grid cells</td>
+        </tr>
+        <tr>
+          <td><code>masonry</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Enables CSS masonry-style layout (column-count fallback)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="thumbnail-grid-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>default</code></td>
+          <td>Thumbnail items to display in the grid (use `&lt;card-media-pk&gt;` or `&lt;img&gt;` elements)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="thumbnail-grid-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;thumbnail-grid-pk&gt;
+  …
+&lt;/thumbnail-grid-pk&gt;</code></pre>
+      </div>
+    </section>
+
+    <section class="doc-component" id="topbar-pk">
+      <h3><span style="background:#10b981;color:#fff;font-size:.65rem;font-weight:600;padding:.1rem .45rem;border-radius:.25rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.05em">organisms</span> <code>&lt;topbar-pk&gt;</code></h3>
+      <div class="doc-tabs" role="tablist" aria-label="topbar-pk API tabs">
+        <button class="doc-tab doc-tab--active" data-target="topbar-pk-props" aria-selected="true" role="tab">Props</button>
+        <button class="doc-tab" data-target="topbar-pk-slots" aria-selected="false" role="tab">Slots</button>
+        <button class="doc-tab" data-target="topbar-pk-example" aria-selected="false" role="tab">Template</button>
+      </div>
+      <div id="topbar-pk-props" class="doc-tab-panel">
+        
+      <table class="doc-table">
+        <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>elevated</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Adds a bottom shadow to the topbar</td>
+        </tr>
+        <tr>
+          <td><code>transparent</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Removes the background colour for overlay usage</td>
+        </tr>
+        <tr>
+          <td><code>sticky</code></td>
+          <td style="color:#7c3aed">boolean</td>
+          <td><em style="color:#718096">—</em></td>
+          <td>Pins the topbar to the top of the viewport</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="topbar-pk-slots" class="doc-tab-panel" hidden>
+        
+      <table class="doc-table">
+        <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+        <tbody>
+        <tr>
+          <td><code>leading</code></td>
+          <td>Left-side content (back button, hamburger menu, logo)</td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td>Centre title or search bar</td>
+        </tr>
+        <tr>
+          <td><code>actions</code></td>
+          <td>Right-side icon buttons (notifications, avatar, settings)</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div id="topbar-pk-example" class="doc-tab-panel" hidden>
+        <pre class="doc-pre"><code>&lt;topbar-pk&gt;
+  …
+&lt;/topbar-pk&gt;</code></pre>
+      </div>
+    </section>
+  </section>
+
+  <!-- ── Framework Adapters ─────────────────────────────────────────────────── -->
+  <section id="framework-adapters">
+    <h2>Framework Adapters</h2>
+
+    <div class="doc-box">
+      <h3>React 18+ — <code>pseudo-kit-react</code></h3>
+      <p>Install the adapter:</p>
+      <pre class="doc-pre"><code>npm install pseudo-kit-react</code></pre>
+      <p>Use hooks inside your components:</p>
+      <pre class="doc-pre"><code>import { useComponent, PseudoKitProvider } from 'pseudo-kit-react';
+
+// Provider approach — loads multiple components once
+function App() {
+  return (
+    &lt;PseudoKitProvider components={['/button-pk.html', '/input-pk.html']}&gt;
+      &lt;MyPage /&gt;
+    &lt;/PseudoKitProvider&gt;
+  );
+}
+
+// Hook approach — load on demand
+function MyButton() {
+  const { ready } = useComponent('/button-pk.html');
+  if (!ready) return &lt;span&gt;Loading…&lt;/span&gt;;
+  return &lt;button-pk variant="primary"&gt;Click me&lt;/button-pk&gt;;
+}</code></pre>
+
+      <p>SSR / server rendering:</p>
+      <pre class="doc-pre"><code>import { renderComponent } from 'pseudo-kit-react/ssr';
+
+// In your server route / RSC
+const html = await renderComponent('/path/to/button-pk.html', {
+  variant: 'primary',
+  label: 'Save',
+});
+// → &lt;button-pk variant="primary" data-pk-ssr="button-pk" data-pk-resolved&gt;…&lt;/button-pk&gt;</code></pre>
+    </div>
+
+    <div class="doc-box">
+      <h3>Svelte 5 — <code>pseudo-kit-svelte</code></h3>
+      <p>Install the adapter:</p>
+      <pre class="doc-pre"><code>npm install pseudo-kit-svelte</code></pre>
+      <p>Use in a Svelte component:</p>
+      <pre class="doc-pre"><code>&lt;script&gt;
+  import { pseudoKit } from 'pseudo-kit-svelte';
+  import { onMount } from 'svelte';
+
+  onMount(() => {
+    const { ready } = pseudoKit(['/button-pk.html', '/card-pk.html']);
+    ready.then(() => console.log('PseudoKit ready'));
+  });
+&lt;/script&gt;
+
+&lt;button-pk variant="primary"&gt;Hello Svelte&lt;/button-pk&gt;</code></pre>
+    </div>
+  </section>
+
+  <!-- ── CLI ────────────────────────────────────────────────────────────────── -->
+  <section id="cli">
+    <h2>CLI</h2>
+
+    <div class="doc-box">
+      <h3><code>pseudo-kit init</code></h3>
+      <p>Scaffold a new project with a ready-to-run structure:</p>
+      <pre class="doc-pre"><code># One-shot scaffold (no install needed)
+npx pseudo-kit init my-app
+
+# Or scaffold into current directory
+npx pseudo-kit init .</code></pre>
+      <p>Generated structure:</p>
+      <pre class="doc-pre"><code>my-app/
+├── index.html          ← entry point (loads PseudoKit)
+├── demo.html           ← sample component demo
+├── components/         ← put your .html component files here
+└── package.json        ← npm/pnpm project scaffold</code></pre>
+      <div class="doc-callout">
+        The scaffold is idempotent — running it on an existing project only adds missing files.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Accessibility ──────────────────────────────────────────────────────── -->
+  <section id="accessibility">
+    <h2>Accessibility</h2>
+
+    <div class="doc-box">
+      <h3>WCAG 2.2 AA Compliance</h3>
+      <p>pseudo-html-kit v1.0.0 is <strong>WCAG 2.2 Level AA compliant</strong> after the S18-01 and S19 accessibility sprints.</p>
+      <ul>
+        <li>✅ All interactive components use <code>:focus-visible</code> for keyboard-only focus rings</li>
+        <li>✅ All animated components respect <code>prefers-reduced-motion</code></li>
+        <li>✅ 0 color-contrast violations (WCAG 1.4.3 AA) with default design tokens</li>
+        <li>✅ Full ARIA landmark and role coverage (<code>&lt;nav&gt;</code>, <code>&lt;dialog&gt;</code>, <code>role="tablist"</code>, <code>role="status"</code>)</li>
+        <li>✅ Keyboard navigation: Tab, Arrow keys, Escape, Enter, Space — all standard patterns implemented</li>
+      </ul>
+      <div class="doc-callout">
+        <strong>Note:</strong> Page-level skip links, <code>lang</code> attribute, and <code>&lt;main&gt;</code> landmarks are host-page responsibilities — not part of the component library.
+      </div>
+    </div>
+
+    <div class="doc-box">
+      <h3>Running the audit locally</h3>
+      <pre class="doc-pre"><code># axe-core Playwright a11y audit (Chromium)
+pnpm test:a11y
+
+# Bundle size check
+pnpm check:bundle</code></pre>
+    </div>
+  </section>
+
+  <footer class="doc-footer">
+    <p>pseudo-html-kit v1.0.0 &nbsp;·&nbsp; 61 components &nbsp;·&nbsp; WCAG 2.2 AA &nbsp;·&nbsp; <a href="https://github.com/pseudo-html-kit/pseudo-html-kit">GitHub</a></p>
+    <p style="margin-top:.25rem">Generated by <code>pnpm generate:docs</code> on 2026-03-11</p>
+  </footer>
+
+</main>
+
+<!-- ── Mini tab widget (no framework) ───────────────────────────────────────── -->
+<script>
+document.querySelectorAll('.doc-tabs').forEach(tablist => {
+  const tabs   = [...tablist.querySelectorAll('.doc-tab')];
+  const panels = tabs.map(t => document.getElementById(t.dataset.target));
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t, j) => {
+        const active = i === j;
+        t.classList.toggle('doc-tab--active', active);
+        t.setAttribute('aria-selected', String(active));
+        if (panels[j]) panels[j].hidden = !active;
+      });
+    });
+  });
+});
+</script>
+
+</body>
+</html>

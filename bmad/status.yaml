@@ -142,7 +142,7 @@ pseudo_assets:
 
 qa:
   test_plan: done
-  coverage: "656 passing — 226 node:test + 392 vitest (345 main + 29 react + 18 svelte) + 38 E2E Chromium · 0 failures"
+  coverage: "656 passing — 226 node:test + 392 vitest (345 main + 29 react + 18 svelte) + 38 E2E + 5 a11y · 0 failures"
   last_run: "2026-03-11"
   e2e_ready: true
   e2e_browsers: "Chromium, Firefox, WebKit"
@@ -197,7 +197,7 @@ decisions:
   - barrel_meta: "index.js: components + frames URLs + componentsMeta + framesMeta"
   - ssr_marker: "data-pk-hydrated on each SSR-rendered component root"
 
-release_status: "✅ v0.5.1 stable · v0.6.0 GA released · v0.6.1 in progress (Sprint 18 WCAG + SSR)"
+release_status: "🎉 v1.0.0 STABLE — API locked · 21 sprints · 61 components · WCAG 2.2 AA · 7.7 KB gzip"
 
 # v0.4.0 cycle — Phase 1: Interaction Components Migration
 migration_v040:
@@ -306,7 +306,7 @@ sprint_13_stories:
     status: done
     story: artifacts/stories/S13-05-theme-skin-system.md
 
-recommendation: "Sprint 19 in progress. S19-01 ✅ (24 components +reduced-motion, 8 +focus-visible) · S19-02 ✅ (date-picker aria-label) · S19-03 ⏳ (axe-core Playwright) · S19-04 ✅ (bundle check script, 7.7 KB). Next: S19-03 axe-core color contrast audit."
+recommendation: "🎉 v1.0.0 RELEASED. Sprint 21 complete. All 21 sprints done. API locked. 61 components. WCAG 2.2 AA. 661+ tests. VSCode extension remains deferred (post-1.0.0 backlog)."
 audit:
   baseline: true
   file: artifacts/audit-baseline-2026-03-07.md

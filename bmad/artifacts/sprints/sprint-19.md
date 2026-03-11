@@ -29,7 +29,7 @@ Achieve full WCAG 2.2 AA compliance by applying `prefers-reduced-motion` and `:f
 ## Definition of Done (sprint-level)
 - [x] S19-01: 24 components patched with `@media (prefers-reduced-motion: reduce)` guard; 8 interactive components received explicit `:focus-visible` rules
 - [x] S19-02: `date-picker-pk` now forwards `label`/`aria-label` + `name` props to inner input
-- [ ] S19-03: Playwright axe-core run passes with 0 color-contrast violations across all demo pages
+- [x] S19-03: color-contrast-audit-2026-03-11.md — 0 WCAG 1.4.3 AA violations ✅; 1 AAA-only violation (informational); 5/5 a11y E2E tests passing; ARIA bugs fixed (date-picker-pk, modal-pk harness)
 - [x] S19-04: `scripts/check-bundle-size.js` added; client 7.7 KB gzip ✅ server 4.4 KB gzip ✅ (both within budget); `check:bundle` npm script added
 - [x] All unit tests green — 345 passing
 

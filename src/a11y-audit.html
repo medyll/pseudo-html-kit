@@ -170,6 +170,40 @@
       </toggle-pk>
     </div>
 
+    <div class="component-sample">
+      <div class="component-label">checkbox-pk</div>
+      <checkbox-pk name="agree" value="yes">I agree to the terms</checkbox-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">radio-pk</div>
+      <fieldset style="border:none;padding:0;margin:0">
+        <legend style="font-size:.75rem;margin-bottom:.25rem">Delivery</legend>
+        <radio-pk name="delivery" value="standard" id="a11y-radio-std">Standard</radio-pk>
+        <radio-pk name="delivery" value="express" id="a11y-radio-exp">Express</radio-pk>
+      </fieldset>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">select-pk</div>
+      <label for="a11y-select" style="display:block;margin-bottom:.25rem;font-size:.875rem">Country</label>
+      <select-pk name="country" id="a11y-select" aria-label="Country">
+        <option value="">Select…</option>
+        <option value="us">United States</option>
+        <option value="fr">France</option>
+      </select-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">slider-pk</div>
+      <slider-pk name="volume" min="0" max="100" value="50" label="Volume"></slider-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">progress-pk</div>
+      <progress-pk value="60" max="100" label="Upload"></progress-pk>
+    </div>
+
   </div><!-- /atoms -->
 
   <h2>Molecules</h2>
@@ -240,8 +274,8 @@
 
     <div class="component-sample">
       <div class="component-label">modal-pk</div>
-      <modal-pk aria-labelledby="modal-h" style="position:relative;max-width:280px">
-        <span slot="header" id="modal-h" style="font-weight:600">Confirm action</span>
+      <modal-pk style="position:relative;max-width:280px">
+        <span slot="header" style="font-weight:600">Confirm action</span>
         <p>Are you sure you want to proceed?</p>
         <div slot="footer" style="display:flex;gap:.5rem">
           <button-pk>Cancel</button-pk>
@@ -285,6 +319,20 @@
         <span slot="tab-2">Reviews</span>
         <span slot="tab-3">Specs</span>
       </tab-bar-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">combobox-pk</div>
+      <combobox-pk name="fruit" aria-label="Choose a fruit" placeholder="Type to filter…">
+        <option value="apple">Apple</option>
+        <option value="banana">Banana</option>
+        <option value="cherry">Cherry</option>
+      </combobox-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">date-picker-pk (molecule)</div>
+      <date-picker-pk label="Appointment date" name="appt"></date-picker-pk>
     </div>
 
     <div class="component-sample">
@@ -432,6 +480,30 @@
       </topbar-pk>
     </div>
 
+    <div class="component-sample">
+      <div class="component-label">accordion-pk</div>
+      <accordion-pk style="max-width:280px">
+        <details>
+          <summary>Section 1</summary>
+          <div class="accordion__content">Content for section 1.</div>
+        </details>
+        <details open>
+          <summary>Section 2</summary>
+          <div class="accordion__content">Content for section 2.</div>
+        </details>
+      </accordion-pk>
+    </div>
+
+    <div class="component-sample">
+      <div class="component-label">tabs-pk</div>
+      <tabs-pk style="max-width:280px">
+        <button slot="tabs" data-panel="panel-a">Tab A</button>
+        <button slot="tabs" data-panel="panel-b">Tab B</button>
+        <div slot="panels" id="panel-a">Panel A content.</div>
+        <div slot="panels" id="panel-b">Panel B content.</div>
+      </tabs-pk>
+    </div>
+
   </div><!-- /organisms -->
 
 </main>
@@ -461,8 +533,13 @@ const defs = [
   { name: 'tag-pk',          src: r('./pseudo-assets/components/atoms/tag.html') },
   { name: 'textarea-pk',     src: r('./pseudo-assets/components/atoms/textarea-pk.html') },
   { name: 'toggle-pk',       src: r('./pseudo-assets/components/atoms/toggle.html') },
+  { name: 'checkbox-pk',    src: r('./pseudo-assets/components/atoms/checkbox-pk.html') },
+  { name: 'radio-pk',       src: r('./pseudo-assets/components/atoms/radio-pk.html') },
+  { name: 'select-pk',      src: r('./pseudo-assets/components/atoms/select-pk.html') },
+  { name: 'slider-pk',      src: r('./pseudo-assets/components/atoms/slider-pk.html') },
+  { name: 'progress-pk',    src: r('./pseudo-assets/components/atoms/progress-pk.html') },
   // Molecules
-  { name: 'breadcrumb-pk',   src: r('./pseudo-assets/components/molecules/breadcrumb.html') },
+  { name: 'breadcrumb-pk',   src: r('./pseudo-assets/components/molecules/breadcrumb-pk.html') },
   { name: 'card-pk',         src: r('./pseudo-assets/components/molecules/card.html') },
   { name: 'card-media-pk',   src: r('./pseudo-assets/components/molecules/card-media.html') },
   { name: 'dropdown-pk',     src: r('./pseudo-assets/components/molecules/dropdown.html') },
@@ -478,6 +555,8 @@ const defs = [
   { name: 'tab-bar-pk',      src: r('./pseudo-assets/components/molecules/tab-bar.html') },
   { name: 'tooltip-pk',      src: r('./pseudo-assets/components/molecules/tooltip.html') },
   { name: 'user-info-pk',    src: r('./pseudo-assets/components/molecules/user-info.html') },
+  { name: 'combobox-pk',     src: r('./pseudo-assets/components/molecules/combobox-pk.html') },
+  { name: 'date-picker-pk',  src: r('./pseudo-assets/components/molecules/date-picker-pk.html') },
   // Organisms
   { name: 'cart-summary-pk',   src: r('./pseudo-assets/components/organisms/cart-summary.html') },
   { name: 'comment-thread-pk', src: r('./pseudo-assets/components/organisms/comment-thread.html') },
@@ -492,6 +571,8 @@ const defs = [
   { name: 'story-ring-pk',     src: r('./pseudo-assets/components/organisms/story-ring.html') },
   { name: 'thumbnail-grid-pk', src: r('./pseudo-assets/components/organisms/thumbnail-grid.html') },
   { name: 'topbar-pk',         src: r('./pseudo-assets/components/organisms/topbar.html') },
+  { name: 'accordion-pk',     src: r('./pseudo-assets/components/organisms/accordion-pk.html') },
+  { name: 'tabs-pk',          src: r('./pseudo-assets/components/organisms/tabs-pk.html') },
 ];
 
 defs.forEach(d => PseudoKit.register(d));

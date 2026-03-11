@@ -1,6 +1,6 @@
 {
   "name": "pseudo-stack",
-  "version": "0.5.1",
+  "version": "1.0.0",
   "description": "Vanilla HTML component system for pseudo-HTML layout descriptors. No build step. No framework.",
   "type": "module",
   "license": "MIT",
@@ -37,6 +37,8 @@
     "test:e2e:ui": "playwright test --config playwright.config.js --ui",
     "test:e2e:debug": "playwright test --config playwright.config.js --debug",
     "check:bundle": "node scripts/check-bundle-size.js",
+    "generate:context": "node scripts/generate-context.js",
+    "generate:docs": "node scripts/generate-context.js && node scripts/generate-docs.js",
     "test:all": "pnpm test && pnpm run test:client && pnpm run test:components && pnpm run test:viewer && pnpm run test:e2e",
     "test:coverage": "vitest run --coverage",
     "test:a11y": "playwright test --config playwright.a11y.config.js",

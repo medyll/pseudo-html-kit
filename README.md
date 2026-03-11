@@ -2,6 +2,12 @@
 
 > Vanilla HTML component system. No build step. No framework. No dependencies.
 
+[![version](https://img.shields.io/badge/version-1.0.0-blue)](CHANGELOG-v1.0.0.md)
+[![WCAG 2.2 AA](https://img.shields.io/badge/WCAG%202.2-AA%20✓-green)](bmad/artifacts/a11y-audit-v0.6.0.md)
+[![bundle](https://img.shields.io/badge/gzip-7.7%20KB-brightgreen)](scripts/check-bundle-size.js)
+[![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
+[![components](https://img.shields.io/badge/components-61-purple)](pseudo-kit-context.json)
+
 pseudo-kit is a runtime for **pseudo-HTML** — a language-agnostic interface descriptor that bridges UI specification and working code. Write your UI as annotated HTML, render it in the browser as-is, generate real components for any framework, or serve it via SSR from Node.js.
 
 ---
@@ -136,7 +142,7 @@ pnpm add pseudo-kit
 
 ### With Pre-built Asset Library (optional)
 
-For 46 pre-built components (atoms, molecules, organisms), 20 frame skeletons, and demo apps:
+For 61 pre-built components (atoms, molecules, organisms), frame skeletons, and demo apps:
 
 ```bash
 npm install pseudo-stack-assets
@@ -1314,17 +1320,34 @@ npm run normalize:write -- path/to/canvas.html  # in-place
 
 ### Test Coverage
 
-Target: **100%** lines, functions, branches, statements on all modules.
-
-| File | Runner | Tests |
+| Suite | Runner | Tests |
 |---|---|---|
-| `registry-shared.js` | `node:test` | 30 |
-| `state-shared.js` | `node:test` | 33 |
-| `pseudo-kit-server.js` | `node:test` | 37 |
-| `pseudo-kit-client.js` | Vitest + happy-dom | ~50 |
-| **Total** | — | **259** |
+| Server (registry, state, server, validator, normalizer) | `node:test` | 226 |
+| Client (pseudo-kit-client, hydration) | Vitest + happy-dom | ~100 |
+| Components (atoms, molecules, organisms) | Vitest + happy-dom | 245 |
+| React adapter (`pseudo-kit-react`) | Vitest + jsdom | 29 |
+| Svelte adapter (`pseudo-kit-svelte`) | Vitest + happy-dom | 18 |
+| E2E — migration + forms + viewer | Playwright Chromium | 38 |
+| A11y — axe-core WCAG 2.2 AA | Playwright Chromium | 5 |
+| **Total** | — | **661+** |
 
-**v0.2.0 Status:** All tests passing (0 failures).
+**v1.0.0 Status:** All tests passing (0 failures) · WCAG 2.2 AA · bundle 7.7 KB gzip.
+
+### Additional scripts
+
+```bash
+# Generate LLM context pack
+pnpm generate:context   # → pseudo-kit-context.json
+
+# Generate documentation site
+pnpm generate:docs      # → docs/index.html
+
+# Check bundle size budget
+pnpm check:bundle       # client ≤ 12 KB, server ≤ 6 KB
+
+# Accessibility audit (axe-core Playwright)
+pnpm test:a11y
+```
 
 ---
 

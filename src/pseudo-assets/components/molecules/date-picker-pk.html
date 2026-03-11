@@ -9,7 +9,7 @@
 -->
 <template>
   <div class="date-picker">
-    <input class="date-picker__input" type="date" aria-haspopup="dialog" aria-expanded="false" />
+    <input class="date-picker__input" type="date" />
     <div class="date-picker__popover" role="dialog" aria-modal="false" style="display:none" aria-hidden="true">
       <div class="date-picker__calendar" role="grid"></div>
     </div>
@@ -47,12 +47,10 @@ function _open() {
   }
   pop.style.display = '';
   pop.removeAttribute('aria-hidden');
-  input.setAttribute('aria-expanded', 'true');
 }
 function _close() {
   pop.style.display = 'none';
   pop.setAttribute('aria-hidden', 'true');
-  input.setAttribute('aria-expanded', 'false');
 }
 
 input.addEventListener('focus', () => { if (!_supportsNativeDate()) _open(); });
