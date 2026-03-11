@@ -1,0 +1,32 @@
+{
+  "name": "pseudo-kit-svelte",
+  "version": "0.1.0",
+  "description": "Svelte 5 adapter for pseudo-html-kit — load and use pseudo-html components inside Svelte apps.",
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src/",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "svelte": ">=5.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  },
+  "keywords": [
+    "pseudo-kit",
+    "pseudo-html",
+    "svelte",
+    "svelte5",
+    "web-components",
+    "vanilla",
+    "adapter"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
