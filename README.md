@@ -77,9 +77,9 @@
 
 ---
 
-## What is pseudo-HTML?
+## What is Pseudo-HTML?
 
-**pseudo-HTML** is a language-agnostic interface descriptor. It describes a UI as annotated HTML elements — components with attributes, children, slots, events, and loops — without requiring any framework, build step, or runtime.
+**Pseudo-HTML** is HTML.
 
 A pseudo-HTML layout file looks like regular HTML. You write component tags, provide props as attributes, fill slots with children, and declare loops. The browser renders it as-is, and the pseudo-kit runtime resolves each component tag into its full template.
 
