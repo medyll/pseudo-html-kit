@@ -10,6 +10,11 @@
   "exports": {
     ".": "./src/client/pseudo-kit-client.js",
     "./client": "./src/client/pseudo-kit-client.js",
+    "./client/styles": "./src/client/styles.js",
+    "./client/slots": "./src/client/slots.js",
+    "./client/state": "./src/client/state.js",
+    "./client/resolver": "./src/client/resolver.js",
+    "./client/events": "./src/client/events.js",
     "./server": "./src/server/pseudo-kit-server.js",
     "./validator": "./src/server/canvas-validator.js",
     "./normalizer": "./src/server/canvas-normalize.js",

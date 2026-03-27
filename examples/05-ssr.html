@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example 05 — SSR</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; }
+  </style>
+</head>
+<body>
+  <h1>Example 05 — Server-Side Rendering</h1>
+  <p>This example shows SSR-rendered HTML that hydrates on the client.</p>
+
+  <!-- This HTML was rendered server-side -->
+  <greeting name="Server" data-pk-ssr>
+    <p class="greeting__text">Hello, <span class="greeting__name">Server</span>!</p>
+  </greeting>
+
+  <!-- This one will be rendered client-side -->
+  <greeting name="Client"></greeting>
+
+  <script type="module">
+    import PseudoKit from '../src/client/pseudo-kit-client.js';
+
+    PseudoKit.register({
+      name: 'greeting',
+      src: './components/05-greeting-ssr.html'
+    });
+
+    // Hydrate SSR state if present
+    const stateScript = document.getElementById('pk-state');
+    if (stateScript) {
+      const initialState = JSON.parse(stateScript.textContent);
+      Object.assign(PseudoKit.state, initialState);
+    }
+
+    PseudoKit.init();
+  </script>
+
+  <!-- Embedded SSR state (optional) -->
+  <script id="pk-state" type="application/json">
+    {"focusMode": false, "theme": "light"}
+  </script>
+</body>
+</html>

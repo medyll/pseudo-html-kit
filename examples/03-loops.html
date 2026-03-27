@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example 03 — Loops</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; }
+  </style>
+</head>
+<body>
+  <h1>Example 03 — Loops</h1>
+  <p>Render lists from data arrays.</p>
+
+  <button id="load-btn">Load Products</button>
+
+  <!-- Loop container -->
+  <section id="product-list">
+    <!-- This is the template for each item -->
+    <product-tile loop></product-tile>
+  </section>
+
+  <script type="module">
+    import PseudoKit from '../src/client/pseudo-kit-client.js';
+
+    PseudoKit.register({
+      name: 'product-tile',
+      src: './components/03-product-tile.html'
+    });
+
+    PseudoKit.init();
+
+    // Simulate fetching data
+    document.getElementById('load-btn').addEventListener('click', () => {
+      const products = [
+        { id: '1', name: 'Widget', price: '9.99' },
+        { id: '2', name: 'Gadget', price: '19.99' },
+        { id: '3', name: 'Gizmo', price: '29.99' }
+      ];
+
+      PseudoKit.renderLoop('product-list', products);
+    });
+  </script>
+</body>
+</html>

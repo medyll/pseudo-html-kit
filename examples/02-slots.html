@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example 02 — Slots</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; }
+  </style>
+</head>
+<body>
+  <h1>Example 02 — Slots</h1>
+  <p>Default slot and named slots for content projection.</p>
+
+  <!-- Use the component with slots -->
+  <card>
+    <h2 slot="header">Card Title</h2>
+    <p>This is the card body content.</p>
+    <p>It goes into the <strong>default slot</strong>.</p>
+    <button slot="footer">Close</button>
+  </card>
+
+  <script type="module">
+    import PseudoKit from '../src/client/pseudo-kit-client.js';
+
+    PseudoKit.register({
+      name: 'card',
+      src: './components/02-card.html'
+    });
+
+    PseudoKit.init();
+  </script>
+</body>
+</html>

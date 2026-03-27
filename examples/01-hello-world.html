@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example 01 — Hello World</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; }
+  </style>
+</head>
+<body>
+  <h1>Example 01 — Hello World</h1>
+  <p>Minimal component with no CSS and no script.</p>
+
+  <!-- Use the component -->
+  <greeting name="Alice"></greeting>
+  <greeting name="Bob"></greeting>
+
+  <script type="module">
+    import PseudoKit from '../src/client/pseudo-kit-client.js';
+
+    // Register the component
+    PseudoKit.register({
+      name: 'greeting',
+      src: './components/01-greeting.html'
+    });
+
+    // Initialize the runtime
+    PseudoKit.init();
+  </script>
+</body>
+</html>

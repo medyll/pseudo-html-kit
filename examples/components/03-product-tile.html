@@ -1,0 +1,55 @@
+<template>
+  <article class="product-tile">
+    <h3 class="product-tile__name"></h3>
+    <p class="product-tile__price"></p>
+    <button class="product-tile__add">Add to cart</button>
+  </article>
+</template>
+
+<style>
+  @layer components {
+    @scope (product-tile) {
+      :scope {
+        display: block;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin: 0.5rem 0;
+      }
+      .product-tile__name {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+      }
+      .product-tile__price {
+        margin: 0 0 1rem 0;
+        color: #666;
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+      .product-tile__add {
+        padding: 0.5rem 1rem;
+        background: #0066cc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .product-tile__add:hover {
+        background: #0055aa;
+      }
+    }
+  }
+</style>
+
+<script>
+  // Data arrives as data-* attributes from renderLoop
+  const name = el.dataset.name;
+  const price = el.dataset.price;
+
+  el.querySelector('.product-tile__name').textContent = name;
+  el.querySelector('.product-tile__price').textContent = `$${price}`;
+
+  el.querySelector('.product-tile__add').addEventListener('click', () => {
+    emit(el, 'product:add', { id: el.dataset.id, name, price });
+  });
+</script>

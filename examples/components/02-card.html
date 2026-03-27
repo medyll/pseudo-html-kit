@@ -1,0 +1,49 @@
+<template>
+  <article class="card">
+    <header class="card__header">
+      <slot name="header"></slot>
+    </header>
+    <div class="card__body">
+      <slot></slot>
+    </div>
+    <footer class="card__footer">
+      <slot name="footer"></slot>
+    </footer>
+  </article>
+</template>
+
+<style>
+  @layer components {
+    @scope (card) {
+      :scope {
+        display: block;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .card__header {
+        padding: 1rem;
+        background: #f5f5f5;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .card__body {
+        padding: 1rem;
+      }
+      .card__footer {
+        padding: 1rem;
+        background: #fafafa;
+        border-top: 1px solid #e0e0e0;
+      }
+    }
+  }
+</style>
+
+<script>
+  // Optional: add interactivity
+  const footerSlot = el.querySelector('[slot="footer"]');
+  if (footerSlot && footerSlot.tagName === 'BUTTON') {
+    footerSlot.addEventListener('click', () => {
+      el.remove();
+    });
+  }
+</script>
