@@ -216,7 +216,9 @@ describe('card-media-pk', () => {
     document.body.innerHTML = '<card-media-pk src="img.jpg" alt="x"><span slot="overlay" class="overlay-badge">NEW</span></card-media-pk>';
     PseudoKit.init(document.body);
     await flush();
+    // Slot content is present in the component (inside pk-slot wrapper)
     expect(document.querySelector('.overlay-badge')).toBeTruthy();
+    expect(document.querySelector('.overlay-badge')?.textContent).toBe('NEW');
     obs.disconnect();
   });
 });

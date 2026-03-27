@@ -143,6 +143,12 @@ See [`/examples/`](examples/) for runnable demos:
 | 04 | State | Reactive state + CSS |
 | 05 | SSR | Server-side rendering |
 
+Run examples:
+```bash
+pnpm serve:examples
+# Open http://localhost:3008/01-hello-world.html
+```
+
 ---
 
 ## Browser Support

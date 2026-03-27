@@ -49,6 +49,7 @@
     "test:a11y": "playwright test --config playwright.a11y.config.js",
     "serve": "serve src/www -p 3008",
     "serve:src": "serve src/ -p 3008",
+    "serve:examples": "serve examples -p 3008",
     "add-knowledge": "node scripts/add-knowledge-cli.js"
   },
   "devDependencies": {

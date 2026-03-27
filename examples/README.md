@@ -6,10 +6,12 @@ Runnable demos showing pseudo-kit features from simple to advanced.
 
 ```bash
 # From the project root
-npx serve . -p 3000
+pnpm serve:examples
+# or
+npm run serve:examples
 
 # Then open in browser:
-# http://localhost:3000/examples/01-hello-world.html
+# http://localhost:3008/01-hello-world.html
 ```
 
 ## Examples

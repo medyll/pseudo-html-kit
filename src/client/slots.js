@@ -107,4 +107,16 @@ export function stampTemplate(el, def) {
 
   el.innerHTML = '';
   el.appendChild(fragment);
+
+  // Preserve original slotted elements for backward compatibility with
+  // component scripts that query for [slot="..."]. Clone them and append
+  // with display:none so they're in the DOM but not visible.
+  for (const node of originalChildren) {
+    if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('slot')) {
+      const hidden = node.cloneNode(true);
+      hidden.style.display = 'none';
+      hidden.setAttribute('data-pk-preserved', 'true');
+      el.appendChild(hidden);
+    }
+  }
 }

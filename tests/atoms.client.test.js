@@ -359,7 +359,9 @@ describe('image-pk', () => {
     document.body.innerHTML = '<image-pk><span slot="fallback" class="custom-fallback">N/A</span></image-pk>';
     PseudoKit.init(document.body);
     await flush();
+    // Slot content is present in the component (inside pk-slot wrapper)
     expect(document.querySelector('.custom-fallback')).toBeTruthy();
+    expect(document.querySelector('.custom-fallback')?.textContent).toBe('N/A');
     obs.disconnect();
   });
 });
@@ -831,7 +833,9 @@ describe('toggle-pk', () => {
     document.body.innerHTML = '<toggle-pk name="notify"><span slot="label" class="toggle-label-text">Enable</span></toggle-pk>';
     PseudoKit.init(document.body);
     await flush();
+    // Slot content is present in the component (inside pk-slot wrapper)
     expect(document.querySelector('.toggle-label-text')).toBeTruthy();
+    expect(document.querySelector('.toggle-label-text')?.textContent).toBe('Enable');
     obs.disconnect();
   });
 });

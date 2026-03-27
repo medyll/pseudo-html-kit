@@ -81,23 +81,22 @@ if (!nav || !list) { el.setAttribute('data-ready', 'true'); return; }
 const label = el.getAttribute('label');
 if (label) nav.setAttribute('aria-label', label);
 
-// Collect slotted item elements (direct element children of the host with slot="items",
-// or fall back to scanning the list for already-slotted nodes)
-let items = [...el.querySelectorAll('[slot="items"]')];
-
-// Fallback: items are text/element nodes that were already placed in the list by PseudoKit
-if (!items.length) {
-  items = [...list.children].filter(n => n.tagName !== 'SLOT');
+// Collect slotted items from pk-slot wrappers (runtime injects them here)
+const items = [];
+const slotWrapper = list.querySelector('pk-slot');
+if (slotWrapper) {
+  items.push(...slotWrapper.children);
 }
 
 if (!items.length) { el.setAttribute('data-ready', 'true'); return; }
 
-// Wrap each item in an li.breadcrumb__item (if not already)
+// Wrap each item in an li.breadcrumb__item and append to list
 items.forEach((item, i) => {
+  // Skip if already wrapped
   if (item.parentElement?.classList.contains('breadcrumb__item')) return;
+
   const li = document.createElement('li');
   li.className = 'breadcrumb__item';
-  item.replaceWith(li);
   li.appendChild(item);
   list.appendChild(li);
 
